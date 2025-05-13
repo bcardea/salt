@@ -8,7 +8,7 @@
   }
   
   body {
-    @apply bg-background text-secondary-900 font-sans antialiased;
+    @apply bg-secondary-50 text-secondary-900 font-sans antialiased;
   }
 }
 

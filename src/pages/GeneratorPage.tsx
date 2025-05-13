@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
 import ApiKeyInput from '../components/ApiKeyInput';
+import Auth from '../components/Auth';
 import { useApiKey } from '../context/ApiKeyContext';
 import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
 import ImageDisplay from '../components/ImageDisplay';
@@ -8,6 +10,7 @@ import { ReferenceImage, ReferenceImages } from '../constants/referenceImages';
 
 const GeneratorPage: React.FC = () => {
   const { apiKey } = useApiKey();
+  const [session, setSession] = useState(null);
   const [topic, setTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
   const [selectedRefs, setSelectedRefs] = useState<ReferenceImage[]>([]);
@@ -16,9 +19,30 @@ const GeneratorPage: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   const handleGeneratePrompt = async () => {
     if (!apiKey) {
       setError('Please enter your OpenAI API key first');
+      return;
+    }
+
+    if (!session) {
+      setError('Please sign in to generate artwork');
       return;
     }
 
@@ -42,6 +66,11 @@ const GeneratorPage: React.FC = () => {
   const handleGenerateArt = async () => {
     if (!prompt.trim() || !apiKey) return;
     
+    if (!session) {
+      setError('Please sign in to generate artwork');
+      return;
+    }
+    
     setError('');
     setStatus('generating-image');
     try {
@@ -54,6 +83,24 @@ const GeneratorPage: React.FC = () => {
     }
   };
 
+  if (!session) {
+    return (
+      <div className="py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
+              Sign In to Create Artwork
+            </h1>
+            <p className="text-lg text-secondary-600">
+              Create an account or sign in to start generating sermon artwork
+            </p>
+          </div>
+          <Auth onSuccess={() => setStatus('idle')} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
       <div className="max-w-6xl mx-auto">
@@ -61,7 +108,7 @@ const GeneratorPage: React.FC = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
             Create Your Sermon Artwork
           </h1>
-          <p className="text-lg text-secondary-700">
+          <p className="text-lg text-secondary-600">
             Design and refine your sermon artwork in two simple steps
           </p>
         </div>

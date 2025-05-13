@@ -20,12 +20,10 @@ const GeneratorPage: React.FC = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -34,6 +32,22 @@ const GeneratorPage: React.FC = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const saveToLibrary = async (imageUrl: string) => {
+    try {
+      const { error } = await supabase.from('images').insert({
+        user_id: session?.user.id,
+        url: imageUrl,
+        prompt,
+        topic
+      });
+
+      if (error) throw error;
+    } catch (err) {
+      console.error('Error saving to library:', err);
+      // Don't show error to user since the image was still generated successfully
+    }
+  };
 
   const handleGeneratePrompt = async () => {
     if (!apiKey) {
@@ -77,6 +91,9 @@ const GeneratorPage: React.FC = () => {
       const src = await generateSermonArt(prompt, apiKey, selectedRefs);
       setImgSrc(src);
       setStatus('complete');
+      if (src) {
+        await saveToLibrary(src);
+      }
     } catch (e) {
       setError((e as Error).message);
       setStatus('idle');

@@ -7,5 +7,5 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  envPrefix: 'OPENAI_'
+  envPrefix: ['VITE_'] // Changed to use standard Vite env prefix
 });

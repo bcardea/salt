@@ -37,11 +37,21 @@ const Header: React.FC = () => {
             >
               Create Art
             </Link>
+            <Link 
+              to="/library" 
+              className={`text-sm font-medium transition-colors ${
+                location.pathname === '/library' 
+                  ? 'text-secondary-900' 
+                  : 'text-secondary-600 hover:text-secondary-900'
+              }`}
+            >
+              Library
+            </Link>
           </nav>
         </div>
       </div>
     </header>
   );
-}
+};
 
-export default Header
+export default Header;

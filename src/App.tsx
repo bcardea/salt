@@ -4,6 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import GeneratorPage from './pages/GeneratorPage';
+import LibraryPage from './pages/LibraryPage';
 import { ApiKeyProvider } from './context/ApiKeyContext';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/generator" element={<GeneratorPage />} />
+            <Route path="/library" element={<LibraryPage />} />
           </Routes>
         </main>
         <Footer />
@@ -22,5 +24,3 @@ function App() {
     </ApiKeyProvider>
   );
 }
-
-export default App;

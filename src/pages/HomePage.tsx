@@ -5,9 +5,28 @@ import { ArrowRight, Sparkles, Palette, Share2 } from 'lucide-react';
 const HomePage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section with Dynamic Background */}
-      <section className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-secondary-100 to-background"></div>
+      {/* Hero Section with Dynamic Background and Images */}
+      <section className="relative min-h-screen py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background Images Grid */}
+        <div className="absolute inset-0 grid grid-cols-3 gap-4 p-8 opacity-10">
+          <img 
+            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
+            alt=""
+            className="w-full h-full object-cover rounded-2xl transform rotate-2"
+          />
+          <img 
+            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
+            alt=""
+            className="w-full h-full object-cover rounded-2xl -rotate-2"
+          />
+          <img 
+            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png"
+            alt=""
+            className="w-full h-full object-cover rounded-2xl rotate-1"
+          />
+        </div>
+        
+        {/* Content Overlay */}
         <div className="relative max-w-4xl mx-auto text-center">
           <div className="inline-block mb-4 px-6 py-2 bg-white/80 backdrop-blur-sm rounded-full">
             <span className="text-secondary-600 font-medium">AI-Powered Sermon Art</span>
@@ -28,11 +47,58 @@ const HomePage: React.FC = () => {
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a 
-              href="#how-it-works" 
+              href="#examples" 
               className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all"
             >
-              Learn More
+              View Examples
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Examples Section */}
+      <section id="examples" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-secondary-900 mb-4">
+              Inspiring Examples
+            </h2>
+            <p className="text-xl text-secondary-600 max-w-2xl mx-auto">
+              See what's possible with our AI-powered design system
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab5542638e915.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af4ad1fb159ae92eb7.png"
+            ].map((src, index) => (
+              <div 
+                key={index}
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl bg-secondary-100"
+              >
+                <img 
+                  src={src}
+                  alt="Example artwork"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-secondary-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <Link
+                      to="/generator"
+                      className="inline-flex items-center text-white font-medium"
+                    >
+                      Create Similar
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { LogOut } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 const Header: React.FC = () => {
   const location = useLocation();
+  const [session, setSession] = useState(null);
+  
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
   
   return (
     <header className="bg-background border-b border-secondary-200">
@@ -16,7 +37,7 @@ const Header: React.FC = () => {
             />
           </Link>
           
-          <nav className="flex space-x-6">
+          <nav className="flex items-center space-x-6">
             <Link 
               to="/" 
               className={`text-sm font-medium transition-colors ${
@@ -37,16 +58,27 @@ const Header: React.FC = () => {
             >
               Create Art
             </Link>
-            <Link 
-              to="/library" 
-              className={`text-sm font-medium transition-colors ${
-                location.pathname === '/library' 
-                  ? 'text-secondary-900' 
-                  : 'text-secondary-600 hover:text-secondary-900'
-              }`}
-            >
-              Library
-            </Link>
+            {session && (
+              <Link 
+                to="/library" 
+                className={`text-sm font-medium transition-colors ${
+                  location.pathname === '/library' 
+                    ? 'text-secondary-900' 
+                    : 'text-secondary-600 hover:text-secondary-900'
+                }`}
+              >
+                Library
+              </Link>
+            )}
+            {session && (
+              <button
+                onClick={handleLogout}
+                className="flex items-center text-sm font-medium text-secondary-600 hover:text-secondary-900 transition-colors"
+              >
+                <LogOut className="h-4 w-4 mr-1" />
+                Logout
+              </button>
+            )}
           </nav>
         </div>
       </div>

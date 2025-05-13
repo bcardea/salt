@@ -6,31 +6,31 @@ const HomePage: React.FC = () => {
   return (
     <div className="animate-fade-in">
       {/* Hero Section with Dynamic Image Showcase */}
-      <section className="relative min-h-screen flex items-center py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Floating Images */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/4 -left-12 w-96 h-96 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
+      <section className="relative min-h-[80vh] md:min-h-screen flex items-center py-20 md:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Floating Images - Hidden on mobile, shown on larger screens */}
+        <div className="absolute inset-0 pointer-events-none hidden md:block">
+          <div className="absolute top-1/4 -left-12 w-72 lg:w-96 h-72 lg:h-96 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
-          <div className="absolute top-1/3 right-0 w-80 h-80 transform rotate-12 hover:rotate-0 transition-transform duration-500">
+          <div className="absolute top-1/3 right-0 w-64 lg:w-80 h-64 lg:h-80 transform rotate-12 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
-          <div className="absolute bottom-1/4 -left-24 w-72 h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
+          <div className="absolute bottom-1/4 -left-24 w-56 lg:w-72 h-56 lg:h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
-          <div className="absolute bottom-1/3 right-12 w-64 h-64 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+          <div className="absolute bottom-1/3 right-12 w-48 lg:w-64 h-48 lg:h-64 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png"
               alt=""
@@ -39,29 +39,47 @@ const HomePage: React.FC = () => {
           </div>
         </div>
         
+        {/* Mobile Images - Shown only on small screens */}
+        <div className="md:hidden absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 left-0 right-0 h-full overflow-hidden opacity-20">
+            <div className="grid grid-cols-2 gap-4 p-4">
+              <img 
+                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
+                alt=""
+                className="w-full h-48 object-cover rounded-2xl"
+              />
+              <img 
+                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
+                alt=""
+                className="w-full h-48 object-cover rounded-2xl"
+              />
+            </div>
+          </div>
+        </div>
+        
         {/* Content */}
-        <div className="relative max-w-4xl mx-auto text-center">
+        <div className="relative max-w-4xl mx-auto text-center z-10">
           <div className="inline-block mb-4 px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
             <span className="text-secondary-600 font-medium">AI-Powered Sermon Art</span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-bold text-secondary-900 mb-8 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">
             Your Message<br />
             <span className="text-secondary-600">Deserves</span> Flavor.
           </h1>
-          <p className="text-xl md:text-2xl text-secondary-600 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl md:text-2xl text-secondary-600 mb-8 md:mb-12 max-w-2xl mx-auto">
             Create stunning, professional artwork for your sermons in minutes with our AI-powered platform.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               to="/generator" 
-              className="group inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-secondary-900 rounded-full hover:bg-secondary-800 transition-all shadow-lg hover:shadow-xl"
+              className="w-full sm:w-auto group inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-secondary-900 rounded-full hover:bg-secondary-800 transition-all shadow-lg hover:shadow-xl"
             >
               Start Creating
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a 
               href="#examples" 
-              className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all shadow-lg hover:shadow-xl"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all shadow-lg hover:shadow-xl"
             >
               View Examples
             </a>
@@ -70,18 +88,18 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Examples Section */}
-      <section id="examples" className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section id="examples" className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-secondary-900 mb-4">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
               Inspiring Examples
             </h2>
-            <p className="text-xl text-secondary-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-secondary-600 max-w-2xl mx-auto">
               See what's possible with our AI-powered design system
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
             {[
               "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png",
               "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png",
@@ -117,27 +135,27 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-24 px-4 sm:px-6 lg:px-8">
+      <section id="how-it-works" className="py-16 md:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-secondary-900 mb-4">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
               Create with Confidence
             </h2>
-            <p className="text-xl text-secondary-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-secondary-600 max-w-2xl mx-auto">
               Transform your sermon's message into captivating visuals in three simple steps
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-12">
             <div className="group relative">
-              <div className="aspect-square bg-white rounded-3xl p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="aspect-square bg-white rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div className="h-full flex flex-col items-center justify-center text-center">
                   <div className="mb-6 p-4 bg-secondary-50 rounded-2xl">
                     <Sparkles className="h-8 w-8 text-secondary-900" />
                   </div>
-                  <span className="absolute top-6 right-6 text-5xl font-light text-secondary-200">01</span>
-                  <h3 className="text-xl font-medium text-secondary-900 mb-4">Share Your Vision</h3>
-                  <p className="text-secondary-600">
+                  <span className="absolute top-6 right-6 text-4xl md:text-5xl font-light text-secondary-200">01</span>
+                  <h3 className="text-lg md:text-xl font-medium text-secondary-900 mb-4">Share Your Vision</h3>
+                  <p className="text-sm md:text-base text-secondary-600">
                     Tell us your sermon's message, and watch as AI understands your creative direction
                   </p>
                 </div>
@@ -145,29 +163,29 @@ const HomePage: React.FC = () => {
             </div>
             
             <div className="group relative">
-              <div className="aspect-square bg-white rounded-3xl p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+              <div className="aspect-square bg-white rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div className="h-full flex flex-col items-center justify-center text-center">
                   <div className="mb-6 p-4 bg-secondary-50 rounded-2xl">
                     <Palette className="h-8 w-8 text-secondary-900" />
                   </div>
-                  <span className="absolute top-6 right-6 text-5xl font-light text-secondary-200">02</span>
-                  <h3 className="text-xl font-medium text-secondary-900 mb-4">Choose Your Style</h3>
-                  <p className="text-secondary-600">
+                  <span className="absolute top-6 right-6 text-4xl md:text-5xl font-light text-secondary-200">02</span>
+                  <h3 className="text-lg md:text-xl font-medium text-secondary-900 mb-4">Choose Your Style</h3>
+                  <p className="text-sm md:text-base text-secondary-600">
                     Select from curated designs or customize your own unique aesthetic
                   </p>
                 </div>
               </div>
             </div>
             
-            <div className="group relative">
-              <div className="aspect-square bg-white rounded-3xl p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+            <div className="group relative sm:col-span-2 md:col-span-1">
+              <div className="aspect-square bg-white rounded-3xl p-6 md:p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                 <div className="h-full flex flex-col items-center justify-center text-center">
                   <div className="mb-6 p-4 bg-secondary-50 rounded-2xl">
                     <Share2 className="h-8 w-8 text-secondary-900" />
                   </div>
-                  <span className="absolute top-6 right-6 text-5xl font-light text-secondary-200">03</span>
-                  <h3 className="text-xl font-medium text-secondary-900 mb-4">Share Everywhere</h3>
-                  <p className="text-secondary-600">
+                  <span className="absolute top-6 right-6 text-4xl md:text-5xl font-light text-secondary-200">03</span>
+                  <h3 className="text-lg md:text-xl font-medium text-secondary-900 mb-4">Share Everywhere</h3>
+                  <p className="text-sm md:text-base text-secondary-600">
                     Download your artwork, perfectly sized for any platform
                   </p>
                 </div>
@@ -178,18 +196,18 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Use Cases Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-secondary-900 mb-4">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
               Perfect for Every Platform
             </h2>
-            <p className="text-xl text-secondary-600 max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-secondary-600 max-w-2xl mx-auto">
               Create once, use everywhere. Your artwork, optimized for any medium.
             </p>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             {[
               { name: 'Social Media', desc: 'Instagram, Facebook, Twitter' },
               { name: 'Presentations', desc: 'Slides, Projections, Screens' },

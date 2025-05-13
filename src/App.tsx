@@ -24,3 +24,5 @@ function App() {
     </ApiKeyProvider>
   );
 }
+
+export default App;

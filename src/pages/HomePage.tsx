@@ -5,30 +5,43 @@ import { ArrowRight, Sparkles, Palette, Share2 } from 'lucide-react';
 const HomePage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section with Dynamic Background and Images */}
-      <section className="relative min-h-screen py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Background Images Grid */}
-        <div className="absolute inset-0 grid grid-cols-3 gap-4 p-8 opacity-10">
-          <img 
-            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
-            alt=""
-            className="w-full h-full object-cover rounded-2xl transform rotate-2"
-          />
-          <img 
-            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
-            alt=""
-            className="w-full h-full object-cover rounded-2xl -rotate-2"
-          />
-          <img 
-            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png"
-            alt=""
-            className="w-full h-full object-cover rounded-2xl rotate-1"
-          />
+      {/* Hero Section with Dynamic Image Showcase */}
+      <section className="relative min-h-screen flex items-center py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Floating Images */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/4 -left-12 w-96 h-96 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
+              alt=""
+              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+            />
+          </div>
+          <div className="absolute top-1/3 right-0 w-80 h-80 transform rotate-12 hover:rotate-0 transition-transform duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
+              alt=""
+              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+            />
+          </div>
+          <div className="absolute bottom-1/4 -left-24 w-72 h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png"
+              alt=""
+              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+            />
+          </div>
+          <div className="absolute bottom-1/3 right-12 w-64 h-64 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png"
+              alt=""
+              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+            />
+          </div>
         </div>
         
-        {/* Content Overlay */}
+        {/* Content */}
         <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-block mb-4 px-6 py-2 bg-white/80 backdrop-blur-sm rounded-full">
+          <div className="inline-block mb-4 px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
             <span className="text-secondary-600 font-medium">AI-Powered Sermon Art</span>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-secondary-900 mb-8 tracking-tight">
@@ -41,14 +54,14 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link 
               to="/generator" 
-              className="group inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-secondary-900 rounded-full hover:bg-secondary-800 transition-all"
+              className="group inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-secondary-900 rounded-full hover:bg-secondary-800 transition-all shadow-lg hover:shadow-xl"
             >
               Start Creating
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Link>
             <a 
               href="#examples" 
-              className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all"
+              className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all shadow-lg hover:shadow-xl"
             >
               View Examples
             </a>
@@ -86,7 +99,7 @@ const HomePage: React.FC = () => {
                   alt="Example artwork"
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-secondary-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 bg-gradient-to-t from-secondary-900/80 via-secondary-900/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <Link
                       to="/generator"

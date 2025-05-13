@@ -140,7 +140,7 @@ const GeneratorPage: React.FC = () => {
           {/* Step 1: Topic Input and Prompt Generation */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Topic</h2>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
                 <label htmlFor="topic" className="block text-sm font-medium text-secondary-700 mb-1">
                   Topic / Title
@@ -180,7 +180,7 @@ const GeneratorPage: React.FC = () => {
               </div>
 
               {/* Reference Image Gallery */}
-              <div className="mt-6">
+              <div>
                 <label className="block text-sm font-medium text-secondary-700 mb-2">
                   Reference Images
                 </label>
@@ -191,24 +191,25 @@ const GeneratorPage: React.FC = () => {
                   disabled={status !== 'idle'}
                 />
               </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleGeneratePrompt}
-                disabled={!topic.trim() || status !== 'idle'}
-                className="btn-primary"
-              >
-                Generate Prompt
-              </button>
-              {(status === 'generating-prompt' || status === 'generating-image') && (
-                <div className="text-secondary-600 flex items-center">
-                  <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Working...
-                </div>
-              )}
+
+              <div className="flex items-center gap-3 pt-4">
+                <button
+                  onClick={handleGeneratePrompt}
+                  disabled={!topic.trim() || status !== 'idle'}
+                  className="btn-primary"
+                >
+                  Generate Prompt
+                </button>
+                {(status === 'generating-prompt' || status === 'generating-image') && (
+                  <div className="text-secondary-600 flex items-center">
+                    <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Working...
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -232,7 +233,7 @@ const GeneratorPage: React.FC = () => {
               <button
                 onClick={handleGenerateArt}
                 disabled={status !== 'idle' || !prompt.trim()}
-                className="btn-accent"
+                className="btn-primary"
               >
                 Generate Artwork
               </button>

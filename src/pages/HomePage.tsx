@@ -8,10 +8,10 @@ const HomePage: React.FC = () => {
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-900 mb-6">
-            Create Stunning Art for Your Message
+            YOUR MESSAGE DESERVES FLAVOR.
           </h1>
           <p className="text-xl md:text-2xl text-secondary-600 mb-12">
-            Transform your ideas into beautiful, custom artwork using AI technology
+           CREATE BEAUTIFUL ART FOR YOUR SERMON IN JUST A COUPLE MINUTES.
           </p>
           <Link 
             to="/generator" 

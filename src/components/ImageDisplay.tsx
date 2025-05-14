@@ -10,9 +10,16 @@ interface ImageDisplayProps {
 
 const loadingMessages = [
   "Cooking up your design...",
+  "Gathering inspiration...",
   "Mixing the perfect colors...",
-  "Adding that special touch...",
+  "Crafting the composition...",
+  "Adding visual elements...",
+  "Refining the details...",
   "Making it pixel perfect...",
+  "Balancing the layout...",
+  "Adding that special touch...",
+  "Perfecting the typography...",
+  "Harmonizing the colors...",
   "Almost there...",
   "Putting on the finishing touches..."
 ];

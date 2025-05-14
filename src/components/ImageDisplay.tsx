@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Download, RefreshCw, Image as ImageIcon } from 'lucide-react';
 import { downloadImage } from '../utils/downloadHelper';
 
@@ -8,33 +8,62 @@ interface ImageDisplayProps {
   onRegenerate: () => void;
 }
 
+const loadingMessages = [
+  "Cooking up your design...",
+  "Mixing the perfect colors...",
+  "Adding that special touch...",
+  "Making it pixel perfect...",
+  "Almost there...",
+  "Putting on the finishing touches..."
+];
+
 const LoadingState: React.FC<{ step: 'prompt' | 'image' }> = ({ step }) => {
+  const [messageIndex, setMessageIndex] = useState(0);
+
+  useEffect(() => {
+    if (step === 'image') {
+      const interval = setInterval(() => {
+        setMessageIndex((current) => (current + 1) % loadingMessages.length);
+      }, 4000); // Change message every 4 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [step]);
+
   return (
     <div className="flex flex-col items-center justify-center h-full p-8">
       <div className="w-16 h-16 mb-4 relative">
         <div className="absolute inset-0 rounded-full bg-primary-100 animate-pulse"></div>
         {step === 'prompt' ? (
           <div className="absolute inset-0 flex items-center justify-center">
-            <svg className="w-8 h-8 text-primary-600" fill="none" viewBox="0 0 24 24">
-              <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0-11V3"></path>
+            <svg className="w-8 h-8 text-primary-600 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           </div>
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <ImageIcon className="w-8 h-8 text-primary-600" />
+            <ImageIcon className="w-8 h-8 text-primary-600 animate-pulse" />
           </div>
         )}
       </div>
       <h3 className="text-xl font-semibold text-secondary-900 mb-2">
-        {step === 'prompt' ? 'Creating Concept' : 'Generating Image'}
+        {step === 'prompt' ? 'Creating Concept' : loadingMessages[messageIndex]}
       </h3>
       <p className="text-secondary-600 text-center">
         {step === 'prompt' 
           ? 'Our AI is crafting the perfect concept for your sermon...' 
-          : 'Creating your custom sermon artwork...'}
+          : 'This usually takes about 90 seconds...'}
       </p>
-      <div className="mt-4 w-full max-w-xs bg-secondary-100 rounded-full h-2.5 overflow-hidden">
-        <div className="bg-primary-500 h-2.5 rounded-full animate-pulse-slow" style={{ width: '70%' }}></div>
+      <div className="mt-6 w-full max-w-xs">
+        <div className="w-full bg-secondary-100 rounded-full h-2">
+          <div 
+            className="bg-primary-500 h-2 rounded-full transition-all duration-1000 ease-in-out"
+            style={{ 
+              width: step === 'prompt' ? '30%' : `${((messageIndex + 1) / loadingMessages.length) * 100}%`
+            }}
+          ></div>
+        </div>
       </div>
     </div>
   );
@@ -55,9 +84,13 @@ const EmptyState: React.FC = () => {
 };
 
 const ImageDisplay: React.FC<ImageDisplayProps> = ({ imageUrl, status, onRegenerate }) => {
-  const handleDownload = () => {
+  const handleDownload = async () => {
     if (imageUrl) {
-      downloadImage(imageUrl, 'sermon-artwork.png');
+      try {
+        await downloadImage(imageUrl, 'sermon-artwork.png');
+      } catch (error) {
+        console.error('Failed to download image:', error);
+      }
     }
   };
 

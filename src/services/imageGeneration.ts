@@ -1,4 +1,3 @@
-// src/services/imageGeneration.ts
 import axios from "axios";
 import { openai } from "../lib/openaiClient";
 import { ReferenceImage, ReferenceImages } from "../constants/referenceImages";
@@ -44,19 +43,27 @@ export async function generateSermonArtPrompt(
     openai.apiKey = apiKey;
   }
 
+  const isFullNotes = topic.length > 100;
+  const systemPrompt = isFullNotes
+    ? "You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively."
+    : "You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. Use the attached reference images ONLY as STYLE inspiration — match their typography, layout, color palette, and design balance. Do NOT copy their text or subject matter.";
+
   const chat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
     messages: [
       {
         role: "system",
-        content:
-          "You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. Use the attached reference images ONLY as STYLE inspiration — match their typography, layout, color palette, and design balance. Do NOT copy their text or subject matter. Create a fresh 1536×1024 landscape sermon graphic with the title large and centered, complementary imagery around it, and ample space for projection readability. Ignore any words in the reference images and focus on fresh subject matter related to the sermon topic. Answer only with the prompt as it will be fed to an image generator, do not be conversational, just deliver the direct prompt."
+        content: systemPrompt
       },
       {
         role: "user",
-        content: `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).${
-          stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
-        }`
+        content: isFullNotes
+          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.${
+              stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
+            }`
+          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).${
+              stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
+            }`
       }
     ],
     temperature: 0.6

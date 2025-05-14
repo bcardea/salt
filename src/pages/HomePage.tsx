@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react";
 const fromImage =
   "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg";
 
+const mascotImage = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68252b4db098805b4b4520fc.png";
+
 // The ACTUAL art examples you referenced
 const toImages = [
   {
@@ -32,6 +34,16 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto flex flex-col-reverse md:grid md:grid-cols-2 gap-10 items-center">
           {/* LEFT: TEXT */}
           <div className="relative flex flex-col items-start justify-center md:pr-10">
+            {/* Salt Shaker Mascot */}
+            <div className="absolute -top-16 -right-8 md:-right-16 w-24 md:w-32 transform rotate-12 select-none pointer-events-none">
+              <img
+                src={mascotImage}
+                alt=""
+                className="w-full h-auto"
+                style={{ filter: 'drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))' }}
+              />
+            </div>
+            
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
               From Sermon Notes<br />
               <span className="block mt-1 text-secondary-600">

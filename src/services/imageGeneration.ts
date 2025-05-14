@@ -162,7 +162,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Cinematic Bible Scene",
     description: "Epic, dramatic artwork inspired by ancient narratives",
     promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c583c676d53573ee3.png"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
   },
   {
     id: "youth",

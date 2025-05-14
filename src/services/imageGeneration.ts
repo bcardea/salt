@@ -30,7 +30,7 @@ export async function generateSermonArtPrompt(
 
   const systemPrompt = isFullNotes
     ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. ${typographyInstructions}`;
+    : `You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. You never specify which image model is being used in the prompt and you deliver a clean promot that can be directly sent into the image generation api. You don't deliver two prompts, just a single perfect prompt that will be using OpenAI's gen-1 image generation api. ${typographyInstructions}`;
 
   const chat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",

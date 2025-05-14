@@ -39,7 +39,7 @@ const HomePage = () => {
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 mb-6">
-              Generate eye-catching artwork for your nexxt sermon at the click of a button – <span className="font-semibold text-secondary-700">fast, faithful, and effortless</span>.
+              Generate eye-catching artwork for your next sermon at the click of a button – <span className="font-semibold text-secondary-700">fast, faithful, and effortless</span>.
             </p>
             <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
               You wear many hats as a pastor. Salt Creative helps you create eye-catching, faith-filled graphics for sermons, Bible studies, and every ministry need—even with no design team. Simply give us the Title and Concept of your sermon, or paste in your entire sermon notes and we'll create the concept, allow you to make changes and then generate your artwork in just a couple moments. <span className="font-semibold text-secondary-600">Your message deserves visuals as powerful as your calling.</span>

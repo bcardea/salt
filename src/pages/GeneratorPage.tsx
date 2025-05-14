@@ -7,6 +7,7 @@ import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset 
 import ImageDisplay from '../components/ImageDisplay';
 import ReferenceImageGallery from '../components/ReferenceImageGallery';
 import { ReferenceImage, ReferenceImages } from '../constants/referenceImages';
+import SermonForm from '../components/SermonForm';
 
 const GeneratorPage: React.FC = () => {
   const { apiKey } = useApiKey();
@@ -45,11 +46,10 @@ const GeneratorPage: React.FC = () => {
       if (error) throw error;
     } catch (err) {
       console.error('Error saving to library:', err);
-      // Don't show error to user since the image was still generated successfully
     }
   };
 
-  const handleGeneratePrompt = async () => {
+  const handleGeneratePrompt = async (input: string) => {
     if (!apiKey) {
       setError('Please enter your OpenAI API key first');
       return;
@@ -62,10 +62,12 @@ const GeneratorPage: React.FC = () => {
 
     setError('');
     setStatus('generating-prompt');
+    setTopic(input);
+    
     try {
       const generatedPrompt = await generateSermonArtPrompt(
-        topic.toUpperCase(),
-        topic,
+        input.length > 100 ? 'Sermon Artwork' : input.toUpperCase(),
+        input,
         apiKey,
         selectedStyle
       );
@@ -139,22 +141,12 @@ const GeneratorPage: React.FC = () => {
         <div className="card p-6 max-w-3xl mx-auto">
           {/* Step 1: Topic Input and Prompt Generation */}
           <div className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Topic</h2>
+            <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Details</h2>
             <div className="space-y-6">
-              <div>
-                <label htmlFor="topic" className="block text-sm font-medium text-secondary-700 mb-1">
-                  Topic / Title
-                </label>
-                <input
-                  id="topic"
-                  type="text"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                  placeholder="e.g., Fathers, The Great Commission..."
-                  className="input-field"
-                  disabled={status !== 'idle'}
-                />
-              </div>
+              <SermonForm
+                onSubmit={handleGeneratePrompt}
+                isLoading={status !== 'idle'}
+              />
 
               <div>
                 <label className="block text-sm font-medium text-secondary-700 mb-2">
@@ -190,25 +182,6 @@ const GeneratorPage: React.FC = () => {
                   onSelectionChange={setSelectedRefs}
                   disabled={status !== 'idle'}
                 />
-              </div>
-
-              <div className="flex items-center gap-3 pt-4">
-                <button
-                  onClick={handleGeneratePrompt}
-                  disabled={!topic.trim() || status !== 'idle'}
-                  className="btn-primary"
-                >
-                  Generate Prompt
-                </button>
-                {(status === 'generating-prompt' || status === 'generating-image') && (
-                  <div className="text-secondary-600 flex items-center">
-                    <svg className="animate-spin h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Working...
-                  </div>
-                )}
               </div>
             </div>
           </div>

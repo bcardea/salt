@@ -74,11 +74,8 @@ const HomePage: React.FC = () => {
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"
               alt="SALT Creative Mascot"
-              className="w-24 h-24 md:w-32 md:h-32 mx-auto animate-bounce-slow"
+              className="w-24 h-24 md:w-32 md:h-32 mx-auto"
             />
-            <div className="absolute -top-4 -right-4 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg transform rotate-12">
-              <span className="text-secondary-600 font-medium text-sm">AI-Powered Sermon Art</span>
-            </div>
           </div>
           
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">

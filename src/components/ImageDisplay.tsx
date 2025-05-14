@@ -24,7 +24,7 @@ const LoadingState: React.FC<{ step: 'prompt' | 'image' }> = ({ step }) => {
     if (step === 'image') {
       const interval = setInterval(() => {
         setMessageIndex((current) => (current + 1) % loadingMessages.length);
-      }, 4000); // Change message every 4 seconds
+      }, 10000); // Change message every 10 seconds
 
       return () => clearInterval(interval);
     }

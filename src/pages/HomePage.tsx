@@ -7,30 +7,40 @@ const HomePage: React.FC = () => {
     <div className="animate-fade-in">
       {/* Hero Section with Dynamic Image Showcase */}
       <section className="relative min-h-[80vh] md:min-h-screen flex items-center py-20 md:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Background Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-secondary-100/50 to-transparent pointer-events-none"></div>
+        
         {/* Floating Images - Hidden on mobile, shown on larger screens */}
         <div className="absolute inset-0 pointer-events-none hidden md:block">
-          <div className="absolute top-1/4 -left-12 w-72 lg:w-96 h-72 lg:h-96 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
+          {/* Top left image */}
+          <div className="absolute top-[15%] left-[5%] w-64 lg:w-80 h-64 lg:h-80 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
-          <div className="absolute top-1/3 right-0 w-64 lg:w-80 h-64 lg:h-80 transform rotate-12 hover:rotate-0 transition-transform duration-500">
+          
+          {/* Top right image */}
+          <div className="absolute top-[20%] right-[8%] w-56 lg:w-72 h-56 lg:h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
-          <div className="absolute bottom-1/4 -left-24 w-56 lg:w-72 h-56 lg:h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
+          
+          {/* Bottom left image */}
+          <div className="absolute bottom-[20%] left-[12%] w-48 lg:w-64 h-48 lg:h-64 transform rotate-12 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
-          <div className="absolute bottom-1/3 right-12 w-48 lg:w-64 h-48 lg:h-64 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+          
+          {/* Bottom right image */}
+          <div className="absolute bottom-[15%] right-[5%] w-52 lg:w-68 h-52 lg:h-68 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
               alt=""
@@ -59,9 +69,18 @@ const HomePage: React.FC = () => {
         
         {/* Content */}
         <div className="relative max-w-4xl mx-auto text-center z-10">
-          <div className="inline-block mb-4 px-6 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
-            <span className="text-secondary-600 font-medium">AI-Powered Sermon Art</span>
+          {/* Salt Shaker Mascot */}
+          <div className="relative inline-block mb-6">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"
+              alt="SALT Creative Mascot"
+              className="w-24 h-24 md:w-32 md:h-32 mx-auto animate-bounce-slow"
+            />
+            <div className="absolute -top-4 -right-4 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg transform rotate-12">
+              <span className="text-secondary-600 font-medium text-sm">AI-Powered Sermon Art</span>
+            </div>
           </div>
+          
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">
             Your Message<br />
             <span className="text-secondary-600">Deserves</span> Flavor.

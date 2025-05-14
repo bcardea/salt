@@ -5,8 +5,6 @@ import Auth from '../components/Auth';
 import { useApiKey } from '../context/ApiKeyContext';
 import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
 import ImageDisplay from '../components/ImageDisplay';
-import ReferenceImageGallery from '../components/ReferenceImageGallery';
-import { ReferenceImage, ReferenceImages } from '../constants/referenceImages';
 import SermonForm from '../components/SermonForm';
 
 const GeneratorPage: React.FC = () => {
@@ -14,7 +12,6 @@ const GeneratorPage: React.FC = () => {
   const [session, setSession] = useState(null);
   const [topic, setTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
-  const [selectedRefs, setSelectedRefs] = useState<ReferenceImage[]>([]);
   const [prompt, setPrompt] = useState('');
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
@@ -118,7 +115,7 @@ const GeneratorPage: React.FC = () => {
     setError('');
     setStatus('generating-image');
     try {
-      const src = await generateSermonArt(prompt, apiKey, selectedRefs);
+      const src = await generateSermonArt(prompt, apiKey);
       setImgSrc(src);
       setStatus('complete');
       if (src) {
@@ -239,18 +236,6 @@ const GeneratorPage: React.FC = () => {
                     onChange={(e) => setPrompt(e.target.value)}
                     rows={6}
                     className="input-field font-mono text-sm"
-                    disabled={status !== 'idle'}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-secondary-700 mb-2">
-                    Select Reference Images
-                  </label>
-                  <ReferenceImageGallery
-                    images={ReferenceImages}
-                    selectedImages={selectedRefs}
-                    onSelectionChange={setSelectedRefs}
                     disabled={status !== 'idle'}
                   />
                 </div>

@@ -24,9 +24,6 @@ const toImages = [
   },
 ];
 
-const mascotUrl =
-  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68252b4db098805b4b4520fc.png";
-
 const HomePage = () => {
   return (
     <div className="bg-white text-gray-900 font-sans">
@@ -35,12 +32,6 @@ const HomePage = () => {
         <div className="max-w-7xl mx-auto flex flex-col-reverse md:grid md:grid-cols-2 gap-10 items-center">
           {/* LEFT: TEXT */}
           <div className="relative flex flex-col items-start justify-center md:pr-10">
-            <img
-              src={mascotUrl}
-              alt="Salty the Salt Shaker mascot"
-              className="absolute -top-16 left-0 w-16 h-16 md:w-20 md:h-20 drop-shadow-md"
-              style={{ zIndex: 1 }}
-            />
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
               From Sermon Notes<br />
               <span className="block mt-1 text-secondary-600">
@@ -103,13 +94,6 @@ const HomePage = () => {
                 </div>
               ))}
             </div>
-            {/* Mascot in lower right of grid */}
-            <img
-              src={mascotUrl}
-              alt="Salt mascot waving"
-              className="absolute -bottom-7 -right-7 w-14 h-14 md:w-16 md:h-16"
-              style={{ zIndex: 2 }}
-            />
           </div>
         </div>
       </section>

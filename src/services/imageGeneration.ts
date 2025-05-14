@@ -76,7 +76,7 @@ export async function generateSermonArt(
       promptLength: prompt.length
     });
     
-    rsp = await openai.images.edit({
+    rsp = await openai.images.generate({
       model: "gpt-image-1",
       prompt,
       size: "1536x1024",

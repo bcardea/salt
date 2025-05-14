@@ -35,7 +35,7 @@ const HomePage = () => {
           {/* LEFT: TEXT */}
           <div className="relative flex flex-col items-start justify-center md:pr-10">
             {/* Salt Shaker Mascot */}
-            <div className="absolute -top-16 -right-8 md:-right-16 w-24 md:w-32 transform rotate-12 select-none pointer-events-none">
+            <div className="absolute -top-4 md:-top-12 right-0 md:right-8 w-20 md:w-28 transform rotate-6 select-none pointer-events-none z-10">
               <img
                 src={mascotImage}
                 alt=""

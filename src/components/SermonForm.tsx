@@ -14,10 +14,21 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (isNotesMode && sermonNotes.trim()) {
-      onSubmit(sermonNotes.trim());
-    } else if (topic.trim()) {
-      onSubmit(topic.trim());
+    const value = isNotesMode ? sermonNotes.trim() : topic.trim();
+    if (value) {
+      onSubmit(value);
+    }
+  };
+  
+  const handleInputChange = (value: string) => {
+    if (isNotesMode) {
+      setSermonNotes(value);
+    } else {
+      setTopic(value);
+    }
+    // Immediately submit the value to the parent
+    if (value.trim()) {
+      onSubmit(value.trim());
     }
   };
   
@@ -36,6 +47,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
               setIsNotesMode(!isNotesMode);
               setTopic('');
               setSermonNotes('');
+              onSubmit(''); // Clear the parent's input value
             }}
             className="flex items-center text-sm text-secondary-600 hover:text-secondary-900 transition-colors"
           >
@@ -50,7 +62,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
               className="input-field font-mono text-sm min-h-[200px]"
               placeholder="Paste your full sermon notes here..."
               value={sermonNotes}
-              onChange={(e) => setSermonNotes(e.target.value)}
+              onChange={(e) => handleInputChange(e.target.value)}
               disabled={isLoading || disabled}
               required
             />
@@ -69,7 +81,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
                 className="input-field pl-10"
                 placeholder="e.g., The Prodigal Son, John 3:16, God's Grace..."
                 value={topic}
-                onChange={(e) => setTopic(e.target.value)}
+                onChange={(e) => handleInputChange(e.target.value)}
                 disabled={isLoading || disabled}
                 required
               />

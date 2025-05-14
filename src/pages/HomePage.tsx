@@ -11,120 +11,95 @@ const HomePage: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-secondary-100/50 to-transparent pointer-events-none"></div>
         
         {/* Salt Shaker Mascot */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-24 h-24 md:w-32 md:h-32">
           <img 
             src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"
             alt="SALT Creative Mascot"
-            className="w-20 h-20 md:w-24 md:h-24"
+            className="w-full h-full"
           />
         </div>
 
-        {/* Central Notebook Image */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 md:w-80 z-10">
+        {/* Main Content Container */}
+        <div className="relative max-w-7xl mx-auto w-full z-10">
+          {/* Central Notebook Image */}
+          <div className="relative mb-8 text-center">
+            <span className="inline-block text-lg md:text-xl font-medium text-secondary-600 mb-4">From this...</span>
+            <div className="relative inline-block">
+              <img 
+                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg"
+                alt="Sermon Notes"
+                className="w-64 md:w-80 h-auto rounded-2xl shadow-xl mx-auto"
+              />
+            </div>
+          </div>
+
+          {/* Transformed Images */}
           <div className="relative">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg"
-              alt="Sermon Notes"
-              className="w-full rounded-2xl shadow-2xl"
-            />
-            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 text-lg md:text-xl font-medium text-secondary-900 whitespace-nowrap">
-              From this...
+            {/* Top Images */}
+            <div className="flex justify-center gap-8 mb-8">
+              <div className="transform -translate-x-12">
+                <span className="block text-secondary-600 mb-2">To this...</span>
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
+                  alt=""
+                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="transform translate-x-12">
+                <span className="block text-secondary-600 mb-2">Or this...</span>
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
+                  alt=""
+                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
+                />
+              </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Transformed Images */}
-        <div className="absolute inset-0 pointer-events-none">
-          {/* Top Right */}
-          <div className="absolute top-[15%] right-[10%] w-56 lg:w-72 transform rotate-3 hover:rotate-0 transition-all duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
-              alt=""
-              className="w-full rounded-2xl shadow-2xl"
-            />
-            <div className="absolute -top-8 right-0 text-lg font-medium text-secondary-700">
-              To this...
+
+            {/* Bottom Images */}
+            <div className="flex justify-center gap-8">
+              <div className="transform -translate-x-24">
+                <span className="block text-secondary-600 mb-2">Maybe this...</span>
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
+                  alt=""
+                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
+                />
+              </div>
+              <div className="transform translate-x-24">
+                <span className="block text-secondary-600 mb-2">Or even this...</span>
+                <img 
+                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
+                  alt=""
+                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
+                />
+              </div>
             </div>
           </div>
 
-          {/* Bottom Right */}
-          <div className="absolute bottom-[20%] right-[15%] w-48 lg:w-64 transform -rotate-6 hover:rotate-0 transition-all duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
-              alt=""
-              className="w-full rounded-2xl shadow-2xl"
-            />
-            <div className="absolute -top-8 right-0 text-lg font-medium text-secondary-700">
-              Or this...
+          {/* CTA Section */}
+          <div className="text-center mt-16">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">
+              Your Message<br />
+              <span className="text-secondary-600">Deserves</span> Flavor.
+            </h1>
+            <p className="text-lg sm:text-xl md:text-2xl text-secondary-600 mb-8 md:mb-12 max-w-2xl mx-auto">
+              Create stunning, professional artwork for your sermons in minutes.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link 
+                to="/generator" 
+                className="w-full sm:w-auto group inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-secondary-900 rounded-full hover:bg-secondary-800 transition-all shadow-lg hover:shadow-xl"
+              >
+                Start Creating
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <a 
+                href="#examples" 
+                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all shadow-lg hover:shadow-xl"
+              >
+                View Examples
+              </a>
             </div>
-          </div>
-
-          {/* Bottom Left */}
-          <div className="absolute bottom-[25%] left-[15%] w-52 lg:w-68 transform rotate-6 hover:rotate-0 transition-all duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
-              alt=""
-              className="w-full rounded-2xl shadow-2xl"
-            />
-            <div className="absolute -top-8 left-0 text-lg font-medium text-secondary-700">
-              Maybe this...
-            </div>
-          </div>
-
-          {/* Top Left */}
-          <div className="absolute top-[20%] left-[10%] w-54 lg:w-70 transform -rotate-3 hover:rotate-0 transition-all duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
-              alt=""
-              className="w-full rounded-2xl shadow-2xl"
-            />
-            <div className="absolute -top-8 left-0 text-lg font-medium text-secondary-700">
-              Or even this...
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Images - Shown only on small screens */}
-        <div className="md:hidden absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-0 right-0 h-full overflow-hidden opacity-20">
-            <div className="grid grid-cols-2 gap-4 p-4">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
-                alt=""
-                className="w-full h-48 object-cover rounded-2xl"
-              />
-              <img 
-                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
-                alt=""
-                className="w-full h-48 object-cover rounded-2xl"
-              />
-            </div>
-          </div>
-        </div>
-        
-        {/* Content */}
-        <div className="relative max-w-4xl mx-auto text-center z-10 mt-[45vh]">
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">
-            Your Message<br />
-            <span className="text-secondary-600">Deserves</span> Flavor.
-          </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-secondary-600 mb-8 md:mb-12 max-w-2xl mx-auto">
-            Create stunning, professional artwork for your sermons in minutes with our AI-powered platform.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link 
-              to="/generator" 
-              className="w-full sm:w-auto group inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-white bg-secondary-900 rounded-full hover:bg-secondary-800 transition-all shadow-lg hover:shadow-xl"
-            >
-              Start Creating
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-            <a 
-              href="#examples" 
-              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-lg font-medium text-secondary-900 bg-white rounded-full hover:bg-secondary-50 transition-all shadow-lg hover:shadow-xl"
-            >
-              View Examples
-            </a>
           </div>
         </div>
       </section>
@@ -137,7 +112,7 @@ const HomePage: React.FC = () => {
               Inspiring Examples
             </h2>
             <p className="text-lg md:text-xl text-secondary-600 max-w-2xl mx-auto">
-              See what's possible with our AI-powered design system
+              See what's possible with our design system
             </p>
           </div>
           
@@ -198,7 +173,7 @@ const HomePage: React.FC = () => {
                   <span className="absolute top-6 right-6 text-4xl md:text-5xl font-light text-secondary-200">01</span>
                   <h3 className="text-lg md:text-xl font-medium text-secondary-900 mb-4">Share Your Vision</h3>
                   <p className="text-sm md:text-base text-secondary-600">
-                    Tell us your sermon's message, and watch as AI understands your creative direction
+                    Tell us your sermon's message, and watch as we understand your creative direction
                   </p>
                 </div>
               </div>

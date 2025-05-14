@@ -5,13 +5,10 @@ import { ArrowRight, Sparkles, Palette, Share2 } from 'lucide-react';
 const HomePage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section with Transformation Showcase */}
-      <section className="relative min-h-[80vh] md:min-h-screen flex items-center py-20 md:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-        {/* Background Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-secondary-100/50 to-transparent pointer-events-none"></div>
-        
-        {/* Salt Shaker Mascot */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 w-24 h-24 md:w-32 md:h-32">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-secondary-50 to-white">
+        {/* Mascot */}
+        <div className="absolute top-12 left-1/2 -translate-x-1/2 w-20 h-20 opacity-90">
           <img 
             src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"
             alt="SALT Creative Mascot"
@@ -19,70 +16,62 @@ const HomePage: React.FC = () => {
           />
         </div>
 
-        {/* Main Content Container */}
-        <div className="relative max-w-7xl mx-auto w-full z-10">
-          {/* Central Notebook Image */}
-          <div className="relative mb-8 text-center">
-            <span className="inline-block text-lg md:text-xl font-medium text-secondary-600 mb-4">From this...</span>
-            <div className="relative inline-block">
-              <img 
-                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg"
-                alt="Sermon Notes"
-                className="w-64 md:w-80 h-auto rounded-2xl shadow-xl mx-auto"
-              />
-            </div>
-          </div>
-
-          {/* Transformed Images */}
-          <div className="relative">
-            {/* Top Images */}
-            <div className="flex justify-center gap-8 mb-8">
-              <div className="transform -translate-x-12">
-                <span className="block text-secondary-600 mb-2">To this...</span>
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
-                  alt=""
-                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
-                />
+        {/* Main Content */}
+        <div className="max-w-[1400px] mx-auto w-full">
+          {/* Transformation Flow */}
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
+            {/* Source Content */}
+            <div className="relative">
+              <div className="text-center lg:text-left mb-6">
+                <span className="inline-block text-lg font-medium text-secondary-600">From this...</span>
               </div>
-              <div className="transform translate-x-12">
-                <span className="block text-secondary-600 mb-2">Or this...</span>
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
-                  alt=""
-                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
-                />
+              <div className="relative mx-auto lg:ml-0 max-w-md">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                  <img 
+                    src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg"
+                    alt="Sermon Notes"
+                    className="w-full h-auto"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+                </div>
               </div>
             </div>
 
-            {/* Bottom Images */}
-            <div className="flex justify-center gap-8">
-              <div className="transform -translate-x-24">
-                <span className="block text-secondary-600 mb-2">Maybe this...</span>
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
-                  alt=""
-                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
-                />
+            {/* Transformed Content */}
+            <div className="relative">
+              <div className="text-center lg:text-left mb-6">
+                <span className="inline-block text-lg font-medium text-secondary-600">To these...</span>
               </div>
-              <div className="transform translate-x-24">
-                <span className="block text-secondary-600 mb-2">Or even this...</span>
-                <img 
-                  src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
-                  alt=""
-                  className="w-48 md:w-64 h-auto rounded-2xl shadow-xl transform hover:scale-105 transition-transform duration-300"
-                />
+              <div className="grid grid-cols-2 gap-4 md:gap-6">
+                {[
+                  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
+                  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
+                  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
+                  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
+                ].map((src, index) => (
+                  <div 
+                    key={index}
+                    className="group relative rounded-xl overflow-hidden shadow-lg transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                  >
+                    <img 
+                      src={src}
+                      alt="Transformed artwork"
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
 
           {/* CTA Section */}
-          <div className="text-center mt-16">
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">
+          <div className="text-center mt-20">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-secondary-900 mb-6 tracking-tight leading-tight">
               Your Message<br />
               <span className="text-secondary-600">Deserves</span> Flavor.
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-secondary-600 mb-8 md:mb-12 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl md:text-2xl text-secondary-600 mb-10 max-w-2xl mx-auto">
               Create stunning, professional artwork for your sermons in minutes.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">

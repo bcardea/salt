@@ -96,7 +96,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading }) => {
             Creating Your Art...
           </>
         ) : (
-          'Generate Sermon Art'
+          'Generate Sermon Art Concept'
         )}
       </button>
     </form>

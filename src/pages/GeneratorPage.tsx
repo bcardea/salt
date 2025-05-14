@@ -36,14 +36,31 @@ const GeneratorPage: React.FC = () => {
 
   const saveToLibrary = async (imageUrl: string) => {
     try {
-      const { error } = await supabase.from('images').insert({
+      // Upload the image to Supabase Storage
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
+      
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('sermon-images')
+        .upload(fileName, blob);
+
+      if (uploadError) throw uploadError;
+
+      // Get the public URL for the uploaded image
+      const { data: { publicUrl } } = supabase.storage
+        .from('sermon-images')
+        .getPublicUrl(fileName);
+
+      // Save the record to the images table
+      const { error: insertError } = await supabase.from('images').insert({
         user_id: session?.user.id,
-        url: imageUrl,
+        url: publicUrl,
         prompt,
         topic
       });
 
-      if (error) throw error;
+      if (insertError) throw insertError;
     } catch (err) {
       console.error('Error saving to library:', err);
     }

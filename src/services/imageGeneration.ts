@@ -138,14 +138,14 @@ export async function generateSermonArt(
 export const STYLE_PRESETS: StylePreset[] = [
   {
     id: "photoreal",
-    title: "Photoreal Person",
+    title: "Photographic",
     description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
     promptModifiers: "Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
   },
   {
     id: "minimalist",
-    title: "Super Minimalist",
+    title: "Modern Minimal",
     description: "Clean, editorial layout with purposeful negative space",
     promptModifiers: "Draw inspiration from modern editorial design. Use purposeful negative space, strong typographic hierarchy, and a restrained color palette. Consider geometric elements, clean lines, or abstract shapes that complement the message. The design should feel sophisticated and intentional.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
@@ -159,14 +159,14 @@ export const STYLE_PRESETS: StylePreset[] = [
   },
   {
     id: "biblical",
-    title: "Cinematic Bible Scene",
+    title: "Cinematic",
     description: "Epic, dramatic artwork inspired by ancient narratives",
     promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
   },
   {
     id: "youth",
-    title: "Youth Collage",
+    title: "Youthful Collage",
     description: "Modern grunge collage full of energy and layers",
     promptModifiers: "Blend contemporary urban aesthetics with layered textures and dynamic compositions. Consider using mixed media elements, typography as design elements, and energetic visual treatments. The design should feel fresh and authentic, avoiding forced 'youth' stereotypes.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"

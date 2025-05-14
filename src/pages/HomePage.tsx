@@ -5,50 +5,85 @@ import { ArrowRight, Sparkles, Palette, Share2 } from 'lucide-react';
 const HomePage: React.FC = () => {
   return (
     <div className="animate-fade-in">
-      {/* Hero Section with Dynamic Image Showcase */}
+      {/* Hero Section with Transformation Showcase */}
       <section className="relative min-h-[80vh] md:min-h-screen flex items-center py-20 md:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
         {/* Background Gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-secondary-100/50 to-transparent pointer-events-none"></div>
         
-        {/* Floating Images - Hidden on mobile, shown on larger screens */}
-        <div className="absolute inset-0 pointer-events-none hidden md:block">
-          {/* Top left image */}
-          <div className="absolute top-[15%] left-[5%] w-64 lg:w-80 h-64 lg:h-80 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
+        {/* Salt Shaker Mascot */}
+        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20">
+          <img 
+            src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"
+            alt="SALT Creative Mascot"
+            className="w-20 h-20 md:w-24 md:h-24"
+          />
+        </div>
+
+        {/* Central Notebook Image */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 md:w-80 z-10">
+          <div className="relative">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
-              alt=""
-              className="w-full h-full object-cover rounded-3xl shadow-2xl"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg"
+              alt="Sermon Notes"
+              className="w-full rounded-2xl shadow-2xl"
             />
-          </div>
-          
-          {/* Top right image */}
-          <div className="absolute top-[20%] right-[8%] w-56 lg:w-72 h-56 lg:h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
-              alt=""
-              className="w-full h-full object-cover rounded-3xl shadow-2xl"
-            />
-          </div>
-          
-          {/* Bottom left image */}
-          <div className="absolute bottom-[20%] left-[12%] w-48 lg:w-64 h-48 lg:h-64 transform rotate-12 hover:rotate-0 transition-transform duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
-              alt=""
-              className="w-full h-full object-cover rounded-3xl shadow-2xl"
-            />
-          </div>
-          
-          {/* Bottom right image */}
-          <div className="absolute bottom-[15%] right-[5%] w-52 lg:w-68 h-52 lg:h-68 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
-              alt=""
-              className="w-full h-full object-cover rounded-3xl shadow-2xl"
-            />
+            <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 text-lg md:text-xl font-medium text-secondary-900 whitespace-nowrap">
+              From this...
+            </div>
           </div>
         </div>
         
+        {/* Transformed Images */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Top Right */}
+          <div className="absolute top-[15%] right-[10%] w-56 lg:w-72 transform rotate-3 hover:rotate-0 transition-all duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
+              alt=""
+              className="w-full rounded-2xl shadow-2xl"
+            />
+            <div className="absolute -top-8 right-0 text-lg font-medium text-secondary-700">
+              To this...
+            </div>
+          </div>
+
+          {/* Bottom Right */}
+          <div className="absolute bottom-[20%] right-[15%] w-48 lg:w-64 transform -rotate-6 hover:rotate-0 transition-all duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
+              alt=""
+              className="w-full rounded-2xl shadow-2xl"
+            />
+            <div className="absolute -top-8 right-0 text-lg font-medium text-secondary-700">
+              Or this...
+            </div>
+          </div>
+
+          {/* Bottom Left */}
+          <div className="absolute bottom-[25%] left-[15%] w-52 lg:w-68 transform rotate-6 hover:rotate-0 transition-all duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
+              alt=""
+              className="w-full rounded-2xl shadow-2xl"
+            />
+            <div className="absolute -top-8 left-0 text-lg font-medium text-secondary-700">
+              Maybe this...
+            </div>
+          </div>
+
+          {/* Top Left */}
+          <div className="absolute top-[20%] left-[10%] w-54 lg:w-70 transform -rotate-3 hover:rotate-0 transition-all duration-500">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
+              alt=""
+              className="w-full rounded-2xl shadow-2xl"
+            />
+            <div className="absolute -top-8 left-0 text-lg font-medium text-secondary-700">
+              Or even this...
+            </div>
+          </div>
+        </div>
+
         {/* Mobile Images - Shown only on small screens */}
         <div className="md:hidden absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-0 right-0 h-full overflow-hidden opacity-20">
@@ -68,16 +103,7 @@ const HomePage: React.FC = () => {
         </div>
         
         {/* Content */}
-        <div className="relative max-w-4xl mx-auto text-center z-10">
-          {/* Salt Shaker Mascot */}
-          <div className="relative inline-block mb-6">
-            <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"
-              alt="SALT Creative Mascot"
-              className="w-24 h-24 md:w-32 md:h-32 mx-auto"
-            />
-          </div>
-          
+        <div className="relative max-w-4xl mx-auto text-center z-10 mt-[45vh]">
           <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-secondary-900 mb-6 md:mb-8 tracking-tight">
             Your Message<br />
             <span className="text-secondary-600">Deserves</span> Flavor.

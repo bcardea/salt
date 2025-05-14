@@ -72,15 +72,15 @@ export async function generateSermonArt(
   let rsp;
   try {
     console.log('Starting OpenAI API call...', {
-      modelName: "dall-e-3",
+      modelName: "gpt-image-1",
       promptLength: prompt.length
     });
     
-    rsp = await openai.images.generate({
-      model: "dall-e-3",
+    rsp = await openai.images.edit({
+      model: "gpt-image-1",
       prompt,
-      size: "1792x1024",
-      quality: "hd",
+      size: "1536x1024",
+      quality: "high",
       n: 1
     });
     
@@ -101,11 +101,23 @@ export async function generateSermonArt(
     throw new Error("No image data received from OpenAI");
   }
 
-  const { url } = rsp.data[0];
-  if (!url) throw new Error("No image URL received");
+  const { url, b64_json } = rsp.data[0];
+  if (url) {
+    console.timeEnd('Total image generation');
+    return url;
+  }
+  if (!b64_json) throw new Error("No image data received");
 
+  console.time('Base64 to Blob conversion');
+  // Convert base64 to Blob URL for better performance
+  const byteChars = atob(b64_json);
+  const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
+  const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
+  const objectUrl = URL.createObjectURL(blob);
+  console.timeEnd('Base64 to Blob conversion');
   console.timeEnd('Total image generation');
-  return url;
+
+  return objectUrl;
 }
 
 /* ------------------------------------------------------------------ */

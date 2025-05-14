@@ -30,7 +30,18 @@ export async function generateSermonArtPrompt(
 
   const systemPrompt = isFullNotes
     ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. You never specify which image model is being used in the prompt and you deliver a clean promot that can be directly sent into the image generation api. You don't deliver two prompts, just a single perfect prompt that will be using OpenAI's gen-1 image generation api. Be specific in regards to the text placement, approach it as a designer would making sure that the focus is always on the title and subtitle text with the image and or design working to compliment the title and sub-title text. ${typographyInstructions}`;
+    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.
+
+When given a style reference, use it as inspiration for the mood, tone, and artistic approach, but don't be constrained by it. Instead, think about what visual elements would best serve this specific message while maintaining the essence of the chosen style.
+
+Focus on:
+- Creating unique compositions that serve the specific message
+- Using visual metaphors that reinforce the sermon's theme
+- Ensuring the design enhances rather than overshadows the message
+- Maintaining professional, modern aesthetics
+- Placing text thoughtfully to maximize impact
+
+${typographyInstructions}`;
 
   const chat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -43,14 +54,14 @@ export async function generateSermonArtPrompt(
         role: "user",
         content: isFullNotes
           ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
-              stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
+              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
           : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
-              stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
+              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
       }
     ],
-    temperature: 0.6
+    temperature: 0.8
   });
 
   return chat.choices[0].message.content!.trim();
@@ -128,36 +139,36 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "photoreal",
     title: "Photoreal Person",
     description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
-    promptModifiers: `cinematic portrait photography, shallow depth‑of‑field, dramatic key & rim lighting, ultra‑detailed skin texture, realistic bokeh, one softly blurred background landmark hinting at theme, sophisticated color grade, modern sans‑serif headline with optional elegant script subtitle, spacious balanced layout`
+    promptModifiers: "Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject."
   },
   {
     id: "minimalist",
     title: "Super Minimalist",
-    description: "Clean, editorial layout with huge negative space and restrained color palette",
-    promptModifiers: `modern editorial minimalism, vast negative space, slim geometric sans‑serif headline with selective outline accent, limited warm neutral palette plus one muted accent color, oversized typographic hierarchy, crisp vector edges, no shadows or textures`
+    description: "Clean, editorial layout with purposeful negative space",
+    promptModifiers: "Draw inspiration from modern editorial design. Use purposeful negative space, strong typographic hierarchy, and a restrained color palette. Consider geometric elements, clean lines, or abstract shapes that complement the message. The design should feel sophisticated and intentional."
   },
   {
     id: "retro80s",
     title: "Retro 80s",
-    description: "Outrun / synthwave poster bursting with neon nostalgia",
-    promptModifiers: `outrun synthwave horizon, neon sunset gradient sky, silhouetted palm trees, infinite laser grid perspective, chrome text with star‑sparkle highlights, handwritten neon script accent, subtle VHS scanlines & film grain`
+    description: "Synthwave-inspired design with bold energy",
+    promptModifiers: "Channel retro-futuristic aesthetics with bold color gradients, dynamic lighting, and geometric elements. Consider how to incorporate synthwave elements while maintaining relevance to the sermon's message. The design should feel energetic and nostalgic without being cliché."
   },
   {
     id: "biblical",
     title: "Cinematic Bible Scene",
-    description: "Epic, dramatic artwork inspired by ancient manuscripts and fallen kingdoms",
-    promptModifiers: `weathered parchment texture, warm sepia & bronze wash, diagonal golden light, broken regal relics crumbling into dust, high‑contrast Trajan‑style serif title stack, heavy grain & ash particles, somber mythic mood`
+    description: "Epic, dramatic artwork inspired by ancient narratives",
+    promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors."
   },
   {
     id: "youth",
     title: "Youth Collage",
-    description: "Modern grunge collage full of energy and textured layers",
-    promptModifiers: `distressed torn‑paper collage, ripped headline strips, grayscale portrait base, muted reds & dusty pink florals, spray‑paint splatter, bold condensed sans headline, photocopy grit overlay, generous breathing room`
+    description: "Modern grunge collage full of energy and layers",
+    promptModifiers: "Blend contemporary urban aesthetics with layered textures and dynamic compositions. Consider using mixed media elements, typography as design elements, and energetic visual treatments. The design should feel fresh and authentic, avoiding forced 'youth' stereotypes."
   },
   {
     id: "vintage",
     title: "Vintage Print",
-    description: "Classic, worn aesthetic with print-inspired textures",
-    promptModifiers: `faded CMYK misprint, halftone dots, retro newspaper texture, limited palette, letterpress style`
+    description: "Classic aesthetic with authentic print textures",
+    promptModifiers: "Draw from classic print design with authentic textures, traditional typography, and careful attention to detail. Consider how printing artifacts and techniques can add character without overwhelming the design. The result should feel crafted and timeless."
   }
 ];

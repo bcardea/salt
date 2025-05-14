@@ -77,6 +77,11 @@ const GeneratorPage: React.FC = () => {
       return;
     }
 
+    if (!selectedStyle) {
+      setError('Please select a style first');
+      return;
+    }
+
     setError('');
     setStatus('generating-prompt');
     setTopic(input);
@@ -145,7 +150,7 @@ const GeneratorPage: React.FC = () => {
             Create Your Sermon Artwork
           </h1>
           <p className="text-lg text-secondary-600">
-            Design and refine your sermon artwork in two simple steps
+            Design and refine your sermon artwork in three simple steps
           </p>
         </div>
 
@@ -156,77 +161,77 @@ const GeneratorPage: React.FC = () => {
         )}
 
         <div className="card p-6 max-w-3xl mx-auto">
-          {/* Step 1: Topic Input and Prompt Generation */}
+          {/* Step 1: Enter Sermon Details */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Details</h2>
-            <div className="space-y-6">
-              <SermonForm
-                onSubmit={handleGeneratePrompt}
-                isLoading={status !== 'idle'}
-              />
+            <SermonForm
+              onSubmit={handleGeneratePrompt}
+              isLoading={status !== 'idle'}
+            />
+          </div>
 
-              <div>
-                <label className="block text-sm font-medium text-secondary-700 mb-2">
-                  Choose a Style
-                </label>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                  {STYLE_PRESETS.map((style) => (
-                    <button
-                      key={style.id}
-                      onClick={() => setSelectedStyle(style)}
-                      className={`p-3 text-left rounded-md border transition-all ${status !== 'idle' ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-500'} ${
-                        selectedStyle?.id === style.id
-                          ? 'border-primary-500 bg-primary-50 text-primary-900'
-                          : 'border-secondary-200 bg-white'
-                      }`}
-                      disabled={status !== 'idle'}
-                    >
-                      <div className="font-medium text-sm">{style.title}</div>
-                      <div className="text-xs text-secondary-600 mt-1">{style.description}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Reference Image Gallery */}
-              <div>
-                <label className="block text-sm font-medium text-secondary-700 mb-2">
-                  Reference Images
-                </label>
-                <ReferenceImageGallery
-                  images={ReferenceImages}
-                  selectedImages={selectedRefs}
-                  onSelectionChange={setSelectedRefs}
+          {/* Step 2: Choose Style */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Step 2: Choose Your Style</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {STYLE_PRESETS.map((style) => (
+                <button
+                  key={style.id}
+                  onClick={() => setSelectedStyle(style)}
+                  className={`p-3 text-left rounded-md border transition-all ${
+                    status !== 'idle' ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-500'
+                  } ${
+                    selectedStyle?.id === style.id
+                      ? 'border-primary-500 bg-primary-50 text-primary-900'
+                      : 'border-secondary-200 bg-white'
+                  }`}
                   disabled={status !== 'idle'}
-                />
-              </div>
+                >
+                  <div className="font-medium text-sm">{style.title}</div>
+                  <div className="text-xs text-secondary-600 mt-1">{style.description}</div>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Step 2: Edit Prompt and Generate Art */}
+          {/* Step 3: Generated Prompt and Final Image Generation */}
           {prompt && (
             <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Step 2: Refine Your Artwork Description</h2>
-              <div className="mb-4">
-                <label htmlFor="prompt" className="block text-sm font-medium text-secondary-700 mb-1">
-                  Edit the prompt below to customize your artwork
-                </label>
-                <textarea
-                  id="prompt"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  rows={6}
-                  className="input-field font-mono text-sm"
-                  disabled={status !== 'idle'}
-                />
+              <h2 className="text-xl font-semibold mb-4">Step 3: Customize and Generate</h2>
+              <div className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                    Edit Prompt (Optional)
+                  </label>
+                  <textarea
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    rows={6}
+                    className="input-field font-mono text-sm"
+                    disabled={status !== 'idle'}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                    Select Reference Images
+                  </label>
+                  <ReferenceImageGallery
+                    images={ReferenceImages}
+                    selectedImages={selectedRefs}
+                    onSelectionChange={setSelectedRefs}
+                    disabled={status !== 'idle'}
+                  />
+                </div>
+
+                <button
+                  onClick={handleGenerateArt}
+                  disabled={status !== 'idle' || !prompt.trim()}
+                  className="btn-primary w-full"
+                >
+                  Generate Final Artwork
+                </button>
               </div>
-              <button
-                onClick={handleGenerateArt}
-                disabled={status !== 'idle' || !prompt.trim()}
-                className="btn-primary"
-              >
-                Generate Artwork
-              </button>
             </div>
           )}
 

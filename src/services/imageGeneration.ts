@@ -29,8 +29,8 @@ export async function generateSermonArtPrompt(
   const typographyInstructions = "Typography: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
 
   const systemPrompt = isFullNotes
-    ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. ${typographyInstructions}`;
+    ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. IMPORTANT: Return ONLY the prompt text, with no additional formatting, comments, or markdown. ${typographyInstructions}`
+    : `You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. IMPORTANT: Return ONLY the prompt text, with no additional formatting, comments, or markdown. ${typographyInstructions}`;
 
   const chat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -44,13 +44,14 @@ export async function generateSermonArtPrompt(
         content: isFullNotes
           ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
               stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
-            }`
+            }\n\nIMPORTANT: Return ONLY the prompt text, with no additional formatting, comments, or markdown.`
           : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
               stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
-            }`
+            }\n\nIMPORTANT: Return ONLY the prompt text, with no additional formatting, comments, or markdown.`
       }
     ],
-    temperature: 0.6
+    temperature: 0.6,
+    response_format: { type: "text" }
   });
 
   return chat.choices[0].message.content!.trim();

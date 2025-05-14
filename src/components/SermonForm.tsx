@@ -4,9 +4,10 @@ import { BookOpen, SwitchCamera } from 'lucide-react';
 interface SermonFormProps {
   onSubmit: (topic: string) => void;
   isLoading: boolean;
+  disabled?: boolean;
 }
 
-const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading }) => {
+const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }) => {
   const [topic, setTopic] = useState('');
   const [sermonNotes, setSermonNotes] = useState('');
   const [isNotesMode, setIsNotesMode] = useState(false);
@@ -21,7 +22,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading }) => {
   };
   
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
           <label 
@@ -50,7 +51,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading }) => {
               placeholder="Paste your full sermon notes here..."
               value={sermonNotes}
               onChange={(e) => setSermonNotes(e.target.value)}
-              disabled={isLoading}
+              disabled={isLoading || disabled}
               required
             />
             <p className="mt-1 text-sm text-secondary-500">
@@ -69,7 +70,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading }) => {
                 placeholder="e.g., The Prodigal Son, John 3:16, God's Grace..."
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                disabled={isLoading}
+                disabled={isLoading || disabled}
                 required
               />
             </div>
@@ -79,27 +80,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading }) => {
           </div>
         )}
       </div>
-      
-      <button
-        type="submit"
-        disabled={isLoading}
-        className={`btn-primary w-full flex items-center justify-center ${
-          isLoading ? 'opacity-70 cursor-not-allowed' : ''
-        }`}
-      >
-        {isLoading ? (
-          <>
-            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            Creating Your Art...
-          </>
-        ) : (
-          'Generate Sermon Art Concept'
-        )}
-      </button>
-    </form>
+    </div>
   );
 };
 

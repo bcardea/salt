@@ -19,6 +19,7 @@ const GeneratorPage: React.FC = () => {
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
+  const [inputText, setInputText] = useState('');
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -66,7 +67,7 @@ const GeneratorPage: React.FC = () => {
     }
   };
 
-  const handleGeneratePrompt = async (input: string) => {
+  const handleGeneratePrompt = async () => {
     if (!apiKey) {
       setError('Please enter your OpenAI API key first');
       return;
@@ -82,14 +83,19 @@ const GeneratorPage: React.FC = () => {
       return;
     }
 
+    if (!inputText.trim()) {
+      setError('Please enter your sermon details');
+      return;
+    }
+
     setError('');
     setStatus('generating-prompt');
-    setTopic(input);
+    setTopic(inputText);
     
     try {
       const generatedPrompt = await generateSermonArtPrompt(
-        input.length > 100 ? 'Sermon Artwork' : input.toUpperCase(),
-        input,
+        inputText.length > 100 ? 'Sermon Artwork' : inputText.toUpperCase(),
+        inputText,
         apiKey,
         selectedStyle
       );
@@ -165,8 +171,9 @@ const GeneratorPage: React.FC = () => {
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Details</h2>
             <SermonForm
-              onSubmit={handleGeneratePrompt}
+              onSubmit={setInputText}
               isLoading={status !== 'idle'}
+              disabled={status !== 'idle'}
             />
           </div>
 
@@ -194,10 +201,34 @@ const GeneratorPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Step 3: Generated Prompt and Final Image Generation */}
+          {/* Step 3: Generate Concept */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">Step 3: Generate Your Concept</h2>
+            <button
+              onClick={handleGeneratePrompt}
+              disabled={status !== 'idle' || !inputText.trim() || !selectedStyle}
+              className={`btn-primary w-full flex items-center justify-center ${
+                status !== 'idle' || !inputText.trim() || !selectedStyle ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
+            >
+              {status === 'generating-prompt' ? (
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating Your Concept...
+                </>
+              ) : (
+                'Generate Sermon Art Concept'
+              )}
+            </button>
+          </div>
+
+          {/* Step 4: Generated Prompt and Final Image Generation */}
           {prompt && (
             <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Step 3: Customize and Generate</h2>
+              <h2 className="text-xl font-semibold mb-4">Step 4: Customize and Generate</h2>
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-secondary-700 mb-2">

@@ -11,28 +11,28 @@ const HomePage: React.FC = () => {
         <div className="absolute inset-0 pointer-events-none hidden md:block">
           <div className="absolute top-1/4 -left-12 w-72 lg:w-96 h-72 lg:h-96 transform -rotate-12 hover:rotate-0 transition-transform duration-500">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
           <div className="absolute top-1/3 right-0 w-64 lg:w-80 h-64 lg:h-80 transform rotate-12 hover:rotate-0 transition-transform duration-500">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
           <div className="absolute bottom-1/4 -left-24 w-56 lg:w-72 h-56 lg:h-72 transform rotate-6 hover:rotate-0 transition-transform duration-500">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
           </div>
           <div className="absolute bottom-1/3 right-12 w-48 lg:w-64 h-48 lg:h-64 transform -rotate-6 hover:rotate-0 transition-transform duration-500">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
               alt=""
               className="w-full h-full object-cover rounded-3xl shadow-2xl"
             />
@@ -44,12 +44,12 @@ const HomePage: React.FC = () => {
           <div className="absolute top-0 left-0 right-0 h-full overflow-hidden opacity-20">
             <div className="grid grid-cols-2 gap-4 p-4">
               <img 
-                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png"
+                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
                 alt=""
                 className="w-full h-48 object-cover rounded-2xl"
               />
               <img 
-                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png"
+                src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
                 alt=""
                 className="w-full h-48 object-cover rounded-2xl"
               />
@@ -101,12 +101,12 @@ const HomePage: React.FC = () => {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
             {[
-              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png",
-              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png",
-              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png",
-              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png",
-              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab5542638e915.png",
-              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af4ad1fb159ae92eb7.png"
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
+              "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
             ].map((src, index) => (
               <div 
                 key={index}

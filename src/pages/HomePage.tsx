@@ -25,7 +25,7 @@ const toImages = [
 ];
 
 const mascotUrl =
-  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/66c4cab2908c2c648fb54238.svg"; // Swap with your local file if needed
+  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68252b4db098805b4b4520fc.png";
 
 const HomePage = () => {
   return (

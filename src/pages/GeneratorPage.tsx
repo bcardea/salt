@@ -175,24 +175,27 @@ const GeneratorPage: React.FC = () => {
           {/* Step 2: Choose Style */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 2: Choose Your Style</h2>
-            <div className="relative">
-              {hoveredStyle && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 -translate-y-full w-64 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <img
-                    src={hoveredStyle.previewUrl}
-                    alt={`${hoveredStyle.title} preview`}
-                    className="w-full h-auto rounded-lg shadow-xl"
-                  />
-                </div>
-              )}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {STYLE_PRESETS.map((style) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {STYLE_PRESETS.map((style) => (
+                <div key={style.id} className="relative group">
+                  {/* Preview Image */}
+                  <div 
+                    className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 opacity-0 scale-95 transition-all duration-200 pointer-events-none z-50
+                      ${hoveredStyle?.id === style.id ? 'opacity-100 scale-100' : ''}`}
+                  >
+                    <img
+                      src={style.previewUrl}
+                      alt={`${style.title} preview`}
+                      className="w-full h-auto rounded-lg shadow-xl"
+                    />
+                  </div>
+                  
+                  {/* Style Button */}
                   <button
-                    key={style.id}
                     onClick={() => setSelectedStyle(style)}
                     onMouseEnter={() => setHoveredStyle(style)}
                     onMouseLeave={() => setHoveredStyle(undefined)}
-                    className={`group p-3 text-left rounded-md border transition-all ${
+                    className={`w-full p-3 text-left rounded-md border transition-all ${
                       status !== 'idle' ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-500'
                     } ${
                       selectedStyle?.id === style.id
@@ -204,8 +207,8 @@ const GeneratorPage: React.FC = () => {
                     <div className="font-medium text-sm">{style.title}</div>
                     <div className="text-xs text-secondary-600 mt-1">{style.description}</div>
                   </button>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
 

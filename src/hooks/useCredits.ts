@@ -13,14 +13,30 @@ export function useCredits() {
 
   const fetchCredits = async () => {
     try {
-      const { data, error } = await supabase
+      const { data: userCredits, error: creditsError } = await supabase
         .from('user_credits')
         .select('credits_remaining, next_reset_at')
         .single();
 
-      if (error) throw error;
-      setCredits(data);
+      if (creditsError) {
+        // If no record exists, create one for the user
+        if (creditsError.code === 'PGRST116') {
+          const { data: newCredits, error: insertError } = await supabase
+            .from('user_credits')
+            .insert({})
+            .select('credits_remaining, next_reset_at')
+            .single();
+
+          if (insertError) throw insertError;
+          setCredits(newCredits);
+          return;
+        }
+        throw creditsError;
+      }
+
+      setCredits(userCredits);
     } catch (err) {
+      console.error('Error fetching credits:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch credits');
     } finally {
       setLoading(false);

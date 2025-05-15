@@ -1,5 +1,5 @@
 import axios from "axios";
-import { openai } from "../lib/openaiClient";
+import { getOpenAIClient } from "../lib/openaiClient";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
@@ -36,13 +36,10 @@ async function urlToFile(url: string): Promise<File> {
 export async function generateSermonArtPrompt(
   sermTitle: string,
   topic: string,
-  apiKey?: string,
+  apiKey: string,
   stylePreset?: StylePreset
 ): Promise<string> {
-  // Set API key if provided
-  if (apiKey) {
-    openai.apiKey = apiKey;
-  }
+  const openai = getOpenAIClient(apiKey);
 
   const isFullNotes = topic.length > 100;
   const typographyInstructions = "Typography: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
@@ -94,8 +91,7 @@ export async function generateSermonArt(
   apiKey: string,
   stylePreset?: StylePreset
 ): Promise<string | null> {
-  // Set API key
-  openai.apiKey = apiKey;
+  const openai = getOpenAIClient(apiKey);
 
   console.time('Total image generation');
   

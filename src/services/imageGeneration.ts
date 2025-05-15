@@ -88,3 +88,4 @@ Create a completely new image that applies these style elements to the content d
   }
 
   // Rest of the function remains the same...
+}

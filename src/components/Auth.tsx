@@ -12,6 +12,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [showBetaForm, setShowBetaForm] = useState(false);
 
   const validateInviteCode = async (code: string): Promise<boolean> => {
     const { data, error } = await supabase
@@ -69,9 +70,53 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
     }
   };
 
+  if (showBetaForm) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 relative">
+          <button
+            onClick={() => setShowBetaForm(false)}
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          >
+            ×
+          </button>
+          <iframe
+            src="https://api.leadconnectorhq.com/widget/form/GeeGU9WJM8gIAjaSgAD7"
+            style={{width: '100%', height: '745px', border: 'none', borderRadius: '3px'}}
+            id="inline-GeeGU9WJM8gIAjaSgAD7" 
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Salt Sign-Up"
+            data-height="745"
+            data-layout-iframe-id="inline-GeeGU9WJM8gIAjaSgAD7"
+            data-form-id="GeeGU9WJM8gIAjaSgAD7"
+            title="Salt Sign-Up"
+          />
+          <script src="https://link.msgsndr.com/js/form_embed.js" async></script>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-md mx-auto p-6">
       <div className="text-center mb-8">
+        <p className="text-secondary-600 mb-6">
+          SALT Creative is currently in beta and only accepting new accounts by private invite. 
+          If you're interested in using Salt, We'd love to speak with you. Please{' '}
+          <button 
+            onClick={() => setShowBetaForm(true)}
+            className="text-primary-600 hover:text-primary-700 font-medium"
+          >
+            Click Here
+          </button>{' '}
+          to schedule a time for us to speak with you and to learn more about using Salt.
+        </p>
         <h2 className="text-2xl font-bold text-secondary-900">
           {mode === 'signin' ? 'Welcome Back' : 'Create Your Account'}
         </h2>

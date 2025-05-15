@@ -221,7 +221,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "youth",
     title: "Youthful Collage",
     description: "Modern grunge collage full of energy and layers",
-    promptModifiers: "Blend contemporary urban aesthetics with layered textures and dynamic compositions. Consider using mixed media elements, typography as design elements, and energetic visual treatments. The design should feel fresh and authentic, avoiding forced 'youth' stereotypes.",
+    promptModifiers: "Create a dynamic collage composition with multiple overlapping elements, torn paper textures, and layered design elements. Include: 1) A base layer with grungy textures or distressed patterns 2) Multiple overlapping geometric shapes or torn paper elements 3) Typography treated as graphic elements with parts intentionally overlapping or breaking the frame 4) Subtle shadow effects to create depth between layers 5) Small decorative elements like paint splatters, tape, or paper clips scattered thoughtfully. The overall composition should feel energetic and intentionally layered, with clear visual hierarchy despite the complexity.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
   },

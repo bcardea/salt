@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 
 interface AuthProps {
@@ -13,6 +13,20 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [showBetaForm, setShowBetaForm] = useState(false);
+
+  useEffect(() => {
+    // Load the form embed script when the modal is shown
+    if (showBetaForm) {
+      const script = document.createElement('script');
+      script.src = 'https://link.msgsndr.com/js/form_embed.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }, [showBetaForm]);
 
   const validateInviteCode = async (code: string): Promise<boolean> => {
     const { data, error } = await supabase
@@ -73,31 +87,21 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   if (showBetaForm) {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 relative">
+        <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto">
           <button
             onClick={() => setShowBetaForm(false)}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold z-10"
           >
             ×
           </button>
-          <iframe
-            src="https://api.leadconnectorhq.com/widget/form/GeeGU9WJM8gIAjaSgAD7"
-            style={{width: '100%', height: '745px', border: 'none', borderRadius: '3px'}}
-            id="inline-GeeGU9WJM8gIAjaSgAD7" 
-            data-layout="{'id':'INLINE'}"
-            data-trigger-type="alwaysShow"
-            data-trigger-value=""
-            data-activation-type="alwaysActivated"
-            data-activation-value=""
-            data-deactivation-type="neverDeactivate"
-            data-deactivation-value=""
-            data-form-name="Salt Sign-Up"
-            data-height="745"
-            data-layout-iframe-id="inline-GeeGU9WJM8gIAjaSgAD7"
+          <div
+            data-leadconnector-embed="form"
             data-form-id="GeeGU9WJM8gIAjaSgAD7"
-            title="Salt Sign-Up"
-          />
-          <script src="https://link.msgsndr.com/js/form_embed.js" async></script>
+            data-trigger-type="alwaysShow"
+            data-activation-type="alwaysActivated"
+            data-deactivation-type="neverDeactivate"
+            style={{minHeight: '745px'}}
+          ></div>
         </div>
       </div>
     );

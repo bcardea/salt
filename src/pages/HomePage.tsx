@@ -57,6 +57,26 @@ const ministryUsesCases = [
     description: "Attract volunteers and promote kids' programs",
     image: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262b36b6b7cd59b6d72c72.jpeg",
     formats: ["Recruitment Posts", "Parent Communications", "Signage"]
+  },
+  {
+    title: "Last-Minute Requests",
+    description: "Handle urgent design needs with confidence",
+    image: "https://images.pexels.com/photos/3182833/pexels-photo-3182833.jpeg",
+    formats: ["Quick Turnaround", "Team Communication", "24/7 Availability"],
+    chat: [
+      {
+        role: "request",
+        message: "Hey, sorry to ask so late on a Saturday but we need a design for Prayer Night ready by tomorrow morning's service"
+      },
+      {
+        role: "response",
+        message: "No problem! I can use SALT to create this, I'll have it ready in 5 minutes!"
+      },
+      {
+        role: "request",
+        message: "🙌 Amazing, thank you! 🙏"
+      }
+    ]
   }
 ];
 
@@ -174,32 +194,70 @@ const HomePage = () => {
                 key={index}
                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
               >
-                <div className="aspect-[4/3] relative overflow-hidden">
-                  <img
-                    src={useCase.image}
-                    alt={useCase.title}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-secondary-900 mb-2">
-                    {useCase.title}
-                  </h3>
-                  <p className="text-secondary-600 mb-4">
-                    {useCase.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {useCase.formats.map((format, idx) => (
-                      <span 
-                        key={idx}
-                        className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm"
-                      >
-                        {format}
-                      </span>
-                    ))}
+                {useCase.chat ? (
+                  <div className="p-6 h-full flex flex-col">
+                    <h3 className="text-xl font-bold text-secondary-900 mb-4">
+                      {useCase.title}
+                    </h3>
+                    <div className="flex-grow space-y-3">
+                      {useCase.chat.map((message, idx) => (
+                        <div
+                          key={idx}
+                          className={`flex ${message.role === 'response' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          <div
+                            className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                              message.role === 'response'
+                                ? 'bg-primary-600 text-white'
+                                : 'bg-secondary-100'
+                            }`}
+                          >
+                            <p className="text-sm">{message.message}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {useCase.formats.map((format, idx) => (
+                        <span 
+                          key={idx}
+                          className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm"
+                        >
+                          {format}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="aspect-[4/3] relative overflow-hidden">
+                      <img
+                        src={useCase.image}
+                        alt={useCase.title}
+                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-bold text-secondary-900 mb-2">
+                        {useCase.title}
+                      </h3>
+                      <p className="text-secondary-600 mb-4">
+                        {useCase.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {useCase.formats.map((format, idx) => (
+                          <span 
+                            key={idx}
+                            className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm"
+                          >
+                            {format}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             ))}
           </div>

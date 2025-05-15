@@ -30,14 +30,15 @@ const HomePage = () => {
   return (
     <div className="bg-white text-gray-900 font-sans">
       {/* Hero Section */}
-      <section className="w-full px-4 md:px-0 pt-14 md:pt-24 pb-10 md:pb-20 bg-gradient-to-b from-secondary-50 to-white">
+      <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-10 md:pb-20 bg-gradient-to-b from-secondary-50 to-white">
         <div className="max-w-7xl mx-auto flex flex-col-reverse md:grid md:grid-cols-2 gap-10 items-center">
           {/* LEFT: TEXT */}
-          <div className="relative flex flex-col items-start justify-center md:pr-10">
+          <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
               Your Words,<br />
-              <span className="block mt-1 text-secondary-600">
-                <span className="young-serif gradient-text">Divinely</span> Visualized.
+              <span className="block mt-1">
+                <span className="young-serif gradient-text">Divinely</span>{" "}
+                <span className="text-secondary-900">Visualized</span>
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 mb-6">
@@ -107,7 +108,7 @@ const HomePage = () => {
       </section>
 
       {/* Use Cases Section */}
-      <section className="px-4 md:px-0 py-16 bg-gray-50 text-center">
+      <section className="px-6 md:px-8 lg:px-12 py-16 bg-gray-50 text-center">
         <h3 className="text-2xl md:text-3xl font-bold mb-6">Design Anything You Need for Ministry</h3>
         <ul className="max-w-3xl mx-auto text-left list-disc list-inside space-y-3 text-gray-800">
           <li>

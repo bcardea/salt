@@ -33,22 +33,22 @@ const HomePage = () => {
           {/* LEFT: TEXT */}
           <div className="relative flex flex-col items-start justify-center md:pr-10">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
-              From Sermon Notes<br />
+              Your Words,<br />
               <span className="block mt-1 text-secondary-600">
-                to Stunning Visuals in Minutes.
+                Divinely Visualized.
               </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-700 mb-6">
-              Generate eye-catching artwork for your next sermon at the click of a button – <span className="font-semibold text-secondary-700">fast, faithful, and effortless</span>.
+              The world has enough ordinary sermon slides. <span className="font-semibold text-secondary-700">Yours should be extraordinary</span> — in just 120 seconds.
             </p>
             <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
-              You wear many hats as a pastor. Salt Creative helps you create eye-catching, faith-filled graphics for sermons, Bible studies, and every ministry need—even with no design team. Simply give us the Title and Concept of your sermon, or paste in your entire sermon notes and we'll create the concept, allow you to make changes and then generate your artwork in just a couple moments. <span className="font-semibold text-secondary-600">Your message deserves visuals as powerful as your calling.</span>
+              You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
             </p>
             <a
               href="/generator"
               className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
             >
-              Start Creating
+              Create Your First Masterpiece
               <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </a>
           </div>

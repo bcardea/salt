@@ -113,7 +113,7 @@ const GeneratorPage: React.FC = () => {
     setError('');
     setStatus('generating-image');
     try {
-      const src = await generateSermonArt(prompt, apiKey);
+      const src = await generateSermonArt(prompt, apiKey, selectedStyle);
       setImgSrc(src);
       setStatus('complete');
       if (src) {

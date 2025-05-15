@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Play } from "lucide-react";
+import VideoModal from "../components/VideoModal";
 
 const fromImage =
   "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg";
@@ -26,7 +27,14 @@ const toImages = [
   },
 ];
 
+const DEMO_VIDEO_URL = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6825fdd739adaa074fde36eb.mp4";
+
 const HomePage = () => {
+  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+
+  const handleOpenVideo = () => setIsVideoModalOpen(true);
+  const handleCloseVideo = () => setIsVideoModalOpen(false);
+
   return (
     <div className="bg-white text-gray-900 font-sans">
       {/* Hero Section */}
@@ -47,13 +55,22 @@ const HomePage = () => {
             <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
               You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
             </p>
-            <Link
-              to="/generator"
-              className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
-            >
-              Create Your First Masterpiece
-              <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Link
+                to="/generator"
+                className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
+              >
+                Create Your First Masterpiece
+                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <button
+                onClick={handleOpenVideo}
+                className="inline-flex items-center px-8 py-4 text-lg font-bold text-secondary-900 bg-white border-2 border-secondary-900 rounded-full shadow-lg hover:bg-secondary-50 transition-all group"
+              >
+                Watch Demo
+                <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            </div>
           </div>
 
           {/* RIGHT: TRANSFORMATION IMAGES */}
@@ -79,8 +96,7 @@ const HomePage = () => {
                 height="60"
                 className="my-2 md:my-4 text-secondary-200"
                 fill="none"
-                viewBox="0 0 32 60"
-                style={{ minHeight: "48px" }}
+                viewBox="0 0 24 24"
               >
                 <path
                   d="M16 0v54M16 54l-8-8M16 54l8-8"
@@ -126,7 +142,11 @@ const HomePage = () => {
         </ul>
       </section>
 
-      {/* ...the rest of your page, benefits, midpage CTA, footer etc. */}
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={handleCloseVideo}
+        videoUrl={DEMO_VIDEO_URL}
+      />
     </div>
   );
 };

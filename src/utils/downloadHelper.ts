@@ -34,21 +34,3 @@ export const downloadImage = async (url: string, filename: string): Promise<void
     throw new Error('Failed to download image');
   }
 };
-
-/**
- * Converts a URL to a File object
- * @param url The URL to convert to a File
- * @returns A Promise that resolves to a File object
- */
-export const urlToFile = async (url: string): Promise<File> => {
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error('Failed to fetch image');
-    
-    const blob = await response.blob();
-    return new File([blob], 'reference.jpg', { type: blob.type });
-  } catch (error) {
-    console.error('Error converting URL to File:', error);
-    throw new Error('Failed to convert URL to File');
-  }
-};

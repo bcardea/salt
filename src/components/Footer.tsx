@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Footer: React.FC = () => {
+const Footer: React.FC<{ onWatchDemo?: () => void }> = ({ onWatchDemo }) => {
   return (
     <footer className="bg-secondary-900 text-white py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -11,6 +11,12 @@ const Footer: React.FC = () => {
             <p className="text-secondary-200 text-sm">
               Create beautiful, custom artwork for your sermons using AI technology.
             </p>
+            <button
+              onClick={onWatchDemo}
+              className="mt-4 text-white hover:text-secondary-200 text-sm transition-colors"
+            >
+              Watch Demo Video
+            </button>
           </div>
           
           <div>
@@ -60,5 +66,3 @@ const Footer: React.FC = () => {
     </footer>
   );
 };
-
-export default Footer;

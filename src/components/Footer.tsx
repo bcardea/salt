@@ -42,7 +42,13 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
             <p className="text-secondary-200 text-sm">
-              Questions? Reach out to our support team.
+              Questions? Reach out to our support team at{' '}
+              <a 
+                href="mailto:salt-support@usebeanstalk.com"
+                className="text-white hover:text-secondary-200 transition-colors"
+              >
+                salt-support@usebeanstalk.com
+              </a>
             </p>
           </div>
         </div>

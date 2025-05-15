@@ -50,6 +50,19 @@ const TermsPage: React.FC = () => {
               We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of modified terms.
             </p>
           </section>
+
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">7. Support</h2>
+            <p className="mb-4">
+              For support inquiries, please contact us at{' '}
+              <a 
+                href="mailto:salt-support@usebeanstalk.com"
+                className="text-primary-600 hover:text-primary-700"
+              >
+                salt-support@usebeanstalk.com
+              </a>
+            </p>
+          </section>
         </div>
       </div>
     </div>

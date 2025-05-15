@@ -65,6 +65,19 @@ const PrivacyPage: React.FC = () => {
               <li>Opt-out of promotional communications</li>
             </ul>
           </section>
+
+          <section className="mb-8">
+            <h2 className="text-xl font-semibold mb-4">6. Contact Us</h2>
+            <p className="mb-4">
+              If you have any questions about this Privacy Policy, please contact us at{' '}
+              <a 
+                href="mailto:salt-support@usebeanstalk.com"
+                className="text-primary-600 hover:text-primary-700"
+              >
+                salt-support@usebeanstalk.com
+              </a>
+            </p>
+          </section>
         </div>
       </div>
     </div>

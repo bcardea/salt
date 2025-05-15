@@ -27,6 +27,39 @@ const toImages = [
   },
 ];
 
+const ministryUsesCases = [
+  {
+    title: "Community Service Events",
+    description: "Promote your church's outreach and service initiatives",
+    image: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262b369ce13305523fb0b0.jpeg",
+    formats: ["Posters", "Social Media", "Email Headers"]
+  },
+  {
+    title: "Youth Ministry",
+    description: "Engage young people with dynamic, relevant designs",
+    image: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262b3687ff6450da9e721e.jpeg",
+    formats: ["Instagram Stories", "Event Banners", "Digital Signage"]
+  },
+  {
+    title: "Women's Ministry",
+    description: "Create beautiful materials for women's events and studies",
+    image: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262b36b6b7cd5fefd72c71.jpeg",
+    formats: ["Social Posts", "Study Guides", "Event Flyers"]
+  },
+  {
+    title: "Men's Fellowship",
+    description: "Design impactful graphics for men's gatherings",
+    image: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262b36a32ad3085a164bf6.jpeg",
+    formats: ["Digital Banners", "Social Media", "Print Materials"]
+  },
+  {
+    title: "Children's Ministry",
+    description: "Attract volunteers and promote kids' programs",
+    image: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262b36b6b7cd59b6d72c72.jpeg",
+    formats: ["Recruitment Posts", "Parent Communications", "Signage"]
+  }
+];
+
 const DEMO_VIDEO_URL = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6825fdd739adaa074fde36eb.mp4";
 
 const HomePage = () => {
@@ -123,23 +156,54 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Use Cases Section */}
-      <section className="px-6 md:px-8 lg:px-12 py-16 bg-gray-50 text-center">
-        <h3 className="text-2xl md:text-3xl font-bold mb-6">Design Anything You Need for Ministry</h3>
-        <ul className="max-w-3xl mx-auto text-left list-disc list-inside space-y-3 text-gray-800">
-          <li>
-            <strong>Sermon Series Artwork:</strong> Instantly create stunning title slides and social media graphics that capture your message.
-          </li>
-          <li>
-            <strong>Bible Study & Small Group Invites:</strong> Engaging images for Bible studies, youth nights, and small group gatherings.
-          </li>
-          <li>
-            <strong>Event Promotions & Digital Signage:</strong> Design announcement slides, flyers, and digital signage in minutes.
-          </li>
-          <li>
-            <strong>Social Media Inspiration:</strong> Turn verses or quotes into shareable graphics that inspire and encourage.
-          </li>
-        </ul>
+      {/* Ministry Use Cases Section */}
+      <section className="px-6 md:px-8 lg:px-12 py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
+              Design Anything You Need for Ministry
+            </h2>
+            <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
+              From sermon graphics to event promotions, SALT helps you create professional designs for every aspect of your ministry.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {ministryUsesCases.map((useCase, index) => (
+              <div 
+                key={index}
+                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+              >
+                <div className="aspect-[4/3] relative overflow-hidden">
+                  <img
+                    src={useCase.image}
+                    alt={useCase.title}
+                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-secondary-900 mb-2">
+                    {useCase.title}
+                  </h3>
+                  <p className="text-secondary-600 mb-4">
+                    {useCase.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {useCase.formats.map((format, idx) => (
+                      <span 
+                        key={idx}
+                        className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm"
+                      >
+                        {format}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
 
       <VideoModal

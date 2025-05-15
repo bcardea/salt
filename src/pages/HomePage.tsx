@@ -4,7 +4,8 @@ import { ArrowRight } from "lucide-react";
 const fromImage =
   "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg";
 
-// The ACTUAL art examples you referenced
+const saltyImage = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68253020b12e575165b9498e.svg";
+
 const toImages = [
   {
     src: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
@@ -57,6 +58,12 @@ const HomePage = () => {
           <div className="w-full flex flex-col items-center relative">
             <div className="flex flex-col items-center mb-2">
               <div className="relative">
+                {/* Salty SVG positioned to the left */}
+                <img
+                  src={saltyImage}
+                  alt=""
+                  className="absolute -left-24 top-1/2 -translate-y-1/2 w-24 h-auto z-10"
+                />
                 <img
                   src={fromImage}
                   alt="Sermon Notes"

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import ApiKeyInput from '../components/ApiKeyInput';
 import Auth from '../components/Auth';
-import { useApiKey } from '../context/ApiKeyContext';
 import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
@@ -10,7 +8,6 @@ import CreditDisplay from '../components/CreditDisplay';
 import { useCredits } from '../hooks/useCredits';
 
 const GeneratorPage: React.FC = () => {
-  const { apiKey } = useApiKey();
   const [session, setSession] = useState(null);
   const [topic, setTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
@@ -66,11 +63,6 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGeneratePrompt = async () => {
-    if (!apiKey) {
-      setError('Please enter your OpenAI API key first');
-      return;
-    }
-
     if (!session) {
       setError('Please sign in to generate artwork');
       return;
@@ -99,7 +91,7 @@ const GeneratorPage: React.FC = () => {
       const generatedPrompt = await generateSermonArtPrompt(
         inputText.length > 100 ? 'Sermon Artwork' : inputText.toUpperCase(),
         inputText,
-        apiKey,
+        import.meta.env.VITE_OPENAI_API_KEY,
         selectedStyle
       );
       setPrompt(generatedPrompt);
@@ -111,7 +103,7 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGenerateArt = async () => {
-    if (!prompt.trim() || !apiKey) return;
+    if (!prompt.trim()) return;
     
     if (!session) {
       setError('Please sign in to generate artwork');
@@ -134,7 +126,7 @@ const GeneratorPage: React.FC = () => {
         throw new Error('Failed to use credit. Please try again.');
       }
 
-      const src = await generateSermonArt(prompt, apiKey, selectedStyle);
+      const src = await generateSermonArt(prompt, import.meta.env.VITE_OPENAI_API_KEY, selectedStyle);
       setImgSrc(src);
       setStatus('complete');
       if (src) {
@@ -182,12 +174,6 @@ const GeneratorPage: React.FC = () => {
             />
           </div>
         </div>
-
-        {!apiKey && (
-          <div className="max-w-lg mx-auto mb-8">
-            <ApiKeyInput />
-          </div>
-        )}
 
         <div className="card p-6 max-w-3xl mx-auto">
           {/* Step 1: Enter Sermon Details */}

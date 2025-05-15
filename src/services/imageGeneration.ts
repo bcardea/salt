@@ -2,9 +2,9 @@ import OpenAI from "openai";
 import * as fs from "fs";  // for reading reference images
 import * as path from "path";
 
-// Initialize OpenAI API (assumes OPENAI_API_KEY is set in env)
+// Initialize OpenAI API (assumes VITE_OPENAI_API_KEY is set in env)
 const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   dangerouslyAllowBrowser: true 
 });
 

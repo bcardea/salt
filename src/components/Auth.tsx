@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 interface AuthProps {
@@ -12,18 +12,15 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [showForm, setShowForm] = useState(false);
 
-  useEffect(() => {
-    // Add the form embed script
-    const script = document.createElement('script');
-    script.src = 'https://link.msgsndr.com/js/form_embed.js';
-    script.async = true;
-    document.body.appendChild(script);
+  const handleShowForm = () => {
+    setShowForm(true);
+  };
 
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []);
+  const handleCloseForm = () => {
+    setShowForm(false);
+  };
 
   const validateInviteCode = async (code: string): Promise<boolean> => {
     const { data, error } = await supabase
@@ -36,7 +33,6 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
       return false;
     }
 
-    // Use the invite code
     const { data: useResult } = await supabase
       .rpc('use_invite_code', { invite_code: code });
 
@@ -50,7 +46,6 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
 
     try {
       if (mode === 'signup') {
-        // Validate invite code first
         if (!inviteCode) {
           throw new Error('Invite code is required');
         }
@@ -86,7 +81,14 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
       <div className="text-center mb-8">
         <p className="text-secondary-600 mb-6">
           SALT Creative is currently in beta and only accepting new accounts by private invite. 
-          If you're interested in using Salt, We'd love to speak with you.
+          If you're interested in using Salt,{' '}
+          <button 
+            onClick={handleShowForm}
+            className="text-primary-600 hover:text-primary-700 font-medium"
+          >
+            Click Here
+          </button>
+          {' '}to schedule a time for us to speak with you and to learn more about using Salt.
         </p>
         <h2 className="text-2xl font-bold text-secondary-900">
           {mode === 'signin' ? 'Welcome Back' : 'Create Your Account'}
@@ -181,23 +183,26 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
         </div>
       </form>
 
-      <iframe
-        src="https://api.leadconnectorhq.com/widget/form/GeeGU9WJM8gIAjaSgAD7"
-        style={{ display: 'none', width: '100%', height: '100%', border: 'none', borderRadius: '3px' }}
-        id="popup-GeeGU9WJM8gIAjaSgAD7" 
-        data-layout="{'id':'POPUP'}"
-        data-trigger-type="alwaysShow"
-        data-trigger-value=""
-        data-activation-type="alwaysActivated"
-        data-activation-value=""
-        data-deactivation-type="neverDeactivate"
-        data-deactivation-value=""
-        data-form-name="Salt Sign-Up "
-        data-height="639"
-        data-layout-iframe-id="popup-GeeGU9WJM8gIAjaSgAD7"
-        data-form-id="GeeGU9WJM8gIAjaSgAD7"
-        title="Salt Sign-Up "
-      />
+      {showForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white w-full max-w-3xl h-[80vh] rounded-lg relative">
+            <button
+              onClick={handleCloseForm}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <iframe
+              src="https://api.leadconnectorhq.com/widget/form/GeeGU9WJM8gIAjaSgAD7"
+              className="w-full h-full rounded-lg"
+              style={{ border: 'none' }}
+              title="Salt Sign-Up Form"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

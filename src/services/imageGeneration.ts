@@ -1,10 +1,10 @@
-import OpenAI from "openai";
+import { Configuration, OpenAIApi } from "openai";
+import * as fs from "fs";  // for reading reference images
+import * as path from "path";
 
-// Initialize OpenAI API (assumes VITE_OPENAI_API_KEY is set in env)
-const openai = new OpenAI({ 
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
-  dangerouslyAllowBrowser: true 
-});
+// Initialize OpenAI API (assumes OPENAI_API_KEY is set in env)
+const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAIApi(configuration);
 
 // Define the structure for style presets
 interface StylePreset {
@@ -12,8 +12,8 @@ interface StylePreset {
   name: string;
   // A brief description or set of modifiers defining the style (for prompt context)
   stylePrompt: string;
-  // URL to the reference image for this style
-  previewUrl: string;
+  // Path to the reference image file for this style
+  refImagePath: string;
   // List of possible typography instruction variants for this style
   typography: string[];
 }
@@ -24,7 +24,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "photoreal",
     name: "Photorealistic",
     stylePrompt: "a cinematic, photorealistic style with realistic lighting and emotional tone. (The reference image features a young man at sunset, but use this only for mood/lighting inspiration – do **not** copy the same person or scene.) This style should feel like a real-life scene captured on camera.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png",
+    refImagePath: path.join(__dirname, "assets/styles/photoreal.png"),  // update path as needed
     typography: [
       "the title in a bold modern sans-serif font and the subtitle in a clear cursive script",
       "clean, large sans-serif text for the title, with a smaller italic serif for the subtitle",
@@ -35,7 +35,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "minimal",
     name: "Minimal Modern",
     stylePrompt: "a minimalist, modern graphic style with clean lines and ample whitespace. (The reference image is mostly abstract with simple shapes and neutral colors – **do not** add detailed scenery or characters.) Emphasize simplicity and an uncluttered design.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png",
+    refImagePath: path.join(__dirname, "assets/styles/minimalmodern.png"),
     typography: [
       "a simple, bold sans-serif font for the title and a lighter sans-serif for the subtitle",
       "modern minimal text: uppercase sans-serif title and a thin lowercase subtitle",
@@ -46,7 +46,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "retro80s",
     name: "80's Retro",
     stylePrompt: "a vibrant 1980s retro synthwave style with neon colors, sunset gradients, and palm trees. (The reference image shows a neon sun and palm silhouette – use this for color and vibe inspiration, **not** to duplicate the exact scene.) Create a nostalgic, energetic atmosphere true to 80s aesthetics.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png",
+    refImagePath: path.join(__dirname, "assets/styles/80s.png"),
     typography: [
       "chrome 3D lettering for the title with a neon glow, and a cursive neon-style font for the subtitle",
       "retro arcade-style bold font for the title and a hot pink script for the subtitle",
@@ -57,7 +57,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "cinematic",
     name: "Cinematic Drama",
     stylePrompt: "an epic, cinematic style with dramatic lighting and rich detail. (The reference image has a crown in dusty light – an **inspiration for mood** only, not to reuse the same crown prop.) Use deep shadows and a grand atmosphere to convey drama and significance.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png",
+    refImagePath: path.join(__dirname, "assets/styles/cinematic.png"),
     typography: [
       "a classic movie-poster look: title in an elegant serif (like Trajan) and subtitle in a subtle italic serif",
       "the title in a dramatic serif typeface, with the subtitle in smaller capital letters underneath",
@@ -68,7 +68,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "youthCollage",
     name: "Youth Collage",
     stylePrompt: "a youthful collage/art journal style with torn paper, textured overlays, and mixed media. (The reference image includes a face with torn paper and flowers – take **style inspiration** from that layering effect, not the specific face.) Incorporate grunge textures or floral elements to give an artisanal collage feel.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab5542638e915.png",
+    refImagePath: path.join(__dirname, "assets/styles/youthcollage.png"),
     typography: [
       "the title in bold sans-serif on ripped paper scraps and the subtitle in a handwritten or brush script below",
       "a gritty collage text style: title stamped or stenciled, with the subtitle in a casual script",
@@ -79,7 +79,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintagePrint",
     name: "Vintage Print",
     stylePrompt: "a vintage print poster style with halftone shading and retro colors. (The reference image shows a silhouetted figure and an old print texture – use it as **style** guide, not to reuse the same figure.) Capture a nostalgic, printed look with coarse dots and limited color palette.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af4ad1fb159ae92eb7.png",
+    refImagePath: path.join(__dirname, "assets/styles/vintageprint.png"),
     typography: [
       "the title in a bold retro sans-serif and the subtitle in an italic script, like a vintage poster",
       "text with a distressed print effect: a thick old-style sans-serif for the title and a cursive font for subtitle",
@@ -153,7 +153,7 @@ export async function generateSermonArtPrompt(
   userMessage += `Requirement: The image should include the title and subtitle text with ${typographyInstruction}.`;
 
   try {
-    const completion = await openai.chat.completions.create({
+    const completion = await openai.createChatCompletion({
       model: "gpt-4-0613",  // using GPT-4.1 (adjust model name if needed)
       temperature: 0.8,
       messages: [
@@ -161,7 +161,7 @@ export async function generateSermonArtPrompt(
         { role: "user", content: userMessage }
       ]
     });
-    const promptText = completion.choices[0]?.message?.content?.trim();
+    const promptText = completion.data.choices[0]?.message?.content?.trim();
     if (!promptText) {
       throw new Error("Empty prompt generated by GPT");
     }
@@ -183,24 +183,28 @@ export async function generateSermonArt(prompt: string, styleKey: string): Promi
   const style = getStylePreset(styleKey);
   console.log(`[generateSermonArt] Generating image for style="${style.name}" with prompt length=${prompt.length}`);
 
+  // Load the style reference image from disk
+  let imageData: Buffer;
   try {
-    // Fetch the reference image
-    const response = await fetch(style.previewUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch reference image: ${response.statusText}`);
-    }
-    const imageBlob = await response.blob();
+    imageData = await fs.promises.readFile(style.refImagePath);
+  } catch (err: any) {
+    console.error(`Error loading reference image "${style.refImagePath}":`, err);
+    throw new Error(`Reference image not found for style "${style.name}".`);
+  }
 
+  try {
     // Call the OpenAI image edit endpoint with the reference image
-    const imageResponse = await openai.images.edit({
-      image: imageBlob,
+    const imageResponse = await openai.createImageEdit({
+      model: "gpt-image-1",
+      image: imageData,
       prompt: prompt,
       n: 1,
       size: "1536x1024",    // landscape aspect for wide artwork (3:2 ratio)
       quality: "high",      // request high quality generation
       response_format: "url"// get URL to the generated image
+      // (No mask provided – the model will use the reference image for style inspiration and generate new content based on the prompt)
     });
-    const imageUrl = imageResponse.data[0]?.url;
+    const imageUrl = imageResponse.data.data[0]?.url;
     if (!imageUrl) {
       throw new Error("No image URL returned by OpenAI API");
     }

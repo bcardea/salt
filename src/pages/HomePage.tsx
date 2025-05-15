@@ -65,9 +65,9 @@ const HomePage = () => {
               </Link>
               <button
                 onClick={handleOpenVideo}
-                className="inline-flex items-center px-8 py-4 text-lg font-bold text-secondary-900 bg-white border-2 border-secondary-900 rounded-full shadow-lg hover:bg-secondary-50 transition-all group"
+                className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-600 hover:text-secondary-900 transition-colors group"
               >
-                Watch Demo
+                Watch Demo Video
                 <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>

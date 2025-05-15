@@ -13,6 +13,9 @@ export function useCredits() {
 
   const fetchCredits = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('No authenticated user');
+
       const { data: userCredits, error: creditsError } = await supabase
         .from('user_credits')
         .select('credits_remaining, next_reset_at')
@@ -23,7 +26,9 @@ export function useCredits() {
         if (creditsError.code === 'PGRST116') {
           const { data: newCredits, error: insertError } = await supabase
             .from('user_credits')
-            .insert({})
+            .insert({
+              user_id: user.id // Explicitly set the user_id to match RLS policy
+            })
             .select('credits_remaining, next_reset_at')
             .single();
 

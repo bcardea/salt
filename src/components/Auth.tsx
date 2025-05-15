@@ -8,9 +8,28 @@ interface AuthProps {
 const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [inviteCode, setInviteCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+
+  const validateInviteCode = async (code: string): Promise<boolean> => {
+    const { data, error } = await supabase
+      .from('invite_codes')
+      .select('code')
+      .eq('code', code)
+      .single();
+
+    if (error || !data) {
+      return false;
+    }
+
+    // Use the invite code
+    const { data: useResult } = await supabase
+      .rpc('use_invite_code', { invite_code: code });
+
+    return !!useResult;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +38,16 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
 
     try {
       if (mode === 'signup') {
+        // Validate invite code first
+        if (!inviteCode) {
+          throw new Error('Invite code is required');
+        }
+
+        const isValidCode = await validateInviteCode(inviteCode);
+        if (!isValidCode) {
+          throw new Error('Invalid or expired invite code');
+        }
+
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -81,6 +110,23 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
             required
           />
         </div>
+
+        {mode === 'signup' && (
+          <div>
+            <label htmlFor="inviteCode" className="block text-sm font-medium text-secondary-700">
+              Invite Code
+            </label>
+            <input
+              id="inviteCode"
+              type="text"
+              value={inviteCode}
+              onChange={(e) => setInviteCode(e.target.value)}
+              className="input-field mt-1"
+              required
+              placeholder="Enter your invite code"
+            />
+          </div>
+        )}
 
         {error && (
           <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">

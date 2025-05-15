@@ -214,7 +214,7 @@ const HomePage = () => {
                       <img
                         src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262fc2a32ad3673c166033.png"
                         alt=""
-                        className="w-48 h-auto"
+                        className="w-96 h-auto"
                       />
                     </div>
                   </div>

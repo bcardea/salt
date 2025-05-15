@@ -12,26 +12,18 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
-  const [showBetaForm, setShowBetaForm] = useState(false);
 
   useEffect(() => {
-    if (showBetaForm) {
-      const script = document.createElement('script');
-      script.src = 'https://link.msgsndr.com/js/form_embed.js';
-      script.async = true;
-      script.onload = () => {
-        // Re-initialize the form after script loads
-        if (window.LCGForms) {
-          window.LCGForms.initializeAllForms();
-        }
-      };
-      document.body.appendChild(script);
+    // Add the form embed script
+    const script = document.createElement('script');
+    script.src = 'https://link.msgsndr.com/js/form_embed.js';
+    script.async = true;
+    document.body.appendChild(script);
 
-      return () => {
-        document.body.removeChild(script);
-      };
-    }
-  }, [showBetaForm]);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
 
   const validateInviteCode = async (code: string): Promise<boolean> => {
     const { data, error } = await supabase
@@ -89,48 +81,12 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
     }
   };
 
-  if (showBetaForm) {
-    return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 relative max-h-[90vh] overflow-y-auto">
-          <button
-            onClick={() => setShowBetaForm(false)}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl font-bold z-10"
-          >
-            ×
-          </button>
-          <div
-            data-leadconnector-embed="form"
-            data-form-id="GeeGU9WJM8gIAjaSgAD7"
-            data-trigger-type="alwaysShow"
-            data-trigger-value=""
-            data-activation-type="alwaysActivated"
-            data-activation-value=""
-            data-deactivation-type="neverDeactivate"
-            data-deactivation-value=""
-            data-form-name="Salt Sign-Up"
-            data-height="745"
-            data-layout-iframe-id="inline-GeeGU9WJM8gIAjaSgAD7"
-            style={{ minHeight: '745px' }}
-          ></div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="w-full max-w-md mx-auto p-6">
       <div className="text-center mb-8">
         <p className="text-secondary-600 mb-6">
           SALT Creative is currently in beta and only accepting new accounts by private invite. 
-          If you're interested in using Salt, We'd love to speak with you. Please{' '}
-          <button 
-            onClick={() => setShowBetaForm(true)}
-            className="text-primary-600 hover:text-primary-700 font-medium"
-          >
-            Click Here
-          </button>{' '}
-          to schedule a time for us to speak with you and to learn more about using Salt.
+          If you're interested in using Salt, We'd love to speak with you.
         </p>
         <h2 className="text-2xl font-bold text-secondary-900">
           {mode === 'signin' ? 'Welcome Back' : 'Create Your Account'}
@@ -224,6 +180,24 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
           </button>
         </div>
       </form>
+
+      <iframe
+        src="https://api.leadconnectorhq.com/widget/form/GeeGU9WJM8gIAjaSgAD7"
+        style={{ display: 'none', width: '100%', height: '100%', border: 'none', borderRadius: '3px' }}
+        id="popup-GeeGU9WJM8gIAjaSgAD7" 
+        data-layout="{'id':'POPUP'}"
+        data-trigger-type="alwaysShow"
+        data-trigger-value=""
+        data-activation-type="alwaysActivated"
+        data-activation-value=""
+        data-deactivation-type="neverDeactivate"
+        data-deactivation-value=""
+        data-form-name="Salt Sign-Up "
+        data-height="639"
+        data-layout-iframe-id="popup-GeeGU9WJM8gIAjaSgAD7"
+        data-form-id="GeeGU9WJM8gIAjaSgAD7"
+        title="Salt Sign-Up "
+      />
     </div>
   );
 };

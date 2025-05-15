@@ -1,236 +1,217 @@
-import axios from "axios";
-import { openai } from "../lib/openaiClient";
+import { Configuration, OpenAIApi } from "openai";
+import * as fs from "fs";  // for reading reference images
+import * as path from "path";
 
-/* ------------------------------------------------------------------ */
-/* Types                                                              */
-/* ------------------------------------------------------------------ */
-export type StylePreset = {
+// Initialize OpenAI API (assumes OPENAI_API_KEY is set in env)
+const configuration = new Configuration({ apiKey: process.env.OPENAI_API_KEY });
+const openai = new OpenAIApi(configuration);
+
+// Define the structure for style presets
+interface StylePreset {
   id: string;
-  title: string;
-  description: string;
-  promptModifiers: string;
-  previewUrl: string;
-  referenceUrl: string;
-};
-
-/* ------------------------------------------------------------------ */
-/* 1) Utility: fetch URL → File                                       */
-/* ------------------------------------------------------------------ */
-async function urlToFile(url: string): Promise<File> {
-  console.log(`Downloading reference image...`);
-  const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
-  const type = res.headers["content-type"] ?? "image/png";
-  const blob = new Blob([res.data], { type });
-  const file = new File([blob], `reference.png`, { type });
-  console.log(`Reference image downloaded:`, {
-    size: file.size,
-    type: file.type,
-    name: file.name
-  });
-  return file;
+  name: string;
+  // A brief description or set of modifiers defining the style (for prompt context)
+  stylePrompt: string;
+  // Path to the reference image file for this style
+  refImagePath: string;
+  // List of possible typography instruction variants for this style
+  typography: string[];
 }
 
-/* ------------------------------------------------------------------ */
-/* 2) Generate prompt text                                            */
-/* ------------------------------------------------------------------ */
-export async function generateSermonArtPrompt(
-  sermTitle: string,
-  topic: string,
-  apiKey?: string,
-  stylePreset?: StylePreset
-): Promise<string> {
-  // Set API key if provided
-  if (apiKey) {
-    openai.apiKey = apiKey;
-  }
-
-  const isFullNotes = topic.length > 100;
-  const typographyInstructions = "Typography: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
-
-  const systemPrompt = isFullNotes
-    ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.
-
-When given a style reference, use it as inspiration for the mood, tone, and artistic approach, but don't be constrained by it. Instead, think about what visual elements would best serve this specific message while maintaining the essence of the chosen style.
-
-Focus on:
-- Creating unique compositions that serve the specific message
-- Using visual metaphors that reinforce the sermon's theme
-- Ensuring the design enhances rather than overshadows the message
-- Maintaining professional, modern aesthetics
-- Placing text thoughtfully to maximize impact
-
-${typographyInstructions}`;
-
-  const chat = await openai.chat.completions.create({
-    model: "gpt-4.1-2025-04-14",
-    messages: [
-      {
-        role: "system",
-        content: systemPrompt
-      },
-      {
-        role: "user",
-        content: isFullNotes
-          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
-              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
-            }`
-          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
-              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
-            }`
-      }
-    ],
-    temperature: 0.8
-  });
-
-  return chat.choices[0].message.content!.trim();
-}
-
-/* ------------------------------------------------------------------ */
-/* 3) Generate image                                                  */
-/* ------------------------------------------------------------------ */
-export async function generateSermonArt(
-  prompt: string,
-  apiKey: string,
-  stylePreset?: StylePreset
-): Promise<string | null> {
-  // Set API key
-  openai.apiKey = apiKey;
-
-  console.time('Total image generation');
-  
-  // Download reference image if style is selected
-  let referenceFile: File | undefined;
-  if (stylePreset) {
-    console.time('Download reference image');
-    try {
-      referenceFile = await urlToFile(stylePreset.referenceUrl);
-    } catch (error) {
-      console.error('Error downloading reference image:', error);
-      throw new Error('Failed to download reference image');
-    }
-    console.timeEnd('Download reference image');
-  }
-
-  // Append reference image instructions to the prompt
-  const finalPrompt = stylePreset 
-    ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
-    : prompt;
-
-  console.time('OpenAI API call');
-  let rsp;
-  try {
-    console.log('Starting OpenAI API call...', {
-      modelName: "gpt-image-1",
-      promptLength: finalPrompt.length,
-      hasReference: !!referenceFile
-    });
-    
-    if (referenceFile) {
-      rsp = await openai.images.edit({
-        model: "gpt-image-1",
-        image: referenceFile,
-        prompt: finalPrompt,
-        size: "1536x1024",
-        quality: "high",
-        n: 1
-      });
-    } else {
-      rsp = await openai.images.generate({
-        model: "gpt-image-1",
-        prompt: finalPrompt,
-        size: "1536x1024",
-        quality: "high",
-        n: 1
-      });
-    }
-    
-    console.timeEnd('OpenAI API call');
-    console.log('API call completed successfully');
-  } catch (error: any) {
-    console.error('OpenAI API error:', {
-      name: error.name,
-      message: error.message,
-      status: error.status,
-      code: error.code,
-      type: error.type
-    });
-    throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
-  }
-
-  if (!rsp?.data?.[0]) {
-    throw new Error("No image data received from OpenAI");
-  }
-
-  const { url, b64_json } = rsp.data[0];
-  if (url) {
-    console.timeEnd('Total image generation');
-    return url;
-  }
-  if (!b64_json) throw new Error("No image data received");
-
-  console.time('Base64 to Blob conversion');
-  // Convert base64 to Blob URL for better performance
-  const byteChars = atob(b64_json);
-  const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
-  const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
-  const objectUrl = URL.createObjectURL(blob);
-  console.timeEnd('Base64 to Blob conversion');
-  console.timeEnd('Total image generation');
-
-  return objectUrl;
-}
-
-/* ------------------------------------------------------------------ */
-/* Style presets                                                      */
-/* ------------------------------------------------------------------ */
+// Style presets array – add new presets here to support more styles
 export const STYLE_PRESETS: StylePreset[] = [
   {
     id: "photoreal",
-    title: "Photographic",
-    description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
-    promptModifiers: "Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
+    name: "Photorealistic",
+    stylePrompt: "a cinematic, photorealistic style with realistic lighting and emotional tone. (The reference image features a young man at sunset, but use this only for mood/lighting inspiration – do **not** copy the same person or scene.) This style should feel like a real-life scene captured on camera.",
+    refImagePath: path.join(__dirname, "assets/styles/photoreal.png"),  // update path as needed
+    typography: [
+      "the title in a bold modern sans-serif font and the subtitle in a clear cursive script",
+      "clean, large sans-serif text for the title, with a smaller italic serif for the subtitle",
+      "the title in a crisp sans-serif typeface and the subtitle in an elegant handwritten-style font"
+    ]
   },
   {
-    id: "minimalist",
-    title: "Modern Minimal",
-    description: "Clean, editorial layout with purposeful negative space",
-    promptModifiers: "Draw inspiration from modern editorial design. Use purposeful negative space, strong typographic hierarchy, and a restrained color palette. Consider geometric elements, clean lines, or abstract shapes that complement the message. The design should feel sophisticated and intentional.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
+    id: "minimal",
+    name: "Minimal Modern",
+    stylePrompt: "a minimalist, modern graphic style with clean lines and ample whitespace. (The reference image is mostly abstract with simple shapes and neutral colors – **do not** add detailed scenery or characters.) Emphasize simplicity and an uncluttered design.",
+    refImagePath: path.join(__dirname, "assets/styles/minimalmodern.png"),
+    typography: [
+      "a simple, bold sans-serif font for the title and a lighter sans-serif for the subtitle",
+      "modern minimal text: uppercase sans-serif title and a thin lowercase subtitle",
+      "clean typography with a neutral sans-serif font for both title and subtitle"
+    ]
   },
   {
     id: "retro80s",
-    title: "Retro 80s",
-    description: "Synthwave-inspired design with bold energy",
-    promptModifiers: "Channel retro-futuristic aesthetics with bold color gradients, dynamic lighting, and geometric elements. Consider how to incorporate synthwave elements while maintaining relevance to the sermon's message. The design should feel energetic and nostalgic without being cliché.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
+    name: "80's Retro",
+    stylePrompt: "a vibrant 1980s retro synthwave style with neon colors, sunset gradients, and palm trees. (The reference image shows a neon sun and palm silhouette – use this for color and vibe inspiration, **not** to duplicate the exact scene.) Create a nostalgic, energetic atmosphere true to 80s aesthetics.",
+    refImagePath: path.join(__dirname, "assets/styles/80s.png"),
+    typography: [
+      "chrome 3D lettering for the title with a neon glow, and a cursive neon-style font for the subtitle",
+      "retro arcade-style bold font for the title and a hot pink script for the subtitle",
+      "the title in a metallic 80s display font, with the subtitle in a neon cursive beneath it"
+    ]
   },
   {
-    id: "biblical",
-    title: "Cinematic",
-    description: "Epic, dramatic artwork inspired by ancient narratives",
-    promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
+    id: "cinematic",
+    name: "Cinematic Drama",
+    stylePrompt: "an epic, cinematic style with dramatic lighting and rich detail. (The reference image has a crown in dusty light – an **inspiration for mood** only, not to reuse the same crown prop.) Use deep shadows and a grand atmosphere to convey drama and significance.",
+    refImagePath: path.join(__dirname, "assets/styles/cinematic.png"),
+    typography: [
+      "a classic movie-poster look: title in an elegant serif (like Trajan) and subtitle in a subtle italic serif",
+      "the title in a dramatic serif typeface, with the subtitle in smaller capital letters underneath",
+      "cinematic text styling with a bold serif title and the subtitle in an understated, light serif font"
+    ]
   },
   {
-    id: "youth",
-    title: "Youthful Collage",
-    description: "Modern grunge collage full of energy and layers",
-    promptModifiers: "Create a dynamic collage composition with multiple overlapping elements, torn paper textures, and layered design elements. Include: 1) A base layer with grungy textures or distressed patterns 2) Multiple overlapping geometric shapes or torn paper elements 3) Typography treated as graphic elements with parts intentionally overlapping or breaking the frame 4) Subtle shadow effects to create depth between layers 5) Small decorative elements like paint splatters, tape, or paper clips scattered thoughtfully. The overall composition should feel energetic and intentionally layered, with clear visual hierarchy despite the complexity.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
+    id: "youthCollage",
+    name: "Youth Collage",
+    stylePrompt: "a youthful collage/art journal style with torn paper, textured overlays, and mixed media. (The reference image includes a face with torn paper and flowers – take **style inspiration** from that layering effect, not the specific face.) Incorporate grunge textures or floral elements to give an artisanal collage feel.",
+    refImagePath: path.join(__dirname, "assets/styles/youthcollage.png"),
+    typography: [
+      "the title in bold sans-serif on ripped paper scraps and the subtitle in a handwritten or brush script below",
+      "a gritty collage text style: title stamped or stenciled, with the subtitle in a casual script",
+      "typography that looks cut-out: a heavy block font for title and a playful handwritten font for subtitle"
+    ]
   },
   {
-    id: "vintage",
-    title: "Vintage Print",
-    description: "Classic aesthetic with authentic print textures",
-    promptModifiers: "Draw from classic print design with authentic textures, traditional typography, and careful attention to detail. Consider how printing artifacts and techniques can add character without overwhelming the design. The result should feel crafted and timeless.",
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png"
+    id: "vintagePrint",
+    name: "Vintage Print",
+    stylePrompt: "a vintage print poster style with halftone shading and retro colors. (The reference image shows a silhouetted figure and an old print texture – use it as **style** guide, not to reuse the same figure.) Capture a nostalgic, printed look with coarse dots and limited color palette.",
+    refImagePath: path.join(__dirname, "assets/styles/vintageprint.png"),
+    typography: [
+      "the title in a bold retro sans-serif and the subtitle in an italic script, like a vintage poster",
+      "text with a distressed print effect: a thick old-style sans-serif for the title and a cursive font for subtitle",
+      "vintage typography: title in all-caps sans-serif and subtitle in a smaller, italicized serif font"
+    ]
   }
 ];
+
+/** Helper: find a style preset by id or name (case-insensitive). Throws if not found. */
+function getStylePreset(styleIdOrName: string): StylePreset {
+  const match = STYLE_PRESETS.find(p => 
+    p.id.toLowerCase() === styleIdOrName.toLowerCase() || 
+    p.name.toLowerCase() === styleIdOrName.toLowerCase()
+  );
+  if (!match) {
+    throw new Error(`Style preset "${styleIdOrName}" not found.`);
+  }
+  return match;
+}
+
+/**
+ * Generates a descriptive image prompt for a sermon artwork using GPT-4.1.
+ * @param title    The sermon title text (will appear on the image).
+ * @param subtitle The sermon subtitle or tagline text (optional, can be empty).
+ * @param notes    Additional sermon notes or description for context (can be empty).
+ * @param styleKey The style preset identifier or name to guide art style.
+ * @return A promise resolving to a creative prompt string for the image model.
+ */
+export async function generateSermonArtPrompt(
+  title: string, 
+  subtitle: string, 
+  notes: string, 
+  styleKey: string
+): Promise<string> {
+  const style = getStylePreset(styleKey);
+  console.log(`[generateSermonArtPrompt] Generating prompt for style="${style.name}", title="${title}"`);
+
+  // Randomly pick a typography instruction from the style's suggestions
+  const typographyInstruction = style.typography[
+    Math.floor(Math.random() * style.typography.length)
+  ];
+
+  // Optionally introduce a random focus for variety (character, symbol, or scene) to reduce repetition
+  const focusOptions = [
+    `focus on a person as the main subject who embodies the message`,            // human subject focus
+    `feature a symbolic object or prop that represents the theme`,               // object/symbol focus
+    `depict a background scene or environment that conveys the atmosphere`       // scene/landscape focus
+  ];
+  const randomFocus = focusOptions[Math.floor(Math.random() * focusOptions.length)];
+
+  // Construct the system and user messages for the chat completion
+  const systemMessage = 
+    "You are a creative assistant that generates detailed image prompts for an AI image model. " +
+    "Your goal is to describe a compelling artwork for a church sermon series, given the sermon title, subtitle, notes, and a target style. " +
+    "The prompt should stay true to the sermon topic and be imaginative. " +
+    "Always include the exact title and subtitle text in the prompt, with instructions for clear, legible typography. " +
+    "Make sure the style guidelines are followed, but do not duplicate the reference image's exact composition or any specific person from it. " +
+    "Avoid repetitive visuals between prompts. Use varied compositions (sometimes a person, sometimes a symbol or scene) to illustrate the theme. " +
+    "Write the prompt in one paragraph, present tense, and in an encouraging tone.";
+  
+  // Include all relevant info for the prompt generation
+  let userMessage = `Title: "${title}"`;
+  if (subtitle && subtitle.trim().length > 0) {
+    userMessage += `\nSubtitle: "${subtitle}"`;
+  }
+  if (notes && notes.trim().length > 0) {
+    userMessage += `\nNotes: ${notes}`;
+  }
+  userMessage += `\nStyle: ${style.name} – ${style.stylePrompt}\n`;
+  userMessage += `Focus: ${randomFocus}.\n`;
+  userMessage += `Requirement: The image should include the title and subtitle text with ${typographyInstruction}.`;
+
+  try {
+    const completion = await openai.createChatCompletion({
+      model: "gpt-4-0613",  // using GPT-4.1 (adjust model name if needed)
+      temperature: 0.8,
+      messages: [
+        { role: "system", content: systemMessage },
+        { role: "user", content: userMessage }
+      ]
+    });
+    const promptText = completion.data.choices[0]?.message?.content?.trim();
+    if (!promptText) {
+      throw new Error("Empty prompt generated by GPT");
+    }
+    console.log(`[generateSermonArtPrompt] Prompt generated (${promptText.length} chars).`);
+    return promptText;
+  } catch (error: any) {
+    console.error("Error generating sermon art prompt:", error);
+    throw new Error(`Failed to generate prompt: ${error.message || error}`);
+  }
+}
+
+/**
+ * Generates the sermon artwork image using the gpt-image-1 model, given a prompt and style.
+ * @param prompt   The prompt string describing the desired image (typically from generateSermonArtPrompt, possibly edited by user).
+ * @param styleKey The style preset identifier or name (to select reference image and modifiers).
+ * @return A promise resolving to the URL of the generated image.
+ */
+export async function generateSermonArt(prompt: string, styleKey: string): Promise<string> {
+  const style = getStylePreset(styleKey);
+  console.log(`[generateSermonArt] Generating image for style="${style.name}" with prompt length=${prompt.length}`);
+
+  // Load the style reference image from disk
+  let imageData: Buffer;
+  try {
+    imageData = await fs.promises.readFile(style.refImagePath);
+  } catch (err: any) {
+    console.error(`Error loading reference image "${style.refImagePath}":`, err);
+    throw new Error(`Reference image not found for style "${style.name}".`);
+  }
+
+  try {
+    // Call the OpenAI image edit endpoint with the reference image
+    const imageResponse = await openai.createImageEdit({
+      model: "gpt-image-1",
+      image: imageData,
+      prompt: prompt,
+      n: 1,
+      size: "1536x1024",    // landscape aspect for wide artwork (3:2 ratio)
+      quality: "high",      // request high quality generation
+      response_format: "url"// get URL to the generated image
+      // (No mask provided – the model will use the reference image for style inspiration and generate new content based on the prompt)
+    });
+    const imageUrl = imageResponse.data.data[0]?.url;
+    if (!imageUrl) {
+      throw new Error("No image URL returned by OpenAI API");
+    }
+    console.log(`[generateSermonArt] Image generated. URL: ${imageUrl}`);
+    return imageUrl;
+  } catch (error: any) {
+    console.error("Error generating sermon art image:", error);
+    throw new Error(`Failed to generate image: ${error.message || error}`);
+  }
+}

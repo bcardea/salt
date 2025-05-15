@@ -59,10 +59,6 @@ const ministryUsesCases = [
     formats: ["Recruitment Posts", "Parent Communications", "Signage"]
   },
   {
-    title: "Last-Minute Requests",
-    description: "Handle urgent design needs with confidence",
-    image: "https://images.pexels.com/photos/3182833/pexels-photo-3182833.jpeg",
-    formats: ["Quick Turnaround", "Team Communication", "24/7 Availability"],
     chat: [
       {
         role: "request",
@@ -192,41 +188,26 @@ const HomePage = () => {
             {ministryUsesCases.map((useCase, index) => (
               <div 
                 key={index}
-                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+                className={useCase.chat ? "bg-transparent" : "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"}
               >
                 {useCase.chat ? (
-                  <div className="p-6 h-full flex flex-col">
-                    <h3 className="text-xl font-bold text-secondary-900 mb-4">
-                      {useCase.title}
-                    </h3>
-                    <div className="flex-grow space-y-3">
-                      {useCase.chat.map((message, idx) => (
+                  <div className="h-full flex flex-col space-y-3">
+                    {useCase.chat.map((message, idx) => (
+                      <div
+                        key={idx}
+                        className={`flex ${message.role === 'response' ? 'justify-end' : 'justify-start'}`}
+                      >
                         <div
-                          key={idx}
-                          className={`flex ${message.role === 'response' ? 'justify-end' : 'justify-start'}`}
+                          className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                            message.role === 'response'
+                              ? 'bg-primary-600 text-white'
+                              : 'bg-secondary-100'
+                          }`}
                         >
-                          <div
-                            className={`max-w-[80%] rounded-2xl px-4 py-2 ${
-                              message.role === 'response'
-                                ? 'bg-primary-600 text-white'
-                                : 'bg-secondary-100'
-                            }`}
-                          >
-                            <p className="text-sm">{message.message}</p>
-                          </div>
+                          <p className="text-sm">{message.message}</p>
                         </div>
-                      ))}
-                    </div>
-                    <div className="mt-4 flex flex-wrap gap-2">
-                      {useCase.formats.map((format, idx) => (
-                        <span 
-                          key={idx}
-                          className="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm"
-                        >
-                          {format}
-                        </span>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
                 ) : (
                   <>

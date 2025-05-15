@@ -31,7 +31,7 @@ const HomePage = () => {
     <div className="bg-white text-gray-900 font-sans">
       {/* Hero Section */}
       <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-10 md:pb-20 bg-gradient-to-b from-secondary-50 to-white">
-        <div className="max-w-7xl mx-auto flex flex-col-reverse md:grid md:grid-cols-2 gap-10 items-center">
+        <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
           {/* LEFT: TEXT */}
           <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">

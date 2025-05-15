@@ -24,7 +24,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "photoreal",
     name: "Photorealistic",
     stylePrompt: "a cinematic, photorealistic style with realistic lighting and emotional tone. (The reference image features a young man at sunset, but use this only for mood/lighting inspiration – do **not** copy the same person or scene.) This style should feel like a real-life scene captured on camera.",
-    previewUrl: "/assets/styles/photoreal.png",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png",
     typography: [
       "the title in a bold modern sans-serif font and the subtitle in a clear cursive script",
       "clean, large sans-serif text for the title, with a smaller italic serif for the subtitle",
@@ -35,7 +35,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "minimal",
     name: "Minimal Modern",
     stylePrompt: "a minimalist, modern graphic style with clean lines and ample whitespace. (The reference image is mostly abstract with simple shapes and neutral colors – **do not** add detailed scenery or characters.) Emphasize simplicity and an uncluttered design.",
-    previewUrl: "/assets/styles/minimalmodern.png",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png",
     typography: [
       "a simple, bold sans-serif font for the title and a lighter sans-serif for the subtitle",
       "modern minimal text: uppercase sans-serif title and a thin lowercase subtitle",
@@ -46,7 +46,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "retro80s",
     name: "80's Retro",
     stylePrompt: "a vibrant 1980s retro synthwave style with neon colors, sunset gradients, and palm trees. (The reference image shows a neon sun and palm silhouette – use this for color and vibe inspiration, **not** to duplicate the exact scene.) Create a nostalgic, energetic atmosphere true to 80s aesthetics.",
-    previewUrl: "/assets/styles/80s.png",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png",
     typography: [
       "chrome 3D lettering for the title with a neon glow, and a cursive neon-style font for the subtitle",
       "retro arcade-style bold font for the title and a hot pink script for the subtitle",
@@ -57,7 +57,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "cinematic",
     name: "Cinematic Drama",
     stylePrompt: "an epic, cinematic style with dramatic lighting and rich detail. (The reference image has a crown in dusty light – an **inspiration for mood** only, not to reuse the same crown prop.) Use deep shadows and a grand atmosphere to convey drama and significance.",
-    previewUrl: "/assets/styles/cinematic.png",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png",
     typography: [
       "a classic movie-poster look: title in an elegant serif (like Trajan) and subtitle in a subtle italic serif",
       "the title in a dramatic serif typeface, with the subtitle in smaller capital letters underneath",
@@ -68,7 +68,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "youthCollage",
     name: "Youth Collage",
     stylePrompt: "a youthful collage/art journal style with torn paper, textured overlays, and mixed media. (The reference image includes a face with torn paper and flowers – take **style inspiration** from that layering effect, not the specific face.) Incorporate grunge textures or floral elements to give an artisanal collage feel.",
-    previewUrl: "/assets/styles/youthcollage.png",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab5542638e915.png",
     typography: [
       "the title in bold sans-serif on ripped paper scraps and the subtitle in a handwritten or brush script below",
       "a gritty collage text style: title stamped or stenciled, with the subtitle in a casual script",
@@ -79,7 +79,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintagePrint",
     name: "Vintage Print",
     stylePrompt: "a vintage print poster style with halftone shading and retro colors. (The reference image shows a silhouetted figure and an old print texture – use it as **style** guide, not to reuse the same figure.) Capture a nostalgic, printed look with coarse dots and limited color palette.",
-    previewUrl: "/assets/styles/vintageprint.png",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af4ad1fb159ae92eb7.png",
     typography: [
       "the title in a bold retro sans-serif and the subtitle in an italic script, like a vintage poster",
       "text with a distressed print effect: a thick old-style sans-serif for the title and a cursive font for subtitle",

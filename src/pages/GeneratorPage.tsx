@@ -6,6 +6,8 @@ import { useApiKey } from '../context/ApiKeyContext';
 import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
+import CreditDisplay from '../components/CreditDisplay';
+import { useCredits } from '../hooks/useCredits';
 
 const GeneratorPage: React.FC = () => {
   const { apiKey } = useApiKey();
@@ -18,6 +20,7 @@ const GeneratorPage: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
   const [inputText, setInputText] = useState('');
+  const { credits, loading: creditsLoading, error: creditsError } = useCredits();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -83,6 +86,11 @@ const GeneratorPage: React.FC = () => {
       return;
     }
 
+    if (!credits?.credits_remaining) {
+      setError('You have no credits remaining. Please wait for your credits to reset.');
+      return;
+    }
+
     setError('');
     setStatus('generating-prompt');
     setTopic(inputText);
@@ -109,10 +117,23 @@ const GeneratorPage: React.FC = () => {
       setError('Please sign in to generate artwork');
       return;
     }
+
+    if (!credits?.credits_remaining) {
+      setError('You have no credits remaining. Please wait for your credits to reset.');
+      return;
+    }
     
     setError('');
     setStatus('generating-image');
     try {
+      // Attempt to decrement credits first
+      const { data: decrementResult, error: decrementError } = await supabase
+        .rpc('decrement_credits', { user_id: session.user.id });
+
+      if (decrementError || !decrementResult) {
+        throw new Error('Failed to use credit. Please try again.');
+      }
+
       const src = await generateSermonArt(prompt, apiKey, selectedStyle);
       setImgSrc(src);
       setStatus('complete');
@@ -153,6 +174,13 @@ const GeneratorPage: React.FC = () => {
           <p className="text-lg text-secondary-600">
             Design and refine your sermon artwork in three simple steps
           </p>
+          <div className="mt-4">
+            <CreditDisplay 
+              credits={credits?.credits_remaining ?? null}
+              nextReset={credits?.next_reset_at ?? null}
+              isLoading={creditsLoading}
+            />
+          </div>
         </div>
 
         {!apiKey && (
@@ -217,9 +245,9 @@ const GeneratorPage: React.FC = () => {
             <h2 className="text-xl font-semibold mb-4">Step 3: Generate Your Concept</h2>
             <button
               onClick={handleGeneratePrompt}
-              disabled={status !== 'idle' || !inputText.trim() || !selectedStyle}
+              disabled={status !== 'idle' || !inputText.trim() || !selectedStyle || !credits?.credits_remaining}
               className={`btn-primary w-full flex items-center justify-center ${
-                status !== 'idle' || !inputText.trim() || !selectedStyle ? 'opacity-70 cursor-not-allowed' : ''
+                status !== 'idle' || !inputText.trim() || !selectedStyle || !credits?.credits_remaining ? 'opacity-70 cursor-not-allowed' : ''
               }`}
             >
               {status === 'generating-prompt' ? (
@@ -256,7 +284,7 @@ const GeneratorPage: React.FC = () => {
 
                 <button
                   onClick={handleGenerateArt}
-                  disabled={status !== 'idle' || !prompt.trim()}
+                  disabled={status !== 'idle' || !prompt.trim() || !credits?.credits_remaining}
                   className="btn-primary w-full"
                 >
                   Generate Final Artwork

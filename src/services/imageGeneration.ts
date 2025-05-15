@@ -112,12 +112,17 @@ export async function generateSermonArt(
     console.timeEnd('Download reference image');
   }
 
+  // Append reference image instructions to the prompt
+  const finalPrompt = stylePreset 
+    ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
+    : prompt;
+
   console.time('OpenAI API call');
   let rsp;
   try {
     console.log('Starting OpenAI API call...', {
       modelName: "gpt-image-1",
-      promptLength: prompt.length,
+      promptLength: finalPrompt.length,
       hasReference: !!referenceFile
     });
     
@@ -125,7 +130,7 @@ export async function generateSermonArt(
       rsp = await openai.images.edit({
         model: "gpt-image-1",
         image: referenceFile,
-        prompt,
+        prompt: finalPrompt,
         size: "1536x1024",
         quality: "high",
         n: 1
@@ -133,7 +138,7 @@ export async function generateSermonArt(
     } else {
       rsp = await openai.images.generate({
         model: "gpt-image-1",
-        prompt,
+        prompt: finalPrompt,
         size: "1536x1024",
         quality: "high",
         n: 1

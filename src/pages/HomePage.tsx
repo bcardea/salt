@@ -191,8 +191,8 @@ const HomePage = () => {
                 className={useCase.chat ? "bg-transparent" : "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"}
               >
                 {useCase.chat ? (
-                  <div className="relative pt-4">
-                    <div className="flex flex-col space-y-3 mb-16">
+                  <div className="relative">
+                    <div className="flex flex-col space-y-3">
                       {useCase.chat.map((message, idx) => (
                         <div
                           key={idx}
@@ -210,11 +210,13 @@ const HomePage = () => {
                         </div>
                       ))}
                     </div>
-                    <img
-                      src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262fc2a32ad3673c166033.png"
-                      alt=""
-                      className="absolute bottom-0 right-0 w-48 h-auto"
-                    />
+                    <div className="mt-8 flex justify-end">
+                      <img
+                        src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262fc2a32ad3673c166033.png"
+                        alt=""
+                        className="w-48 h-auto"
+                      />
+                    </div>
                   </div>
                 ) : (
                   <>

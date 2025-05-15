@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
-import ApiKeyInput from '../components/ApiKeyInput';
 import Auth from '../components/Auth';
 import { useApiKey } from '../context/ApiKeyContext';
 import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
@@ -66,11 +65,6 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGeneratePrompt = async () => {
-    if (!apiKey) {
-      setError('Please enter your OpenAI API key first');
-      return;
-    }
-
     if (!session) {
       setError('Please sign in to generate artwork');
       return;
@@ -111,7 +105,7 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGenerateArt = async () => {
-    if (!prompt.trim() || !apiKey) return;
+    if (!prompt.trim()) return;
     
     if (!session) {
       setError('Please sign in to generate artwork');
@@ -182,12 +176,6 @@ const GeneratorPage: React.FC = () => {
             />
           </div>
         </div>
-
-        {!apiKey && (
-          <div className="max-w-lg mx-auto mb-8">
-            <ApiKeyInput />
-          </div>
-        )}
 
         <div className="card p-6 max-w-3xl mx-auto">
           {/* Step 1: Enter Sermon Details */}

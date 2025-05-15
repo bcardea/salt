@@ -10,11 +10,18 @@ export function useCredits() {
   const [credits, setCredits] = useState<Credits | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const fetchCredits = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('No authenticated user');
+      
+      // If no user is authenticated, just set loading to false and return
+      if (!user) {
+        setLoading(false);
+        setCredits(null);
+        return;
+      }
 
       const { data: userCredits, error: creditsError } = await supabase
         .from('user_credits')
@@ -49,28 +56,54 @@ export function useCredits() {
   };
 
   useEffect(() => {
-    fetchCredits();
+    // Set up auth state listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      setIsAuthenticated(!!session);
+      if (session) {
+        fetchCredits();
+      } else {
+        setCredits(null);
+        setLoading(false);
+      }
+    });
 
-    // Subscribe to changes
-    const channel = supabase
-      .channel('credits_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'user_credits',
-        },
-        () => {
-          fetchCredits();
-        }
-      )
-      .subscribe();
+    // Initial auth check
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthenticated(!!session);
+      if (session) {
+        fetchCredits();
+      } else {
+        setLoading(false);
+      }
+    });
 
+    // Set up realtime subscription only if authenticated
+    let channel: ReturnType<typeof supabase.channel> | null = null;
+    if (isAuthenticated) {
+      channel = supabase
+        .channel('credits_changes')
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'user_credits',
+          },
+          () => {
+            fetchCredits();
+          }
+        )
+        .subscribe();
+    }
+
+    // Cleanup
     return () => {
-      supabase.removeChannel(channel);
+      subscription?.unsubscribe();
+      if (channel) {
+        supabase.removeChannel(channel);
+      }
     };
-  }, []);
+  }, [isAuthenticated]);
 
   return { credits, loading, error, refetch: fetchCredits };
 }

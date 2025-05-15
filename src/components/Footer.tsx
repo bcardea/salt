@@ -66,3 +66,5 @@ const Footer: React.FC<{ onWatchDemo?: () => void }> = ({ onWatchDemo }) => {
     </footer>
   );
 };
+
+export default Footer

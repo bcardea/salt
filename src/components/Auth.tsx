@@ -15,11 +15,16 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [showBetaForm, setShowBetaForm] = useState(false);
 
   useEffect(() => {
-    // Load the form embed script when the modal is shown
     if (showBetaForm) {
       const script = document.createElement('script');
       script.src = 'https://link.msgsndr.com/js/form_embed.js';
       script.async = true;
+      script.onload = () => {
+        // Re-initialize the form after script loads
+        if (window.LCGForms) {
+          window.LCGForms.initializeAllForms();
+        }
+      };
       document.body.appendChild(script);
 
       return () => {
@@ -98,9 +103,15 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
             data-leadconnector-embed="form"
             data-form-id="GeeGU9WJM8gIAjaSgAD7"
             data-trigger-type="alwaysShow"
+            data-trigger-value=""
             data-activation-type="alwaysActivated"
+            data-activation-value=""
             data-deactivation-type="neverDeactivate"
-            style={{minHeight: '745px'}}
+            data-deactivation-value=""
+            data-form-name="Salt Sign-Up"
+            data-height="745"
+            data-layout-iframe-id="inline-GeeGU9WJM8gIAjaSgAD7"
+            style={{ minHeight: '745px' }}
           ></div>
         </div>
       </div>

@@ -55,20 +55,20 @@ const HomePage = () => {
             <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
               You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center gap-4">
               <Link
                 to="/generator"
-                className="btn-primary flex items-center justify-center"
+                className="btn-primary inline-flex items-center group"
               >
                 Create Your First Masterpiece
                 <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <button
                 onClick={handleOpenVideo}
-                className="btn-secondary flex items-center justify-center"
+                className="btn-secondary inline-flex items-center group"
               >
-                Watch a Demo
-                <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <Play className="mr-2 h-4 w-4" />
+                Watch Demo Video
               </button>
             </div>
           </div>

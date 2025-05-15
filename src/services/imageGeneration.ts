@@ -1,6 +1,5 @@
-import OpenAI from "openai";
+import axios from "axios";
 import { openai } from "../lib/openaiClient";
-import { ReferenceImage } from "../constants/referenceImages";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
@@ -11,55 +10,25 @@ export type StylePreset = {
   description: string;
   promptModifiers: string;
   previewUrl: string;
+  referenceUrl: string;
 };
 
 /* ------------------------------------------------------------------ */
-/* Style presets                                                      */
+/* 1) Utility: fetch URL → File                                       */
 /* ------------------------------------------------------------------ */
-export const STYLE_PRESETS: StylePreset[] = [
-  {
-    id: 'photoreal',
-    title: 'Photoreal Person',
-    description: 'Professional portrait style with cinematic lighting',
-    promptModifiers: 'portrait lighting, 35 mm DSLR, ultra-detailed skin, cinematic color grade',
-    previewUrl: 'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab55b4f38e913.png'
-  },
-  {
-    id: 'minimalist',
-    title: 'Super Minimalist',
-    description: 'Clean, simple design with strong impact',
-    promptModifiers: 'flat vector, thick line art, 2-color palette, vast negative space',
-    previewUrl: 'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af16cf7275fa9a083b.png'
-  },
-  {
-    id: 'retro80s',
-    title: 'Retro 80s',
-    description: 'Synthwave-inspired design with neon elements',
-    promptModifiers: 'neon gradient sun, grid floor, VHS noise, retro synthwave poster',
-    previewUrl: 'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab584e938e916.png'
-  },
-  {
-    id: 'biblical',
-    title: 'Cinematic Bible Scene',
-    description: 'Epic, dramatic artwork inspired by biblical imagery',
-    promptModifiers: 'epic matte painting, volumetric light beams, master shot, high contrast shadows',
-    previewUrl: 'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af77a9d43961dd547c.png'
-  },
-  {
-    id: 'youth',
-    title: 'Youth Collage',
-    description: 'Modern, energetic design perfect for youth ministry',
-    promptModifiers: 'magazine cut-out, ripped paper edges, spray-paint splatter, bold sans serif title, pop punk vibes',
-    previewUrl: 'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af265ab5542638e915.png'
-  },
-  {
-    id: 'vintage',
-    title: 'Vintage Print',
-    description: 'Classic, worn aesthetic with print-inspired textures',
-    promptModifiers: 'faded CMYK misprint, halftone dots, retro newspaper texture, limited palette, letterpress style',
-    previewUrl: 'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682391af4ad1fb159ae92eb7.png'
-  }
-];
+async function urlToFile(url: string): Promise<File> {
+  console.log(`Downloading reference image...`);
+  const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
+  const type = res.headers["content-type"] ?? "image/png";
+  const blob = new Blob([res.data], { type });
+  const file = new File([blob], `reference.png`, { type });
+  console.log(`Reference image downloaded:`, {
+    size: file.size,
+    type: file.type,
+    name: file.name
+  });
+  return file;
+}
 
 /* ------------------------------------------------------------------ */
 /* 2) Generate prompt text                                            */
@@ -80,10 +49,21 @@ export async function generateSermonArtPrompt(
 
   const systemPrompt = isFullNotes
     ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer for graphic design. You have over 20 years of experience designing slides for sermons, you understand the importance of clarity and you design with a timeless but modern approach. You design modern sermon artwork. Use the attached reference images ONLY as STYLE inspiration — match their typography, layout, color palette, and design balance. Do NOT copy their text or subject matter. ${typographyInstructions}`;
+    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.
+
+When given a style reference, use it as inspiration for the mood, tone, and artistic approach, but don't be constrained by it. Instead, think about what visual elements would best serve this specific message while maintaining the essence of the chosen style.
+
+Focus on:
+- Creating unique compositions that serve the specific message
+- Using visual metaphors that reinforce the sermon's theme
+- Ensuring the design enhances rather than overshadows the message
+- Maintaining professional, modern aesthetics
+- Placing text thoughtfully to maximize impact
+
+${typographyInstructions}`;
 
   const chat = await openai.chat.completions.create({
-    model: "gpt-4",
+    model: "gpt-4.1-2025-04-14",
     messages: [
       {
         role: "system",
@@ -93,49 +73,78 @@ export async function generateSermonArtPrompt(
         role: "user",
         content: isFullNotes
           ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
-              stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
+              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
           : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
-              stylePreset ? `\nStyle: ${stylePreset.promptModifiers}` : ""
+              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
       }
     ],
-    temperature: 0.6
+    temperature: 0.8
   });
 
   return chat.choices[0].message.content!.trim();
 }
 
 /* ------------------------------------------------------------------ */
-/* 3) Generate image using reference PNGs                             */
+/* 3) Generate image                                                  */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,
   apiKey: string,
-  selectedStyle?: StylePreset
+  stylePreset?: StylePreset
 ): Promise<string | null> {
   // Set API key
   openai.apiKey = apiKey;
 
   console.time('Total image generation');
   
+  // Download reference image if style is selected
+  let referenceFile: File | undefined;
+  if (stylePreset) {
+    console.time('Download reference image');
+    try {
+      referenceFile = await urlToFile(stylePreset.referenceUrl);
+    } catch (error) {
+      console.error('Error downloading reference image:', error);
+      throw new Error('Failed to download reference image');
+    }
+    console.timeEnd('Download reference image');
+  }
+
+  // Append reference image instructions to the prompt
+  const finalPrompt = stylePreset 
+    ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
+    : prompt;
+
   console.time('OpenAI API call');
   let rsp;
-  // Call images.create
   try {
     console.log('Starting OpenAI API call...', {
-      model: "dall-e-3",
-      promptLength: prompt.length,
+      modelName: "gpt-image-1",
+      promptLength: finalPrompt.length,
+      hasReference: !!referenceFile
     });
     
-    rsp = await openai.images.generate({
-      model: "dall-e-3",
-      prompt: prompt,
-      n: 1,
-      size: "1792x1024",
-      quality: "hd",
-      style: "vivid"
-    });
+    if (referenceFile) {
+      rsp = await openai.images.edit({
+        model: "gpt-image-1",
+        image: referenceFile,
+        prompt: finalPrompt,
+        size: "1536x1024",
+        quality: "high",
+        n: 1
+      });
+    } else {
+      rsp = await openai.images.generate({
+        model: "gpt-image-1",
+        prompt: finalPrompt,
+        size: "1536x1024",
+        quality: "high",
+        n: 1
+      });
+    }
+    
     console.timeEnd('OpenAI API call');
     console.log('API call completed successfully');
   } catch (error: any) {
@@ -149,7 +158,6 @@ export async function generateSermonArt(
     throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
   }
 
-  // Return URL if present
   if (!rsp?.data?.[0]) {
     throw new Error("No image data received from OpenAI");
   }
@@ -172,3 +180,57 @@ export async function generateSermonArt(
 
   return objectUrl;
 }
+
+/* ------------------------------------------------------------------ */
+/* Style presets                                                      */
+/* ------------------------------------------------------------------ */
+export const STYLE_PRESETS: StylePreset[] = [
+  {
+    id: "photoreal",
+    title: "Photographic",
+    description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
+    promptModifiers: "Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject.",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
+  },
+  {
+    id: "minimalist",
+    title: "Modern Minimal",
+    description: "Clean, editorial layout with purposeful negative space",
+    promptModifiers: "Draw inspiration from modern editorial design. Use purposeful negative space, strong typographic hierarchy, and a restrained color palette. Consider geometric elements, clean lines, or abstract shapes that complement the message. The design should feel sophisticated and intentional.",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
+  },
+  {
+    id: "retro80s",
+    title: "Retro 80s",
+    description: "Synthwave-inspired design with bold energy",
+    promptModifiers: "Channel retro-futuristic aesthetics with bold color gradients, dynamic lighting, and geometric elements. Consider how to incorporate synthwave elements while maintaining relevance to the sermon's message. The design should feel energetic and nostalgic without being cliché.",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
+  },
+  {
+    id: "biblical",
+    title: "Cinematic",
+    description: "Epic, dramatic artwork inspired by ancient narratives",
+    promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors.",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
+  },
+  {
+    id: "youth",
+    title: "Youthful Collage",
+    description: "Modern grunge collage full of energy and layers",
+    promptModifiers: "Create a dynamic collage composition with multiple overlapping elements, torn paper textures, and layered design elements. Include: 1) A base layer with grungy textures or distressed patterns 2) Multiple overlapping geometric shapes or torn paper elements 3) Typography treated as graphic elements with parts intentionally overlapping or breaking the frame 4) Subtle shadow effects to create depth between layers 5) Small decorative elements like paint splatters, tape, or paper clips scattered thoughtfully. The overall composition should feel energetic and intentionally layered, with clear visual hierarchy despite the complexity.",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
+  },
+  {
+    id: "vintage",
+    title: "Vintage Print",
+    description: "Classic aesthetic with authentic print textures",
+    promptModifiers: "Draw from classic print design with authentic textures, traditional typography, and careful attention to detail. Consider how printing artifacts and techniques can add character without overwhelming the design. The result should feel crafted and timeless.",
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png"
+  }
+];

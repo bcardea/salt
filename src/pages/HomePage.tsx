@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 
 const fromImage =
@@ -45,13 +46,13 @@ const HomePage = () => {
             <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
               You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
             </p>
-            <a
-              href="/generator"
+            <Link
+              to="/generator"
               className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
             >
               Create Your First Masterpiece
               <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </a>
+            </Link>
           </div>
 
           {/* RIGHT: TRANSFORMATION IMAGES */}

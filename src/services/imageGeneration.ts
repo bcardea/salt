@@ -188,7 +188,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "photoreal",
     title: "Photographic",
     description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
-    promptModifiers: "Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject.",
+    promptModifiers: "Create a Photo-realistic filmic style image. Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject. Make sure it's photorealsitic and has the characterstics of an actual photograph",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
   },

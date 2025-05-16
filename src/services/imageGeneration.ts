@@ -177,14 +177,14 @@ export async function generateSermonArt(
   let rsp;
   try {
     console.log('Starting OpenAI API call...', {
-      modelName: "gpt-image-1",
+      modelName: "gpt-1",
       promptLength: finalPrompt.length,
       hasReference: !!referenceFile
     });
     
     if (referenceFile) {
       rsp = await openai.images.edit({
-        model: "gpt-image-1",
+        model: "gpt-1",
         image: referenceFile,
         prompt: finalPrompt,
         size: "1536x1024",
@@ -193,7 +193,7 @@ export async function generateSermonArt(
       });
     } else {
       rsp = await openai.images.generate({
-        model: "gpt-image-1",
+        model: "gpt-1",
         prompt: finalPrompt,
         size: "1536x1024",
         quality: "high",

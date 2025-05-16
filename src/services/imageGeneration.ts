@@ -38,7 +38,7 @@ export async function generateSermonArtPrompt(
   topic: string,
   apiKey: string,
   stylePreset?: StylePreset
-): Promise<string> {
+): Promise<{ fullPrompt: string; summary: string }> {
   const openai = getOpenAIClient(apiKey);
 
   const isFullNotes = topic.length > 100;
@@ -80,11 +80,71 @@ ${typographyInstructions}`;
     temperature: 0.8
   });
 
+  const fullPrompt = chat.choices[0].message.content!.trim();
+  
+  // Generate a summary version for editing
+  const summaryChat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert at summarizing complex image prompts into clear, editable descriptions. Create a concise summary that captures the key visual elements and style, making it easy for users to modify while maintaining the core concept."
+      },
+      {
+        role: "user",
+        content: `Summarize this image prompt into a clear, editable description:\n\n${fullPrompt}`
+      }
+    ],
+    temperature: 0.7
+  });
+
+  return {
+    fullPrompt,
+    summary: summaryChat.choices[0].message.content!.trim()
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* 3) Convert summary back to full prompt                             */
+/* ------------------------------------------------------------------ */
+export async function convertSummaryToPrompt(
+  summary: string,
+  apiKey: string,
+  stylePreset?: StylePreset
+): Promise<string> {
+  const openai = getOpenAIClient(apiKey);
+  
+  const typographyInstructions = "Typography: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
+
+  const chat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: `You are an expert prompt engineer specializing in converting user-edited summaries back into detailed, technical prompts for image generation. Your role is to:
+
+1. Take the user's edited summary and expand it into a comprehensive prompt
+2. Maintain the user's creative direction while adding technical details
+3. Ensure all necessary elements for high-quality image generation are included
+4. Incorporate typography and style requirements seamlessly
+
+${typographyInstructions}`
+      },
+      {
+        role: "user",
+        content: `Convert this summary into a detailed image generation prompt:\n\n${summary}\n\n${
+          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+        }`
+      }
+    ],
+    temperature: 0.7
+  });
+
   return chat.choices[0].message.content!.trim();
 }
 
 /* ------------------------------------------------------------------ */
-/* 3) Generate image                                                  */
+/* 4) Generate image                                                  */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,

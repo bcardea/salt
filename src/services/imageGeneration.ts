@@ -47,6 +47,38 @@ export async function generateSermonArtPrompt(
 }
 
 /* ------------------------------------------------------------------ */
+/* Convert summary to full prompt                                     */
+/* ------------------------------------------------------------------ */
+export async function convertSummaryToPrompt(
+  summary: string,
+  stylePreset?: StylePreset
+): Promise<string> {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Not authenticated');
+
+  const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-prompt`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${session.access_token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      summary,
+      stylePreset,
+      mode: 'convert',
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to convert summary to prompt');
+  }
+
+  const { fullPrompt } = await response.json();
+  return fullPrompt;
+}
+
+/* ------------------------------------------------------------------ */
 /* Generate image                                                     */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(

@@ -1,5 +1,3 @@
-import axios from "axios";
-import { getOpenAIClient } from "../lib/openaiClient";
 import { supabase } from "../lib/supabase";
 
 /* ------------------------------------------------------------------ */
@@ -70,7 +68,7 @@ export async function convertSummaryToPrompt(
   });
 
   if (!response.ok) {
-    const error = await response.json();
+    const error = await response.json().catch(() => ({ message: 'Failed to convert summary to prompt' }));
     throw new Error(error.message || 'Failed to convert summary to prompt');
   }
 

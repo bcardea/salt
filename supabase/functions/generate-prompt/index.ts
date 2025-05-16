@@ -8,8 +8,10 @@ const corsHeaders = {
 };
 
 interface RequestBody {
-  title: string;
-  topic: string;
+  title?: string;
+  topic?: string;
+  summary?: string;
+  mode?: 'generate' | 'convert';
   stylePreset?: {
     id: string;
     promptModifiers: string;
@@ -43,12 +45,47 @@ Deno.serve(async (req) => {
     }
 
     // Parse request body
-    const { title, topic, stylePreset } = await req.json() as RequestBody;
+    const { title, topic, summary, mode = 'generate', stylePreset } = await req.json() as RequestBody;
 
     // Initialize OpenAI client
     const openai = new OpenAI({
       apiKey: Deno.env.get('OPENAI_API_KEY'),
     });
+
+    if (mode === 'convert' && summary) {
+      // Convert summary back to full prompt
+      const chat = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages: [
+          {
+            role: "system",
+            content: "You are an expert prompt engineer for DALL-E image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+          },
+          {
+            role: "user",
+            content: `Convert this design concept into a detailed DALL-E prompt:\n\n${summary}\n\n${
+              stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+            }`
+          }
+        ]
+      });
+
+      return new Response(
+        JSON.stringify({
+          fullPrompt: chat.choices[0].message.content!.trim()
+        }),
+        {
+          headers: {
+            ...corsHeaders,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+    }
+
+    if (!title || !topic) {
+      throw new Error('Title and topic are required for prompt generation');
+    }
 
     const isFullNotes = topic.length > 100;
     const typographyInstructions = "Typography: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";

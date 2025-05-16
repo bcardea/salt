@@ -95,8 +95,7 @@ ${typographyInstructions}`;
         role: "user",
         content: `Summarize this image generation prompt in a single, easy-to-understand paragraph that captures all the vital details:\n\n${fullPrompt}`
       }
-    ],
-    temperature: 0.7
+    ]
   });
 
   return {

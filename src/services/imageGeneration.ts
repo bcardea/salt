@@ -112,11 +112,11 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for gpt-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
       },
       {
         role: "user",
-        content: `Convert this design concept into a detailed gpt-1 prompt:\n\n${summary}\n\n${
+        content: `Convert this design concept into a detailed gpt-image-1 prompt:\n\n${summary}\n\n${
           stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
         }`
       }
@@ -156,7 +156,7 @@ export async function generateSermonArt(
   try {
     if (referenceFile) {
       rsp = await openai.images.edit({
-        model: "gpt-1",
+        model: "gpt-image-1",
         image: referenceFile,
         prompt: finalPrompt,
         size: "1536x1024",
@@ -165,7 +165,7 @@ export async function generateSermonArt(
       });
     } else {
       rsp = await openai.images.generate({
-        model: "gpt-1",
+        model: "gpt-image-1",
         prompt: finalPrompt,
         size: "1536x1024",
         quality: "high",

@@ -152,36 +152,35 @@ export async function generateSermonArt(
     ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
     : prompt;
 
-  let rsp;
   try {
-    if (referenceFile) {
-      rsp = await openai.images.edit({
-        model: "gpt-image-1",
-        image: referenceFile,
-        prompt: finalPrompt,
-        size: "1536x1024",
-        quality: "high",
-        n: 1
-      });
-    } else {
-      rsp = await openai.images.generate({
-        model: "gpt-image-1",
-        prompt: finalPrompt,
-        size: "1536x1024",
-        quality: "high",
-        n: 1
-      });
+    const rsp = referenceFile 
+      ? await openai.images.edit({
+          model: "gpt-image-1",
+          image: referenceFile,
+          prompt: finalPrompt,
+          size: "1536x1024",
+          quality: "high",
+          n: 1,
+          response_format: "url"
+        })
+      : await openai.images.generate({
+          model: "gpt-image-1",
+          prompt: finalPrompt,
+          size: "1536x1024",
+          quality: "high",
+          n: 1,
+          response_format: "url"
+        });
+
+    if (!rsp?.data?.[0]?.url) {
+      throw new Error("No image URL received in the response");
     }
+
+    return rsp.data[0].url;
   } catch (error: any) {
     console.error('OpenAI API error:', error);
     throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
   }
-
-  if (!rsp?.data?.[0]?.url) {
-    throw new Error("No image data received from OpenAI");
-  }
-
-  return rsp.data[0].url;
 }
 
 /* ------------------------------------------------------------------ */

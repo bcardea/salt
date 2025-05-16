@@ -76,7 +76,7 @@ const ministryUsesCases = [
   }
 ];
 
-const DEMO_VIDEO_URL = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6825fdd739adaa074fde36eb.mp4";
+const DEMO_VIDEO_URL = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68277db887598fe88e900a12.mp4";
 
 const HomePage = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);

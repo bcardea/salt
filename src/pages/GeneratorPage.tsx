@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Auth from '../components/Auth';
-import { generateSermonArtPrompt, generateSermonArt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
+import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
 import CreditDisplay from '../components/CreditDisplay';
@@ -12,7 +12,8 @@ const GeneratorPage: React.FC = () => {
   const [topic, setTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
   const [hoveredStyle, setHoveredStyle] = useState<StylePreset | undefined>();
-  const [prompt, setPrompt] = useState('');
+  const [fullPrompt, setFullPrompt] = useState('');
+  const [promptSummary, setPromptSummary] = useState('');
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
@@ -52,7 +53,7 @@ const GeneratorPage: React.FC = () => {
       const { error: insertError } = await supabase.from('images').insert({
         user_id: session?.user.id,
         url: publicUrl,
-        prompt,
+        prompt: fullPrompt,
         topic
       });
 
@@ -88,13 +89,14 @@ const GeneratorPage: React.FC = () => {
     setTopic(inputText);
     
     try {
-      const generatedPrompt = await generateSermonArtPrompt(
+      const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
         inputText.length > 100 ? 'Sermon Artwork' : inputText.toUpperCase(),
         inputText,
         import.meta.env.VITE_OPENAI_API_KEY,
         selectedStyle
       );
-      setPrompt(generatedPrompt);
+      setFullPrompt(generatedPrompt);
+      setPromptSummary(summary);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -103,7 +105,7 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGenerateArt = async () => {
-    if (!prompt.trim()) return;
+    if (!promptSummary.trim()) return;
     
     if (!session) {
       setError('Please sign in to generate artwork');
@@ -118,6 +120,14 @@ const GeneratorPage: React.FC = () => {
     setError('');
     setStatus('generating-image');
     try {
+      // Convert the edited summary back to a full prompt
+      const updatedFullPrompt = await convertSummaryToPrompt(
+        promptSummary,
+        import.meta.env.VITE_OPENAI_API_KEY,
+        selectedStyle
+      );
+      setFullPrompt(updatedFullPrompt);
+
       // Attempt to decrement credits first
       const { data: decrementResult, error: decrementError } = await supabase
         .rpc('decrement_credits', { user_id: session.user.id });
@@ -126,7 +136,7 @@ const GeneratorPage: React.FC = () => {
         throw new Error('Failed to use credit. Please try again.');
       }
 
-      const src = await generateSermonArt(prompt, import.meta.env.VITE_OPENAI_API_KEY, selectedStyle);
+      const src = await generateSermonArt(updatedFullPrompt, import.meta.env.VITE_OPENAI_API_KEY, selectedStyle);
       setImgSrc(src);
       setStatus('complete');
       if (src) {
@@ -250,27 +260,31 @@ const GeneratorPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Step 4: Generated Prompt and Final Image Generation */}
-          {prompt && (
+          {/* Step 4: Review and Edit Concept */}
+          {promptSummary && (
             <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Step 4: Customize and Generate</h2>
+              <h2 className="text-xl font-semibold mb-4">Step 4: Review and Customize</h2>
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-secondary-700 mb-2">
-                    Edit Prompt (Optional)
+                    Edit Design Concept (Optional)
                   </label>
                   <textarea
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    rows={6}
-                    className="input-field font-mono text-sm"
+                    value={promptSummary}
+                    onChange={(e) => setPromptSummary(e.target.value)}
+                    rows={4}
+                    className="input-field"
                     disabled={status !== 'idle'}
+                    placeholder="Describe how you'd like to modify the concept..."
                   />
+                  <p className="mt-2 text-sm text-secondary-600">
+                    Feel free to modify this description to better match your vision.
+                  </p>
                 </div>
 
                 <button
                   onClick={handleGenerateArt}
-                  disabled={status !== 'idle' || !prompt.trim() || !credits?.credits_remaining}
+                  disabled={status !== 'idle' || !promptSummary.trim() || !credits?.credits_remaining}
                   className="btn-primary w-full"
                 >
                   Generate Final Artwork

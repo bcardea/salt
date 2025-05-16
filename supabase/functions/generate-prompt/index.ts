@@ -55,15 +55,15 @@ Deno.serve(async (req) => {
     if (mode === 'convert' && summary) {
       // Convert summary back to full prompt
       const chat = await openai.chat.completions.create({
-        model: "gpt-4",
+        model: "gpt-4.1-2025-04-14",
         messages: [
           {
             role: "system",
-            content: "You are an expert prompt engineer for DALL-E image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+            content: "You are an expert prompt engineer for GPT-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
           },
           {
             role: "user",
-            content: `Convert this design concept into a detailed DALL-E prompt:\n\n${summary}\n\n${
+            content: `Convert this design concept into a detailed GPT-1:\n\n${summary}\n\n${
               stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
             }`
           }
@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
 
     // Generate the full prompt
     const promptChat = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4.1-2025-04-14",
       messages: [
         {
           role: "system",
@@ -119,7 +119,7 @@ Deno.serve(async (req) => {
 
     // Generate a user-friendly summary
     const summaryChat = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-4.1-2025-04-14",
       messages: [
         {
           role: "system",

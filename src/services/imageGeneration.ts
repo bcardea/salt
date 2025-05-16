@@ -160,23 +160,35 @@ export async function generateSermonArt(
           prompt: finalPrompt,
           size: "1536x1024",
           quality: "high",
-          n: 1,
-          response_format: "url"
+          n: 1
         })
       : await openai.images.generate({
           model: "gpt-image-1",
           prompt: finalPrompt,
           size: "1536x1024",
           quality: "high",
-          n: 1,
-          response_format: "url"
+          n: 1
         });
 
-    if (!rsp?.data?.[0]?.url) {
-      throw new Error("No image URL received in the response");
+    if (!rsp?.data?.[0]) {
+      throw new Error("No image data received from OpenAI");
     }
 
-    return rsp.data[0].url;
+    const { url, b64_json } = rsp.data[0];
+    if (url) {
+      return url;
+    }
+    if (!b64_json) {
+      throw new Error("No image data received");
+    }
+
+    // Convert base64 to Blob URL for better performance
+    const byteChars = atob(b64_json);
+    const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
+    const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
+    const objectUrl = URL.createObjectURL(blob);
+
+    return objectUrl;
   } catch (error: any) {
     console.error('OpenAI API error:', error);
     throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);

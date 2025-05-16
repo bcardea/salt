@@ -38,7 +38,7 @@ export async function generateSermonArtPrompt(
   topic: string,
   apiKey: string,
   stylePreset?: StylePreset
-): Promise<string> {
+): Promise<{ fullPrompt: string; summary: string }> {
   const openai = getOpenAIClient(apiKey);
 
   const isFullNotes = topic.length > 100;
@@ -59,7 +59,8 @@ Focus on:
 
 ${typographyInstructions}`;
 
-  const chat = await openai.chat.completions.create({
+  // Generate the full prompt
+  const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
     messages: [
       {
@@ -80,11 +81,62 @@ ${typographyInstructions}`;
     temperature: 0.8
   });
 
+  const fullPrompt = promptChat.choices[0].message.content!.trim();
+
+  // Generate a user-friendly summary of the prompt
+  const summaryChat = await openai.chat.completions.create({
+    model: "o4-mini-2025-04-16",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert at explaining complex design concepts in simple terms. Your task is to take a detailed image generation prompt and create a clear, concise summary that captures the key visual elements and artistic direction in plain language that any church staff member can understand."
+      },
+      {
+        role: "user",
+        content: `Summarize this image generation prompt in a single, easy-to-understand paragraph that captures all the vital details:\n\n${fullPrompt}`
+      }
+    ],
+    temperature: 0.7
+  });
+
+  return {
+    fullPrompt,
+    summary: summaryChat.choices[0].message.content!.trim()
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* 3) Convert summary back to full prompt                             */
+/* ------------------------------------------------------------------ */
+export async function convertSummaryToPrompt(
+  summary: string,
+  apiKey: string,
+  stylePreset?: StylePreset
+): Promise<string> {
+  const openai = getOpenAIClient(apiKey);
+
+  const chat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert prompt engineer for image generation. Your task is to take a simple description of desired artwork and convert it into a detailed, technical prompt that will produce the best possible results. Include specific details about composition, lighting, style, mood, and technical requirements."
+      },
+      {
+        role: "user",
+        content: `Convert this artwork description into a detailed image generation prompt:\n\n${summary}\n\n${
+          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+        }`
+      }
+    ],
+    temperature: 0.8
+  });
+
   return chat.choices[0].message.content!.trim();
 }
 
 /* ------------------------------------------------------------------ */
-/* 3) Generate image                                                  */
+/* 4) Generate image                                                  */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,

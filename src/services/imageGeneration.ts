@@ -58,9 +58,9 @@ async function getOpenAIKey(): Promise<string> {
 export async function generateSermonArtPrompt(
   sermTitle: string,
   topic: string,
+  apiKey: string,
   stylePreset?: StylePreset
-): Promise<string> {
-  const apiKey = await getOpenAIKey();
+): Promise<{ fullPrompt: string; summary: string }> {
   const openai = getOpenAIClient(apiKey);
 
   const isFullNotes = topic.length > 100;
@@ -90,6 +90,55 @@ export async function generateSermonArtPrompt(
     ]
   });
 
+  const fullPrompt = chat.choices[0].message.content!.trim();
+  
+  // Generate a summary version for editing
+  const summaryChat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert at summarizing complex image prompts into clear, concise descriptions that maintain the core creative direction while being easier to edit. Create a simplified version that captures the key elements but is more approachable for non-technical users to modify."
+      },
+      {
+        role: "user",
+        content: `Summarize this image prompt into a clear, editable description:\n\n${fullPrompt}`
+      }
+    ]
+  });
+
+  return {
+    fullPrompt,
+    summary: summaryChat.choices[0].message.content!.trim()
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Convert summary back to full prompt                                */
+/* ------------------------------------------------------------------ */
+export async function convertSummaryToPrompt(
+  summary: string,
+  apiKey: string,
+  stylePreset?: StylePreset
+): Promise<string> {
+  const openai = getOpenAIClient(apiKey);
+
+  const chat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert prompt engineer for GPT-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+      },
+      {
+        role: "user",
+        content: `Convert this design concept into a detailed GPT-1 prompt:\n\n${summary}\n\n${
+          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+        }`
+      }
+    ]
+  });
+
   return chat.choices[0].message.content!.trim();
 }
 
@@ -98,9 +147,9 @@ export async function generateSermonArtPrompt(
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,
+  apiKey: string,
   stylePreset?: StylePreset
 ): Promise<string | null> {
-  const apiKey = await getOpenAIKey();
   const openai = getOpenAIClient(apiKey);
 
   console.time('Total image generation');

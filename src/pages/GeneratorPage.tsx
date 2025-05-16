@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Auth from '../components/Auth';
-import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, STYLE_PRESETS, StylePreset } from '../services/imageGeneration';
+import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
+import { STYLE_PRESETS } from '../constants/stylePresets';
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
 import CreditDisplay from '../components/CreditDisplay';

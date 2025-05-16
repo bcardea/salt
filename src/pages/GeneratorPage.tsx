@@ -5,6 +5,7 @@ import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, STY
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
 import CreditDisplay from '../components/CreditDisplay';
+import PromptEditor from '../components/PromptEditor';
 import { useCredits } from '../hooks/useCredits';
 
 const GeneratorPage: React.FC = () => {
@@ -263,22 +264,11 @@ const GeneratorPage: React.FC = () => {
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Step 4: Review and Customize</h2>
               <div className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-secondary-700 mb-2">
-                    Edit Design Concept (Optional)
-                  </label>
-                  <textarea
-                    value={promptSummary}
-                    onChange={(e) => setPromptSummary(e.target.value)}
-                    rows={4}
-                    className="input-field"
-                    disabled={status !== 'idle'}
-                    placeholder="Describe how you'd like to modify the concept..."
-                  />
-                  <p className="mt-2 text-sm text-secondary-600">
-                    Feel free to modify this description to better match your vision.
-                  </p>
-                </div>
+                <PromptEditor
+                  value={promptSummary}
+                  onChange={setPromptSummary}
+                  disabled={status !== 'idle'}
+                />
 
                 <button
                   onClick={handleGenerateArt}

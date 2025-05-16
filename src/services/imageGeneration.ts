@@ -38,7 +38,7 @@ export async function generateSermonArtPrompt(
   topic: string,
   apiKey: string,
   stylePreset?: StylePreset
-): Promise<string> {
+): Promise<{ fullPrompt: string; summary: string }> {
   const openai = getOpenAIClient(apiKey);
 
   const isFullNotes = topic.length > 100;
@@ -80,11 +80,43 @@ ${typographyInstructions}`;
     temperature: 0.8
   });
 
+  const fullPrompt = chat.choices[0].message.content!.trim();
+  const summary = fullPrompt.split('\n\n')[0]; // Take first paragraph as summary
+
+  return { fullPrompt, summary };
+}
+
+/* ------------------------------------------------------------------ */
+/* 3) Convert summary back to full prompt                             */
+/* ------------------------------------------------------------------ */
+export async function convertSummaryToPrompt(
+  summary: string,
+  apiKey: string,
+  stylePreset?: StylePreset
+): Promise<string> {
+  const openai = getOpenAIClient(apiKey);
+
+  const chat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert prompt engineer for GPT-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+      },
+      {
+        role: "user",
+        content: `Convert this design concept into a detailed GPT-1 prompt:\n\n${summary}\n\n${
+          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+        }`
+      }
+    ],
+  });
+
   return chat.choices[0].message.content!.trim();
 }
 
 /* ------------------------------------------------------------------ */
-/* 3) Generate image                                                  */
+/* 4) Generate image                                                  */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,

@@ -17,16 +17,10 @@ export type StylePreset = {
 /* 1) Utility: fetch URL → File                                       */
 /* ------------------------------------------------------------------ */
 async function urlToFile(url: string): Promise<File> {
-  console.log(`Downloading reference image...`);
   const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
   const type = res.headers["content-type"] ?? "image/png";
   const blob = new Blob([res.data], { type });
   const file = new File([blob], `reference.png`, { type });
-  console.log(`Reference image downloaded:`, {
-    size: file.size,
-    type: file.type,
-    name: file.name
-  });
   return file;
 }
 
@@ -59,8 +53,9 @@ Focus on:
 
 ${typographyInstructions}`;
 
-  const chat = await openai.chat.completions.create({
-    model: "gpt-4.1-2025-04-14",
+  // Generate the full prompt
+  const promptChat = await openai.chat.completions.create({
+    model: "gpt-4-1106-preview",
     messages: [
       {
         role: "system",
@@ -80,10 +75,27 @@ ${typographyInstructions}`;
     temperature: 0.8
   });
 
-  const fullPrompt = chat.choices[0].message.content!.trim();
-  const summary = fullPrompt.split('\n\n')[0]; // Take first paragraph as summary
+  const fullPrompt = promptChat.choices[0].message.content!.trim();
 
-  return { fullPrompt, summary };
+  // Generate a user-friendly summary
+  const summaryChat = await openai.chat.completions.create({
+    model: "gpt-4-1106-preview",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert at explaining complex design concepts in simple terms. Create a clear, concise summary that captures the key visual elements and artistic direction in plain language."
+      },
+      {
+        role: "user",
+        content: `Summarize this image generation prompt in a single, easy-to-understand paragraph:\n\n${fullPrompt}`
+      }
+    ]
+  });
+
+  return {
+    fullPrompt,
+    summary: summaryChat.choices[0].message.content!.trim()
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -97,15 +109,15 @@ export async function convertSummaryToPrompt(
   const openai = getOpenAIClient(apiKey);
 
   const chat = await openai.chat.completions.create({
-    model: "gpt-4.1-2025-04-14",
+    model: "gpt-4-1106-preview",
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for GPT-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+        content: "You are an expert prompt engineer for DALL-E image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
       },
       {
         role: "user",
-        content: `Convert this design concept into a detailed GPT-1 prompt:\n\n${summary}\n\n${
+        content: `Convert this design concept into a detailed DALL-E prompt:\n\n${summary}\n\n${
           stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
         }`
       }
@@ -125,19 +137,15 @@ export async function generateSermonArt(
 ): Promise<string | null> {
   const openai = getOpenAIClient(apiKey);
 
-  console.time('Total image generation');
-  
   // Download reference image if style is selected
   let referenceFile: File | undefined;
   if (stylePreset) {
-    console.time('Download reference image');
     try {
       referenceFile = await urlToFile(stylePreset.referenceUrl);
     } catch (error) {
       console.error('Error downloading reference image:', error);
       throw new Error('Failed to download reference image');
     }
-    console.timeEnd('Download reference image');
   }
 
   // Append reference image instructions to the prompt
@@ -145,68 +153,36 @@ export async function generateSermonArt(
     ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
     : prompt;
 
-  console.time('OpenAI API call');
   let rsp;
   try {
-    console.log('Starting OpenAI API call...', {
-      modelName: "gpt-image-1",
-      promptLength: finalPrompt.length,
-      hasReference: !!referenceFile
-    });
-    
     if (referenceFile) {
       rsp = await openai.images.edit({
-        model: "gpt-image-1",
+        model: "dall-e-3",
         image: referenceFile,
         prompt: finalPrompt,
-        size: "1536x1024",
-        quality: "high",
+        size: "1792x1024",
+        quality: "hd",
         n: 1
       });
     } else {
       rsp = await openai.images.generate({
-        model: "gpt-image-1",
+        model: "dall-e-3",
         prompt: finalPrompt,
-        size: "1536x1024",
-        quality: "high",
+        size: "1792x1024",
+        quality: "hd",
         n: 1
       });
     }
-    
-    console.timeEnd('OpenAI API call');
-    console.log('API call completed successfully');
   } catch (error: any) {
-    console.error('OpenAI API error:', {
-      name: error.name,
-      message: error.message,
-      status: error.status,
-      code: error.code,
-      type: error.type
-    });
+    console.error('OpenAI API error:', error);
     throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
   }
 
-  if (!rsp?.data?.[0]) {
+  if (!rsp?.data?.[0]?.url) {
     throw new Error("No image data received from OpenAI");
   }
 
-  const { url, b64_json } = rsp.data[0];
-  if (url) {
-    console.timeEnd('Total image generation');
-    return url;
-  }
-  if (!b64_json) throw new Error("No image data received");
-
-  console.time('Base64 to Blob conversion');
-  // Convert base64 to Blob URL for better performance
-  const byteChars = atob(b64_json);
-  const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
-  const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
-  const objectUrl = URL.createObjectURL(blob);
-  console.timeEnd('Base64 to Blob conversion');
-  console.timeEnd('Total image generation');
-
-  return objectUrl;
+  return rsp.data[0].url;
 }
 
 /* ------------------------------------------------------------------ */
@@ -261,4 +237,4 @@ export const STYLE_PRESETS: StylePreset[] = [
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png"
   }
-]; 
+];

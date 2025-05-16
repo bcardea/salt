@@ -1,8 +1,9 @@
 import axios from "axios";
 import { getOpenAIClient } from "../lib/openaiClient";
+import { supabase } from "../lib/supabase";
 
 /* ------------------------------------------------------------------ */
-/* Types                                                              */
+/* Types                                                                */
 /* ------------------------------------------------------------------ */
 export type StylePreset = {
   id: string;
@@ -14,50 +15,36 @@ export type StylePreset = {
 };
 
 /* ------------------------------------------------------------------ */
-/* 1) Utility: fetch URL → File                                       */
+/* 1) Utility: fetch URL → File                                         */
 /* ------------------------------------------------------------------ */
 async function urlToFile(url: string): Promise<File> {
-  console.log(`Downloading reference image...`);
   const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
   const type = res.headers["content-type"] ?? "image/png";
   const blob = new Blob([res.data], { type });
   const file = new File([blob], `reference.png`, { type });
-  console.log(`Reference image downloaded:`, {
-    size: file.size,
-    type: file.type,
-    name: file.name
-  });
   return file;
 }
 
 /* ------------------------------------------------------------------ */
-/* 2) Generate prompt text                                            */
+/* 2) Generate prompt text                                              */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArtPrompt(
   sermTitle: string,
   topic: string,
-  apiKey: string,
   stylePreset?: StylePreset
 ): Promise<string> {
-  const openai = getOpenAIClient(apiKey);
+  // Get OpenAI key from Supabase
+  const { data: { key }, error } = await supabase.functions.invoke('get-openai-key');
+  if (error) throw new Error('Failed to get API key');
+
+  const openai = getOpenAIClient(key);
 
   const isFullNotes = topic.length > 100;
   const typographyInstructions = "Typography: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
 
   const systemPrompt = isFullNotes
     ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.
-
-When given a style reference, use it as inspiration for the mood, tone, and artistic approach, but don't be constrained by it. Instead, think about what visual elements would best serve this specific message while maintaining the essence of the chosen style.
-
-Focus on:
-- Creating unique compositions that serve the specific message
-- Using visual metaphors that reinforce the sermon's theme
-- Ensuring the design enhances rather than overshadows the message
-- Maintaining professional, modern aesthetics
-- Placing text thoughtfully to maximize impact
-
-${typographyInstructions}`;
+    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.`;
 
   const chat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -84,28 +71,27 @@ ${typographyInstructions}`;
 }
 
 /* ------------------------------------------------------------------ */
-/* 3) Generate image                                                  */
+/* 3) Generate image                                                    */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,
-  apiKey: string,
   stylePreset?: StylePreset
 ): Promise<string | null> {
-  const openai = getOpenAIClient(apiKey);
+  // Get OpenAI key from Supabase
+  const { data: { key }, error } = await supabase.functions.invoke('get-openai-key');
+  if (error) throw new Error('Failed to get API key');
 
-  console.time('Total image generation');
-  
+  const openai = getOpenAIClient(key);
+
   // Download reference image if style is selected
   let referenceFile: File | undefined;
   if (stylePreset) {
-    console.time('Download reference image');
     try {
       referenceFile = await urlToFile(stylePreset.referenceUrl);
     } catch (error) {
       console.error('Error downloading reference image:', error);
       throw new Error('Failed to download reference image');
     }
-    console.timeEnd('Download reference image');
   }
 
   // Append reference image instructions to the prompt
@@ -113,15 +99,8 @@ export async function generateSermonArt(
     ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
     : prompt;
 
-  console.time('OpenAI API call');
   let rsp;
   try {
-    console.log('Starting OpenAI API call...', {
-      modelName: "gpt-image-1",
-      promptLength: finalPrompt.length,
-      hasReference: !!referenceFile
-    });
-    
     if (referenceFile) {
       rsp = await openai.images.edit({
         model: "gpt-image-1",
@@ -140,17 +119,8 @@ export async function generateSermonArt(
         n: 1
       });
     }
-    
-    console.timeEnd('OpenAI API call');
-    console.log('API call completed successfully');
   } catch (error: any) {
-    console.error('OpenAI API error:', {
-      name: error.name,
-      message: error.message,
-      status: error.status,
-      code: error.code,
-      type: error.type
-    });
+    console.error('OpenAI API error:', error);
     throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
   }
 
@@ -158,27 +128,11 @@ export async function generateSermonArt(
     throw new Error("No image data received from OpenAI");
   }
 
-  const { url, b64_json } = rsp.data[0];
-  if (url) {
-    console.timeEnd('Total image generation');
-    return url;
-  }
-  if (!b64_json) throw new Error("No image data received");
-
-  console.time('Base64 to Blob conversion');
-  // Convert base64 to Blob URL for better performance
-  const byteChars = atob(b64_json);
-  const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
-  const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
-  const objectUrl = URL.createObjectURL(blob);
-  console.timeEnd('Base64 to Blob conversion');
-  console.timeEnd('Total image generation');
-
-  return objectUrl;
+  return rsp.data[0].url || null;
 }
 
 /* ------------------------------------------------------------------ */
-/* Style presets                                                      */
+/* Style presets                                                        */
 /* ------------------------------------------------------------------ */
 export const STYLE_PRESETS: StylePreset[] = [
   {

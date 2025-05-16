@@ -92,7 +92,6 @@ const GeneratorPage: React.FC = () => {
       const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
         inputText.length > 100 ? 'Sermon Artwork' : inputText.toUpperCase(),
         inputText,
-        import.meta.env.VITE_OPENAI_API_KEY,
         selectedStyle
       );
       setFullPrompt(generatedPrompt);
@@ -123,7 +122,6 @@ const GeneratorPage: React.FC = () => {
       // Convert the edited summary back to a full prompt
       const updatedFullPrompt = await convertSummaryToPrompt(
         promptSummary,
-        import.meta.env.VITE_OPENAI_API_KEY,
         selectedStyle
       );
       setFullPrompt(updatedFullPrompt);
@@ -136,7 +134,7 @@ const GeneratorPage: React.FC = () => {
         throw new Error('Failed to use credit. Please try again.');
       }
 
-      const src = await generateSermonArt(updatedFullPrompt, import.meta.env.VITE_OPENAI_API_KEY, selectedStyle);
+      const src = await generateSermonArt(updatedFullPrompt, selectedStyle);
       setImgSrc(src);
       setStatus('complete');
       if (src) {

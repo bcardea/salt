@@ -33,9 +33,10 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
           {!disabled && !isEditing && (
             <button
               onClick={() => setIsEditing(true)}
-              className="text-secondary-600 hover:text-secondary-900 transition-colors"
+              className="flex items-center text-secondary-600 hover:text-secondary-900 transition-colors"
             >
-              <Pencil className="w-4 h-4" />
+              <Pencil className="w-4 h-4 mr-2" />
+              <span className="text-sm">Edit Concept</span>
             </button>
           )}
           {isEditing && (

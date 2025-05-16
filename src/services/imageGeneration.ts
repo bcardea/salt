@@ -53,9 +53,8 @@ Focus on:
 
 ${typographyInstructions}`;
 
-  // Generate the full prompt
   const promptChat = await openai.chat.completions.create({
-    model: "gpt-4-1106-preview",
+    model: "gpt-4.1-2025-04-14",
     messages: [
       {
         role: "system",
@@ -79,7 +78,7 @@ ${typographyInstructions}`;
 
   // Generate a user-friendly summary
   const summaryChat = await openai.chat.completions.create({
-    model: "gpt-4-1106-preview",
+    model: "gpt-4.1-2025-04-14",
     messages: [
       {
         role: "system",
@@ -109,15 +108,15 @@ export async function convertSummaryToPrompt(
   const openai = getOpenAIClient(apiKey);
 
   const chat = await openai.chat.completions.create({
-    model: "gpt-4-1106-preview",
+    model: "gpt-4.1-2025-04-14",
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for DALL-E image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+        content: "You are an expert prompt engineer for gpt-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
       },
       {
         role: "user",
-        content: `Convert this design concept into a detailed DALL-E prompt:\n\n${summary}\n\n${
+        content: `Convert this design concept into a detailed gpt-1 prompt:\n\n${summary}\n\n${
           stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
         }`
       }
@@ -157,19 +156,19 @@ export async function generateSermonArt(
   try {
     if (referenceFile) {
       rsp = await openai.images.edit({
-        model: "dall-e-3",
+        model: "gpt-1",
         image: referenceFile,
         prompt: finalPrompt,
-        size: "1792x1024",
-        quality: "hd",
+        size: "1536x1024",
+        quality: "high",
         n: 1
       });
     } else {
       rsp = await openai.images.generate({
-        model: "dall-e-3",
+        model: "gpt-1",
         prompt: finalPrompt,
-        size: "1792x1024",
-        quality: "hd",
+        size: "1536x1024",
+        quality: "high",
         n: 1
       });
     }

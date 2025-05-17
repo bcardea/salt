@@ -2,6 +2,162 @@ import { StylePreset } from '../services/imageGeneration';
 
 export const STYLE_PRESETS: StylePreset[] = [
   {
+    id: "kids-church",
+    title: "KIDS CHURCH",
+    description: "Bright, high-energy children's ministry design with Memphis patterns",
+    promptModifiers: `{
+      "scene": "bright, high-energy children's ministry logo slide with a fun 1990s Memphis-pattern backdrop",
+      "image_dimensions": "1920×1440",
+      "aspect_ratio": "4:3",
+      "style": [
+        "Saturday-morning-cartoon title card",
+        "bold comic-book outlines",
+        "subtle paper-grain overlay (5 % noise)",
+        "scattered flat-fill geometric confetti in pastel brights"
+      ],
+      "color_palette": {
+        "background_white":   "#fefefe",
+        "navy_outline":       "#003d66",
+        "headline_teal":      "#005d7f",
+        "kid_k":              ["#ffce38", "#ff9b16"],
+        "kid_i_stem":         ["#ff5d8f", "#d83d6c"],
+        "kid_i_dot":          "#e03b6c",
+        "kid_d":              ["#6dc1b3", "#30a4a2"],
+        "kid_s":              ["#ff9953", "#ff6a1d"],
+        "bottom_bar":         "#004d73",
+        "confetti_orange":    "#ff6533",
+        "confetti_teal":      "#2db5ad",
+        "confetti_pink":      "#ff73ab",
+        "confetti_violet":    "#a25cf4"
+      },
+      "background": {
+        "base_color": "background_white",
+        "texture": "fine paper-fiber noise 5 % opacity multiply",
+        "memphis_confetti": [
+          { "shape": "open_triangle",         "stroke": "confetti_orange", "line_w": 4, "size_px": 120, "rotation":  12, "pos_pct": { "x": 88, "y":  7 } },
+          { "shape": "open_triangle",         "stroke": "confetti_teal",   "line_w": 4, "size_px": 110, "rotation": -18, "pos_pct": { "x": 13, "y": 18 } },
+          { "shape": "solid_circle",          "fill":  "confetti_orange",  "diameter_px": 64,                     "pos_pct": { "x":  7, "y": 57 } },
+          { "shape": "solid_circle",          "fill":  "confetti_teal",    "diameter_px": 48,                     "pos_pct": { "x": 83, "y": 88 } },
+          { "shape": "dashed_rect",           "stroke": "confetti_orange", "line_w": 3, "w_px": 190, "h_px": 28, "rotation":   3, "pos_pct": { "x": 15, "y": 31 } },
+          { "shape": "dashed_rect",           "stroke": "confetti_orange", "line_w": 3, "w_px": 160, "h_px": 28, "rotation":  -3, "pos_pct": { "x": 87, "y": 42 } },
+          { "shape": "open_square",           "stroke": "confetti_teal",   "line_w": 5, "size_px": 160, "rotation":  8, "pos_pct": { "x": 12, "y": 64 } },
+          { "shape": "open_square",           "stroke": "confetti_teal",   "line_w": 5, "size_px": 140, "rotation": -12, "pos_pct": { "x": 63, "y": 25 } },
+          { "shape": "solid_right_triangle",  "fill":  "confetti_violet",  "size_px": 84, "rotation": 40,          "pos_pct": { "x": 92, "y": 67 } },
+          { "shape": "grid_6×6",              "fill":  "confetti_pink",    "cell_px": 22, "gap_px": 8, "size_px": 180, "rotation": 5, "pos_pct": { "x": 88, "y": 14 } }
+        ]
+      },
+      "elements": [
+        {
+          "type": "panel",
+          "shape": "irregular comic bubble",
+          "stroke": "navy_outline",
+          "stroke_w": 24,
+          "fill": "transparent",
+          "corner_radius": 22,
+          "padding_px": 68,
+          "tilt_deg": -4,
+          "position_pct": { "x": 50, "y": 47 },
+          "z_index": 5,
+          "content": [
+            {
+              "type": "composite_text",
+              "word": "{sermon_title}",
+              "case_mixed": true,
+              "italic_deg": 8,
+              "outer_stroke": {
+                "color": "navy_outline",
+                "width_px": 28,
+                "join": "round"
+              },
+              "inner_stroke": {
+                "color": "background_white",
+                "width_px": 12
+              },
+              "letterforms": [
+                {
+                  "glyph": "K",
+                  "fill_gradient_linear": {
+                    "angle_deg": -10,
+                    "colors": "kid_k"
+                  },
+                  "shadow": "0 12 0 rgba(0,61,102,0.15)"
+                },
+                {
+                  "glyph": "i",
+                  "fill_gradient_linear": {
+                    "angle_deg": 90,
+                    "colors": "kid_i_stem"
+                  },
+                  "dot": {
+                    "radius_pct_of_cap_height": 25,
+                    "fill": "kid_i_dot"
+                  }
+                },
+                {
+                  "glyph": "D",
+                  "fill_gradient_linear": {
+                    "angle_deg": -15,
+                    "colors": "kid_d"
+                  }
+                },
+                {
+                  "glyph": "S",
+                  "fill_gradient_linear": {
+                    "angle_deg": -12,
+                    "colors": "kid_s"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "content": "{sermon_topic}",
+              "font": "compact-width, extra-bold sans (e.g., Oswald Heavy)",
+              "case": "uppercase",
+              "size_px": 260,
+              "tracking_px": -2,
+              "color": "headline_teal",
+              "baseline_offset_px": 160,
+              "italic_deg": -2,
+              "stroke": "none"
+            }
+          ]
+        },
+        {
+          "type": "rectangle",
+          "fill": "bottom_bar",
+          "size_pct": { "w": 100, "h": 11 },
+          "position_pct": { "x": 50, "y": 92 },
+          "z_index": 4,
+          "content": [
+            {
+              "type": "text",
+              "content": "YOU ARE INVITED",
+              "font": "condensed grotesque caps",
+              "size_px": 120,
+              "color": "background_white",
+              "tracking_px": 6,
+              "alignment": "center",
+              "baseline_offset_px": 4
+            }
+          ]
+        }
+      ],
+      "post_processing": [
+        "apply 4 px drop shadow on entire panel (#000 25 % opacity, y-offset 6 px, blur 12 px)",
+        "global very subtle vignette (darken 8 % at extreme corners)",
+        "1 px outline reinforce on confetti to avoid anti-alias fading"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682875473ba5d8098fbf73f3.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682875473ba5d8098fbf73f3.jpeg"
+  },
+  {
     id: "desert-vintage",
     title: "Desert Vintage Poster",
     description: "Cinematic desert scene with vintage poster aesthetics",
@@ -407,6 +563,7 @@ export const STYLE_PRESETS: StylePreset[] = [
       "composition": {
         "foreground_block": "monolithic headline centred horizontally, spanning from very top of middle third to just below halfway line; letterforms intentionally overlap main illustration to feel pasted on",
         "illustration_anchor": "Jesus (standing) just right of centre, head 70 px below top safe-zone; kneeling receiver at lower centre; adobe wall and foliage frame action",
+        
         "doodle_balance": "white scribbles and ovals counter-weight corners (upper-left, upper-right, lower-left, lower-right) to keep viewer's eye circulating"
       },
       "color_palette": {

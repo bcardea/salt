@@ -276,6 +276,684 @@ export const STYLE_PRESETS: StylePreset[] = [
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827bcc3c519288e6a28f831.jpeg"
   },
   {
+    id: "pop-art-devotional",
+    title: "Pop-Art Devotional",
+    description: "Contemporary sermon graphic with vintage halftone aesthetics",
+    promptModifiers: `{
+      "scene": "contemporary sermon–series title graphic combining vintage halftone print aesthetics with a classical 19th-century painting of Jesus preaching (Sermon on the Mount)",
+      "image_dimensions": "1920×1080",
+      "aspect_ratio": "16:9 landscape",
+      "composition": {
+        "split": "50% left typographic block, 50% right illustrative block",
+        "padding_left": 150,
+        "balance": "large text mass anchors left; golden halo + red robe create focal counter-weight on right; crowd of listeners forms a low horizontal base tying both halves together",
+        "eye_flow": "viewer reads downward through stacked headline, pops to red #Matthew 28 tag, tracks right to Jesus' up-raised hand, then loops around disciples and back to headline"
+      },
+      "color_palette": {
+        "canvas_cream": "#dad7c9",
+        "halftone_dot": "#4a4a4a",
+        "headline_black": "#1e1e1e",
+        "halo_mustard": "#e4c440",
+        "paint_stroke_red": "#c93313",
+        "hash_tag_white": "#ffffff",
+        "subtitle_black": "#262626",
+        "robe_red": "#b6341f",
+        "robe_blue_grey": "#2e4455",
+        "earth_green": "#505536"
+      },
+      "lighting": "flat, even illumination emulating ink-on-paper; painting portion retains subtle directional museum-style key light from upper right (soft highlights on faces, dampened shadows)",
+      "mood": "playful yet reverent; mash-up of modern social-media irony (#Matthew 28) with sacred classical art",
+      "textures": [
+        "uniform 14 ppi halftone dot pattern over entire cream background",
+        "very light recycled-paper grain (5 % opacity) across full canvas",
+        "ragged acrylic brush texture defining edges of red paint stroke",
+        "subtle film grain (10 % opacity) over painting to unify with print look"
+      ],
+      "background": {
+        "base": "solid canvas_cream fill",
+        "overlay": "halftone_dot pattern at 30 % opacity multiply blend"
+      },
+      "subjects": [
+        {
+          "type": "jesus_teaching",
+          "description": "seated figure of Jesus, shoulder-length brown hair, beard, wearing deep red tunic with muted slate-blue cloak; right hand raised index finger, left hand resting on knee",
+          "position": "right-center, occupying from 45 % to 70 % horizontally and middle vertical third",
+          "blend": "clean cut-out with 1 px soft edge feather; minor color-noise added to match halftone environment"
+        },
+        {
+          "type": "disciples_crowd",
+          "description": "approximately 14 surrounding listeners in assorted first-century garments—greys, earth greens, ochres—some looking toward Jesus, others pondering",
+          "position": "forms lower horizontal band stretching from far left margin into right illustrative block"
+        }
+      ],
+      "graphic_elements": [
+        {
+          "type": "halo_circle",
+          "description": "perfect circle 940 px diameter filled with halo_mustard color, overlaid with 15 % halftone dot transparency to match background texture",
+          "position": "centered behind Jesus' upper torso and head; left edge overlaps headline's right margin by ~40 px",
+          "blend_mode": "multiply"
+        },
+        {
+          "type": "paint_stroke_label",
+          "description": "torn-edge rectangular acrylic swatch (610×120 px) in paint_stroke_red with jagged organic top/bottom edges, subtle inner shadow for depth",
+          "position": "left side, baseline aligned between 'Ever.' and subtitle",
+          "text": {
+            "content": "#Matthew 28",
+            "font": "casual handwritten brush script (e.g., 'Marker Felt'-style), white fill, slight 2 ° CCW tilt",
+            "size": "80 pt",
+            "letter_spacing": "normal"
+          }
+        }
+      ],
+      "typography": {
+        "headline": [
+          {
+            "word": "{sermon_title_word1}",
+            "font": "ultra-bold slab serif (similar to 'IBM Plex Serif ExtraBold')",
+            "size": "258 pt",
+            "color": "headline_black",
+            "tracking": "-15",
+            "line_height": "0.9",
+            "x_offset": 150
+          },
+          {
+            "word": "{sermon_title_word2}",
+            "font": "same",
+            "size": "258 pt",
+            "color": "headline_black",
+            "tracking": "-15",
+            "line_height": "0.9",
+            "x_offset": 150
+          },
+          {
+            "word": "{sermon_title_word3}",
+            "font": "same",
+            "size": "258 pt",
+            "color": "headline_black",
+            "tracking": "-15",
+            "line_height": "0.9",
+            "x_offset": 150
+          }
+        ],
+        "subtitle": {
+          "text": "{sermon_topic}",
+          "font": "clean geometric sans-serif (e.g., 'Montserrat SemiBold')",
+          "size": "64 pt",
+          "color": "subtitle_black",
+          "letter_spacing": "-5",
+          "position": "baseline aligned 28 px below red paint stroke"
+        }
+      },
+      "style": "pop-art meets devotional poster; combination of halftone print flatness, bold editorial typography, social-media visual cue, and Renaissance-style painting cutout",
+      "post_processing": [
+        "apply 'Comic Print' halftone filter to background only",
+        "selective color tweak to brighten robe_red highlights (+10 saturation, +5 brightness)",
+        "add mild drop shadow (blur radius 6 px, y-offset 4 px, 30 % opacity) beneath each headline word for crisp legibility on dot background",
+        "new layer: unified noise (1.5 %), soft-light 40 %, to meld all elements",
+        "final curve: gentle S-curve to lift whites (canvas_cream) slightly and deepen dark charcoal tones without crushing colored painting details"
+      ]
+    }`,
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827cd461e09cf5c034a537d.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827cd461e09cf5c034a537d.jpeg"
+  },
+  {
+    id: "throwback-doodle",
+    title: "Throwback-Doodle",
+    description: "Retro-washed ministry poster with playful doodles",
+    promptModifiers: `{
+      "scene": "retro-washed ministry poster featuring a warm-toned illustration of Jesus helping a kneeling figure in a sun-bleached courtyard; bold modern lettering and playful white doodles collide with heavy film-grain texture",
+      "image_dimensions": "2048×1147",
+      "aspect_ratio": "16:9 landscape",
+      "composition": {
+        "foreground_block": "monolithic headline centred horizontally, spanning from very top of middle third to just below halfway line; letterforms intentionally overlap main illustration to feel pasted on",
+        "illustration_anchor": "Jesus (standing) just right of centre, head 70 px below top safe-zone; kneeling receiver at lower centre; adobe wall and foliage frame action",
+        "doodle_balance": "white scribbles and ovals counter-weight corners (upper-left, upper-right, lower-left, lower-right) to keep viewer's eye circulating"
+      },
+      "color_palette": {
+        "vintage_sepia": "#d4976d",
+        "sun_bleach_highlight": "#f8dbc0",
+        "deep_shadow_brown": "#3a2420",
+        "headline_white": "#ffffff",
+        "light_leak_gold": "#fecf4c",
+        "grain_speck": "#000000"
+      },
+      "lighting": "high-noon desert light in original painting (hard top-down), then globally flattened by orange/peach photo filter (+30 warmth, +10 tint) and faded highlights to mimic 1970s film stock; subtle rainbow light-leak flare from bottom-centre upward (golden-yellow shifting to faint magenta)",
+      "mood": "energetic, DIY-zine meets worship-poster; vintage reverence tempered by casual street-art confidence",
+      "textures": [
+        "dense 35 mm film grain (amount ≈ 45 %, size ≈ 3 px)",
+        "random dust & hair specs (1-3 px) ~0.7 % coverage",
+        "subtle halftone dot underlayer on wall (10 % opacity, 12 ppi)",
+        "faint crease / scratch lines diagonal across right half (opacity 15 %)"
+      ],
+      "background": {
+        "layers": [
+          "base peach-sepia colour fill (#d4976d)",
+          "cut-out classical painting of Jesus scene (colour-graded, set to 92 % opacity)",
+          "dark burnt-edge vignette (25 % opacity, feather 320 px) on extreme left and right"
+        ]
+      },
+      "subjects": [
+        {
+          "type": "jesus_standing",
+          "description": "long brown hair, russet tunic, pale undershirt, bending slightly to extend hand",
+          "position": "x: 55 %, y: 35 %",
+          "embellishment": "small 3-point white crown doodle floating 22 px above head (hand-drawn, 2 px stroke)"
+        },
+        {
+          "type": "kneeling_figure",
+          "description": "robed individual, dusty blue garment, hands lifted toward Jesus",
+          "position": "x: 43 %, y: 62 %"
+        }
+      ],
+      "graphic_elements": [
+        {
+          "type": "headline_doodle_cluster",
+          "elements": [
+            {
+              "shape": "scribble_swirl",
+              "stroke": "4 px white",
+              "position": "upper-left corner, curling inward 210 px×170 px"
+            },
+            {
+              "shape": "scribble_swirl",
+              "stroke": "4 px white",
+              "position": "upper-right corner, diagonal 180 px sweep following frame edge"
+            },
+            {
+              "shape": "scribble_swirl",
+              "stroke": "4 px white",
+              "position": "lower-right corner, 260 px curved flourish"
+            }
+          ]
+        },
+        {
+          "type": "oval_cross_group",
+          "description": "hand-drawn white ellipse (5 px stroke) tilted 22 ° CCW with bold white plus sign centred inside",
+          "position": "lower-left quadrant, ellipse 620 × 260 px"
+        },
+        {
+          "type": "circular_text_path",
+          "description": "lower-case sentence '{sermon_topic}' repeated around 360 ° path, font - condensed sans, 28 pt, tracking 30",
+          "color": "#ffffff",
+          "position": [
+            { "x": "29 %", "y": "58 %" },
+            { "x": "76 %", "y": "18 %" }
+          ],
+          "diameter": "200 px"
+        }
+      ],
+      "typography": {
+        "headline": {
+          "text": "{sermon_title}",
+          "font": "ultra-bold geometric sans (akin to 'Anton' or 'Compacta Black')",
+          "size": "first line cap-height 340 px, second line 290 px",
+          "tracking": "-15",
+          "leading": "-40",
+          "case": "upper",
+          "fill": "headline_white",
+          "stroke": { "color": "none" },
+          "inner_shadow": "soft orangey-brown #c17755, distance 0, size 14 px, opacity 35 %",
+          "position": "centered; baseline of second line sits at 63 % canvas height"
+        }
+      },
+      "style": "gritty Christian street-poster; mash-up of vintage mission photo, oversized type, white marker graffiti, and skateboard-mag aesthetic",
+      "post_processing": [
+        "apply LUT 'Kodak Porta Warm' at 60 %",
+        "add gradient map (#fef0c4 → #d4976d → #3a2420) at 20 % Soft Light",
+        "overlay 8-bit noise layer (blend Overlay 45 %)",
+        "light-leak radial gradient centre-bottom (#fecf4c to transparent) Screen 55 %",
+        "Gaussian blur copy of entire canvas (2 px) set to Hard Light 20 % for bloom around white headline",
+        "final Unsharp Mask (amount 65 %, radius 1.0, threshold 3) to emphasise grain"
+      ]
+    }`,
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827ced275852d6b69345c13.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827ced275852d6b69345c13.jpeg"
+  },
+  {
+    id: "vintage-red-sharpie",
+    title: "Vintage Red Sharpie",
+    description: "Vintage-print sermon graphic with handwritten elements",
+    promptModifiers: `{
+      "scene": "vintage-print sermon-series graphic poster, laid out on warm recycled paper stock with visible pulp fibers, faint fold-creases, and scattered black ink specks",
+      "image_dimensions": "2048×1148",
+      "aspect_ratio": "16:9 landscape",
+      "style": [
+        "1960s offset-print / 1970s church bulletin aesthetic",
+        "heavy halftone dots, slight CMYK mis-registration",
+        "soft radial-blur vignette around edges",
+        "overall matte finish with 4 % Gaussian noise grain"
+      ],
+      "color_palette": {
+        "paper":        "#d5d0c2",
+        "headline_blue":"#2b6f97",
+        "scribble_ink": "#1d1d1d",
+        "handwrite_red":"#c33b33",
+        "accent_gold":  "#c0b04d",
+        "painting_teal":"#6ba3a5",
+        "painting_robe":"#ae4135"
+      },
+      "background": {
+        "base_color": "paper",
+        "textures": [
+          "fine paper fiber pattern (10 % opacity multiply)",
+          "random 2–4 px black flecks and pinholes",
+          "hairline black registration crop marks touching top-left and top-right edges",
+          "sub-visible 45° halftone dot field (#4a4a4a at 12 % opacity)",
+          "slightly darker vertical fold shadow 80 px from right edge"
+        ]
+      },
+      "elements": [
+        {
+          "type": "text",
+          "content": "{sermon_title}",
+          "font": "compressed, extra-bold grotesque sans-serif",
+          "case": "uppercase",
+          "size": "≈400 px",
+          "letter_spacing": "tight",
+          "color":  "headline_blue",
+          "position": { "x_pct": 3,  "y_pct": 3 },
+          "distress": [
+            "30 % of glyph edges eroded with subtle paper show-through",
+            "occasional missing dot speckle (dry-ink effect)"
+          ]
+        },
+        {
+          "type": "stroke",
+          "description": "hand-drawn tapering underline",
+          "brush_style": "dry china-ink",
+          "thickness": "12 px taper → 3 px",
+          "length": "83 % canvas width",
+          "color": "scribble_ink",
+          "position_anchor": "base of SERMON word"
+        },
+        {
+          "type": "image",
+          "source": "19th-century oil painting of the Sermon on the Mount",
+          "description_detail": {
+            "jesus": "center-right, seated, scarlet robe with deep-blue cloak, right hand raised",
+            "disciples": "cluster of six listeners on left half, muted earth-toned garments",
+            "landscape": "loose impressionistic brush strokes, olive and ochre hillside fading to turquoise sky"
+          },
+          "crop": "5:4",
+          "size": "≈32 % canvas width",
+          "position": { "x_pct": 62, "y_pct": 31 },
+          "edge_treatment": [
+            "soft halftone feather (25 px)",
+            "swirling radial-blur spoke at lower margin, blending painting into paper"
+          ],
+          "color_grade": "slightly desaturated, +15 warmth"
+        },
+        {
+          "type": "text_block",
+          "style": "casual felt-tip handwriting",
+          "ink_color": "handwrite_red",
+          "line_height": "118 %",
+          "size": "≈38 px",
+          "blocks": [
+            {
+              "content": "{sermon_topic}",
+              "position": { "x_pct": 4, "y_pct": 28 }
+            }
+          ],
+          "extra_details": [
+            "natural baseline wobble",
+            "occasional double-stroke where marker paused"
+          ]
+        },
+        {
+          "type": "text",
+          "content": "{sermon_reference}",
+          "font": "same grotesque as headline",
+          "case": "uppercase",
+          "weight": "900",
+          "size": "≈120 px",
+          "letter_spacing": "3 px",
+          "color": "accent_gold",
+          "opacity": 0.88,
+          "position": { "x_pct": 21, "y_pct": 56 }
+        }
+      ],
+      "post_processing": [
+        "Add 2 % chromatic aberration along left edge of headline",
+        "Overlay 6 % opacity dusty film grain",
+        "Apply subtle (3 px radius) sharpen on entire composition"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "none to preserve grain texture"
+      }
+    }`,
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827cf2d89ba40f48fa404e8.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827cf2d89ba40f48fa404e8.jpeg"
+  },
+  {
+    id: "architecture-collage",
+    title: "Architecture Collage",
+    description: "Architectural elements with geometric framing",
+    promptModifiers: `{
+      "canvas": {
+        "dimensions": "1920×1080",
+        "aspect_ratio": "16:9",
+        "background": {
+          "base_color": "#8f8677",
+          "texture": "high-resolution parchment / aged map paper with fine marbling, faint latitude–longitude grid lines and hairline cracks",
+          "film_grain": {
+            "intensity": 0.35,
+            "size": "fine"
+          }
+        }
+      },
+      "color_palette": {
+        "parchment": "#8f8677",
+        "text_cream": "#ececec",
+        "rust_orange": "#b9833e",
+        "deep_rust": "#8c3d18",
+        "sage_olive": "#66694e",
+        "column_marble": "#c7c7c7",
+        "accent_arrow": "#b17930"
+      },
+      "layers": [
+        {
+          "type": "planet_disc",
+          "shape": "perfect_circle",
+          "diameter_pct_of_height": 75,
+          "center": { "x_pct": 50, "y_pct": 38 },
+          "gradient": {
+            "style": "radial – multitone cloud",
+            "inner_color": "#b9833e",
+            "mid_tone": "#8c3d18",
+            "outer_color": "#66694e",
+            "noise": "subtle nebula speckles",
+            "blend_mode": "overlay",
+            "opacity": 0.90
+          }
+        },
+        {
+          "type": "orbit_arc",
+          "geometry": "concentric_outline",
+          "stroke_color": "#d1cec6",
+          "stroke_width_px": 4,
+          "radius_pct_of_height": 77,
+          "center": { "x_pct": 50, "y_pct": 38 },
+          "start_angle_deg": 190,
+          "end_angle_deg": 40,
+          "opacity": 0.65
+        },
+        {
+          "type": "orbit_arc",
+          "geometry": "concentric_outline",
+          "stroke_color": "#d1cec6",
+          "stroke_width_px": 2,
+          "radius_pct_of_height": 95,
+          "center": { "x_pct": 6, "y_pct": 96 },
+          "start_angle_deg": 280,
+          "end_angle_deg": 20,
+          "opacity": 0.6
+        },
+        {
+          "type": "column_fragment",
+          "image_style": "high-contrast grayscale photograph",
+          "position": { "anchor": "top_left", "x_px": 140, "y_px": 30 },
+          "size": { "width_px": 540, "height_px": 210 },
+          "orientation": "horizontal entablature slab + Ionic capital",
+          "grunge_mask": 0.25
+        },
+        {
+          "type": "column_fragment",
+          "image_style": "high-contrast grayscale photograph",
+          "position": { "anchor": "bottom_right", "x_px": -60, "y_px": 690 },
+          "size": { "width_px": 560, "height_px": 220 },
+          "orientation": "horizontal entablature slab + Ionic capital",
+          "grunge_mask": 0.25
+        },
+        {
+          "type": "chevron_triplet",
+          "icon": "single-line triangle",
+          "fill_color": "#b17930",
+          "position": { "anchor": "top_left", "x_px": 60, "y_px": 70 },
+          "direction": "right",
+          "size_px": 44,
+          "spacing_px": 10,
+          "opacity": 0.93
+        },
+        {
+          "type": "chevron_triplet",
+          "icon": "single-line triangle",
+          "fill_color": "#b17930",
+          "position": { "anchor": "bottom_right", "x_px": -40, "y_px": 780 },
+          "direction": "left",
+          "size_px": 44,
+          "spacing_px": 10,
+          "opacity": 0.93
+        },
+        {
+          "type": "dot",
+          "color": "#b17930",
+          "radius_px": 22,
+          "position": { "x_pct": 7, "y_pct": 60 }
+        },
+        {
+          "type": "dot",
+          "color": "#b17930",
+          "radius_px": 18,
+          "position": { "x_pct": 97, "y_pct": 20 }
+        },
+        {
+          "type": "photographic_element",
+          "subject": "Victorian-era wooden church façade with central steeple and cross",
+          "treatment": "monochrome, slight cyan tint (#9ca1a8), 35% halftone",
+          "position": { "anchor": "bottom_center", "x_pct": 50, "y_pct": 94 },
+          "size": { "height_pct_of_canvas": 45 },
+          "blend_mode": "multiply",
+          "layer_mask": "tapered feather 15px"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_title}",
+          "font_family": "Extra-Condensed Sans (e.g., League Spartan Bold Condensed)",
+          "all_caps": true,
+          "font_weight": 900,
+          "letter_spacing_em": 0.01,
+          "font_size_px": 430,
+          "fill_color": "#ececec",
+          "texture_overlay": {
+            "pattern": "granular paper fibers",
+            "intensity": 0.18
+          },
+          "position": { "x_pct": 50, "y_pct": 56 },
+          "alignment": "center",
+          "max_width_pct": 82,
+          "z_index": 9000
+        }
+      ],
+      "post_processing": {
+        "global_grain": "15% noise on luminosity channel",
+        "vignette": {
+          "shape": "subtle radial",
+          "darken_strength": 0.10
+        },
+        "color_grade": {
+          "lift": "-3",
+          "gamma": "0",
+          "gain": "+2",
+          "temperature_shift": "-3 (cooler in shadows)",
+          "saturation": "-8 overall, +6 in rust/olive midtones"
+        }
+      }
+    }`,
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827d01280f93e0bc6af0382.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827d01280f93e0bc6af0382.jpeg"
+  },
+  {
+    id: "modern-earth-collage",
+    title: "Modern-Earth Collage",
+    description: "Modern collage with dreamy pastel-desert sky",
+    promptModifiers: `{
+      "scene": "modern collage-style sermon graphic built around the single word '{sermon_title}', blending photography, geometric shapes, and flat UI icons against a dreamy pastel-desert sky",
+      "image_dimensions": "2048×1148",
+      "aspect_ratio": "16:9 landscape",
+      "style": [
+        "contemporary worship-media collage",
+        "grainy matte film texture (8 % noise)",
+        "subtle CMYK halftone on photographic areas",
+        "high-contrast serif typography with soft white outer-glow"
+      ],
+      "color_palette": {
+        "sky_peach":      "#f4cfa7",
+        "terra_sienna":   "#9e4e44",
+        "midnight_navy":  "#1e223f",
+        "indigo_circle":  "#2e4576",
+        "sunset_peach":   "#f0b18b",
+        "desert_orange":  "#e68f58",
+        "sand_beige":     "#e9caa4",
+        "text_white":     "#ffffff"
+      },
+      "background": {
+        "layers": [
+          "base gradient sky → vertical blend (#f4cfa7 at top → #e9caa4 mid → #d8c0b2 bottom)",
+          "wispy cumulus clouds, warm-lit from left, opacity 55 %",
+          "global film-grain overlay (Add blend, 8 % strength)"
+        ]
+      },
+      "elements": [
+        {
+          "type": "shape",
+          "name": "left_top_semicircle",
+          "shape": "semicircle",
+          "fill": "terra_sienna",
+          "diameter_pct": 46,
+          "position": { "x_pct": 9, "y_pct": 14 }
+        },
+        {
+          "type": "shape",
+          "name": "central_circle",
+          "shape": "circle",
+          "fill": "radial gradient indigo_circle → midnight_navy",
+          "diameter_pct": 57,
+          "position": { "x_pct": 47, "y_pct": 46 },
+          "texture": "fine halftone dots 10 % opacity",
+          "mask": "low-opacity cloud photograph clipped inside"
+        },
+        {
+          "type": "shape",
+          "name": "right_semicircle",
+          "shape": "semicircle",
+          "fill": "sunset_peach",
+          "diameter_pct": 60,
+          "position": { "x_pct": 75, "y_pct": 62 }
+        },
+        {
+          "type": "shape",
+          "name": "bottom_bar",
+          "shape": "rectangle",
+          "fill": "desert_orange",
+          "size_pct": { "w": 54, "h": 11 },
+          "position": { "x_pct": 23, "y_pct": 87 }
+        },
+        {
+          "type": "photo",
+          "description": "sepia desert dunes with two tiny hikers on ridge",
+          "crop_mode": "wide panorama",
+          "position": { "x_pct": 75, "y_pct": 9 },
+          "scale_pct": 55,
+          "details": "hikers ≈0.9 % canvas height, casting long morning shadows"
+        },
+        {
+          "type": "photo",
+          "description": "charcoal-toned craggy mountain etching",
+          "crop_mode": "isolate on transparent BG",
+          "position": { "x_pct": 15, "y_pct": 70 },
+          "scale_pct": 32
+        },
+        {
+          "type": "photo",
+          "description": "dramatic sun-kissed alpine ridge (orange highlights, deep shadows)",
+          "crop_mode": "clipped inside right_semicircle",
+          "position": "inherits right_semicircle bounds"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_title}",
+          "font": "ultra-high contrast old-style serif (e.g., Recoleta Black or Canela Deck Bold)",
+          "size": "≈470 px",
+          "tracking": "0 px",
+          "case": "uppercase",
+          "color": "text_white",
+          "position": { "x_pct": 50, "y_pct": 50 },
+          "alignment": "center",
+          "effects": [
+            "outer glow 14 px, #ffffff at 80 % opacity",
+            "vertical fade mask on lower 15 % of glyphs"
+          ],
+          "special_glyph_edits": [
+            "counter of O replaced with 4-point star cut-out (rotated 45°)"
+          ]
+        },
+        {
+          "type": "bird",
+          "species": "seagull",
+          "count": 4,
+          "positions_pct": [
+            { "x": 36, "y": 24 },
+            { "x": 64, "y": 23 },
+            { "x": 48, "y": 55 },
+            { "x": 82, "y": 46 }
+          ],
+          "wing_spans_px": [320, 300, 390, 260],
+          "lighting": "top-left key, soft rim on right wing edges",
+          "motion_blur": "subtle 2 px on wing tips"
+        },
+        {
+          "type": "icon_column",
+          "location": "left edge",
+          "icons": [
+            { "shape": "4-point sparkle", "size_px": 46 },
+            { "shape": "diagonal hatch square", "size_px": 52 },
+            { "shape": "three nested rings", "size_px": 48 }
+          ],
+          "stroke": "text_white",
+          "gap_px": 32,
+          "position": { "x_pct": 4.4, "y_pct": 55 }
+        },
+        {
+          "type": "icon_column",
+          "location": "bottom-right",
+          "icons": [
+            { "shape": "inverted chevron-arch", "size_px": 46 },
+            { "shape": "4-leaf clover", "size_px": 50 },
+            { "shape": "wireframe globe", "size_px": 60 }
+          ],
+          "stroke": "text_white",
+          "gap_px": 34,
+          "position": { "x_pct": 90, "y_pct": 67 }
+        },
+        {
+          "type": "text",
+          "content": "{sermon_topic}",
+          "font": "condensed grotesque caps",
+          "size": "≈34 px",
+          "leading": "90 %",
+          "tracking": "6 %",
+          "color": "text_white",
+          "position": { "x_pct": 12.5, "y_pct": 20 },
+          "alignment": "left"
+        }
+      ],
+      "post_processing": [
+        "global film grain (Add, 8 %)",
+        "subtle chromatic aberration: +1 px red fringe on right edge, −1 px cyan on left",
+        "1.5 px sharpen pass on foreground gulls only"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827d0a41e09cfb1fb4a55b2.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827d0a41e09cfb1fb4a55b2.jpeg"
+  },
+  {
     id: "photoreal",
     title: "Photographic",
     description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",

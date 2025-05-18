@@ -131,7 +131,7 @@ const HomePage = () => {
                 <img
                   src={saltyImage}
                   alt=""
-                  className="absolute -left-2 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
+                  className="absolute -left-0 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
                 />
                 {/* From image with 3:2 aspect ratio */}
                 <div className="aspect-[3/2] w-full relative">

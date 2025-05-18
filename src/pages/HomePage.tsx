@@ -125,23 +125,21 @@ const HomePage = () => {
           {/* RIGHT: TRANSFORMATION IMAGES */}
           <div className="w-full flex flex-col items-center relative">
             <div className="flex flex-col items-center mb-2">
-              <div className="relative">
+              <div className="relative w-full max-w-md">
                 {/* Salty SVG positioned to the left */}
                 <img
                   src={saltyImage}
                   alt=""
-                  className="absolute -left-24 top-1/2 -translate-y-1/2 w-24 h-auto z-10"
+                  className="absolute -left-16 top-1/2 -translate-y-1/2 w-20 h-auto z-10"
                 />
-                <div className="w-full max-w-sm">
-                  <div className="aspect-[3/2] relative">
-                    <img
-                      src={fromImage}
-                      alt="Sermon Notes"
-                      className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
-                    />
-                  </div>
-                  <span className="block text-center text-base text-gray-500 mt-2 italic">From this…</span>
+                <div className="aspect-[3/2] relative">
+                  <img
+                    src={fromImage}
+                    alt="Sermon Notes"
+                    className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
+                  />
                 </div>
+                <span className="block text-center text-base text-gray-500 mt-2 italic">From this…</span>
               </div>
               {/* Arrow/Divider */}
               <svg
@@ -160,7 +158,7 @@ const HomePage = () => {
                 />
               </svg>
             </div>
-            <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
+            <div className="grid grid-cols-2 gap-4 w-full max-w-md">
               {toImages.map((img, idx) => (
                 <div key={img.src} className="flex flex-col items-center">
                   <div className="w-full aspect-[3/2] relative">

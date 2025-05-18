@@ -1990,7 +1990,32 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Photographic",
     description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
     categories: ["photoreal", "cinematic", "portrait", "modern", "emotive"],
-    promptModifiers: "Create a Photo-realistic filmic style image. Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject. Make sure it's photorealsitic and has the characterstics of an actual photograph",
+    promptModifiers: `{
+  "scene": "photo-realistic, cinematic portrait in a thoughtfully composed environment relevant to the sermon",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "main subject (figure or scene) is centered or follows the rule of thirds; strong visual hierarchy",
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{sermon_title}",
+      "position": "center-bottom"
+    },
+    {
+      "type": "typographic element",
+      "description": "{sermon_topic}",
+      "position": "bottom-right"
+    }
+  ],
+  "color_palette": {
+    "main": "#e0e0e0",
+    "text": "#232323",
+    "accents": "#70a8ff"
+  },
+  "lighting": "cinematic, soft rim light with gentle background separation",
+  "mood": "emotive, professional, cinematic",
+  "style": "modern, cinematic, photo-realistic with subtle environmental storytelling"
+}`
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
   },
@@ -1999,7 +2024,32 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Modern Minimal",
     description: "Clean, editorial layout with purposeful negative space",
     categories: ["minimal", "modern", "editorial", "clean", "sophisticated"],
-    promptModifiers: "Draw inspiration from modern editorial design. Use purposeful negative space, strong typographic hierarchy, and a restrained color palette. Consider geometric elements, clean lines, or abstract shapes that complement the message. The design should feel sophisticated and intentional.",
+    promptModifiers: `{
+  "scene": "minimalist editorial layout with strategic negative space and clean lines",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "centered or left-aligned text block for {sermon_title}, smaller subtitle for {sermon_topic} below",
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{sermon_title}",
+      "position": "center or upper third"
+    },
+    {
+      "type": "typographic element",
+      "description": "{sermon_topic}",
+      "position": "below title"
+    }
+  ],
+  "color_palette": {
+    "background": "#f7f7f5",
+    "text": "#1a1a1a",
+    "accent": "#efb347"
+  },
+  "lighting": "soft, ambient, no harsh shadows",
+  "mood": "calm, focused, modern",
+  "style": "modern editorial minimalism with restrained color palette and clear hierarchy"
+}`
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
   },
@@ -2008,7 +2058,34 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Retro 80s",
     description: "Synthwave-inspired design with bold energy",
     categories: ["retro", "80s", "bold", "synthwave", "colorful"],
-    promptModifiers: "Channel retro-futuristic aesthetics with bold color gradients, dynamic lighting, and geometric elements. Consider how to incorporate synthwave elements while maintaining relevance to the sermon's message. The design should feel energetic and nostalgic without being cliché.",
+    promptModifiers: `{
+  "scene": "retro 1980s synthwave landscape or abstract composition with bold neon colors and gradients",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "title text {sermon_title} large and central; subtitle {sermon_topic} in smaller type below",
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{sermon_title}",
+      "position": "center"
+    },
+    {
+      "type": "typographic element",
+      "description": "{sermon_topic}",
+      "position": "below title"
+    }
+  ],
+  "color_palette": {
+    "background": "#2c2c54",
+    "neon_pink": "#f74c84",
+    "neon_blue": "#00eafc",
+    "title_text": "#fff900",
+    "subtitle_text": "#ffffff"
+  },
+  "lighting": "glowing neon, dramatic light streaks",
+  "mood": "energetic, nostalgic, bold",
+  "style": "retro-futurist, synthwave, geometric shapes, high contrast"
+}`
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
   },
@@ -2017,7 +2094,33 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Cinematic",
     description: "Epic, dramatic artwork inspired by ancient narratives",
     categories: ["cinematic", "epic", "biblical", "ancient", "dramatic"],
-    promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors.",
+    promptModifiers: `{
+  "scene": "dramatic, cinematic depiction of a key biblical moment or symbol, with rich textures and lighting",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "main focal point for {sermon_title}; {sermon_topic} as subtitle beneath or in a side block",
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{sermon_title}",
+      "position": "centered or top third"
+    },
+    {
+      "type": "typographic element",
+      "description": "{sermon_topic}",
+      "position": "bottom or lower third"
+    }
+  ],
+  "color_palette": {
+    "background": "#31241e",
+    "highlight": "#ffd27f",
+    "accent": "#936639",
+    "text": "#f5f2ed"
+  },
+  "lighting": "strong directional light, deep shadows, cinematic mood",
+  "mood": "epic, timeless, profound",
+  "style": "cinematic, biblical, ancient, dramatic with symbolic detail"
+}`
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
   },
@@ -2026,7 +2129,33 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Youthful Collage",
     description: "Modern grunge collage full of energy and layers",
      categories: ["youth", "collage", "grunge", "energetic", "modern"],
-    promptModifiers: "Create a dynamic collage composition with multiple overlapping elements, torn paper textures, and layered design elements. Include: 1) A base layer with grungy textures or distressed patterns 2) Multiple overlapping geometric shapes or torn paper elements 3) Typography treated as graphic elements with parts intentionally overlapping or breaking the frame 4) Subtle shadow effects to create depth between layers 5) Small decorative elements like paint splatters, tape, or paper clips scattered thoughtfully. The overall composition should feel energetic and intentionally layered, with clear visual hierarchy despite the complexity.",
+    promptModifiers: `{
+  "scene": "energetic collage with torn paper textures, paint splatters, and overlapping graphic elements",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "dynamic layering with {sermon_title} large and bold, {sermon_topic} as secondary label; scattered decorative elements for energy",
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{sermon_title}",
+      "position": "center, partly overlapped by collage elements"
+    },
+    {
+      "type": "typographic element",
+      "description": "{sermon_topic}",
+      "position": "bottom or integrated into collage"
+    }
+  ],
+  "color_palette": {
+    "background": "#272a34",
+    "highlight": "#ffdd2d",
+    "accent": "#fa347a",
+    "text": "#ffffff"
+  },
+  "lighting": "flat collage lighting",
+  "mood": "energetic, youthful, layered",
+  "style": "grunge collage, mixed media, youth poster aesthetic"
+}`
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
   },
@@ -2035,7 +2164,32 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Vintage Print",
     description: "Classic aesthetic with authentic print textures",
     categories: ["vintage", "classic", "print", "timeless", "texture"],
-    promptModifiers: "Draw from classic print design with authentic textures, traditional typography, and careful attention to detail. Consider how printing artifacts and techniques can add character without overwhelming the design. The result should feel crafted and timeless.",
+    promptModifiers: `{
+  "scene": "classic vintage print with paper grain, halftone textures, and traditional layout",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "central typographic headline for {sermon_title}, secondary {sermon_topic} below or above, fine print details",
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{sermon_title}",
+      "position": "centered"
+    },
+    {
+      "type": "typographic element",
+      "description": "{sermon_topic}",
+      "position": "below headline"
+    }
+  ],
+  "color_palette": {
+    "paper": "#eae1d1",
+    "ink": "#232323",
+    "accent": "#aa3232"
+  },
+  "lighting": "flat print-style lighting",
+  "mood": "timeless, classic, crafted",
+  "style": "vintage print, classic, textured, high attention to print detail"
+}`
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png"
   }

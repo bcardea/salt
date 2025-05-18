@@ -151,7 +151,6 @@ const GeneratorPage: React.FC = () => {
     }
   };
 
-
   const handleInputChange = async (value: string) => {
     setRawInput(value);
     setStatus('analyzing');
@@ -224,6 +223,7 @@ const GeneratorPage: React.FC = () => {
             <StylePresetCarousel
               presets={STYLE_PRESETS}
               selectedStyle={selectedStyle}
+              onStyleSelect={setSelectedStyle}
               disabled={status !== 'idle'}
             />
           </div>

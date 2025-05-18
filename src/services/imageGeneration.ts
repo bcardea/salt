@@ -3,7 +3,6 @@ import { getOpenAIClient } from "../lib/openaiClient";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
-/* ------------------------------------------------------------------ */
 export type StylePreset = {
   id: string;
   title: string;

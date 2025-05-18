@@ -178,4 +178,4 @@ export async function generateSermonArt(
     console.error('OpenAI API error:', error);
     throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
   }
-}
+} 

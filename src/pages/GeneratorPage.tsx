@@ -294,3 +294,5 @@ const GeneratorPage: React.FC = () => {
     </div>
   );
 };
+
+export default GeneratorPage;

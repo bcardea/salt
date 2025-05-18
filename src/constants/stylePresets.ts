@@ -50,6 +50,64 @@ export const STYLE_PRESETS: StylePreset[] = [
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
   },
   {
+    id: "desert",
+    title: "Desert Minimalist",
+    description: "Warm, earthy tones with organic textures",
+    promptModifiers: JSON.stringify({
+      style: "desert minimalism, organic modernism",
+      color_palette: {
+        primary: ["terracotta", "sand", "clay"],
+        accent: ["sage green", "dusty blue"],
+        base: "warm cream"
+      },
+      textures: [
+        "sand ripples",
+        "cracked earth",
+        "weathered stone",
+        "organic patterns"
+      ],
+      composition: {
+        layout: "asymmetric balance",
+        space: "expansive, breathing room",
+        elements: "organic shapes, natural forms"
+      },
+      lighting: "warm, directional, desert sunlight quality"
+    }),
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
+  },
+  {
+    id: "red-sharpie",
+    title: "Red Sharpie",
+    description: "Bold marker-style artwork with dynamic energy",
+    promptModifiers: JSON.stringify({
+      style: "hand-drawn marker illustration",
+      medium: {
+        primary: "bold red marker",
+        secondary: "fine-tip black pen",
+        texture: "authentic marker strokes"
+      },
+      technique: [
+        "confident single strokes",
+        "varying line weights",
+        "intentional white space",
+        "dynamic gesture"
+      ],
+      composition: {
+        style: "spontaneous, energetic",
+        balance: "asymmetric, dynamic",
+        focus: "bold central elements"
+      },
+      effects: [
+        "marker texture",
+        "slight ink bleeding",
+        "authentic stroke overlap"
+      ]
+    }),
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
+  },
+  {
     id: "retro80s",
     title: "Retro 80s",
     description: "Synthwave-inspired design with bold energy",

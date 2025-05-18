@@ -1513,8 +1513,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "final Unsharp Mask (amount 65 %, radius 1.0, threshold 3) to emphasise grain"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d49540100fc9797e22.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d49540100fc9797e22.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d4e5ca6c3465f343e9.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d4e5ca6c3465f343e9.jpeg"
   },
   {
     id: "vintage-red-sharpie",

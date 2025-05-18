@@ -132,18 +132,22 @@ const HomePage = () => {
                   alt=""
                   className="absolute -left-24 top-1/2 -translate-y-1/2 w-24 h-auto z-10"
                 />
-                <img
-                  src={fromImage}
-                  alt="Sermon Notes"
-                  className="w-56 h-44 object-cover rounded-xl shadow-xl border-4 border-white"
-                />
-                <span className="block text-center text-base text-gray-500 mt-1 italic">From this…</span>
+                <div className="w-full max-w-sm">
+                  <div className="aspect-[3/2] relative">
+                    <img
+                      src={fromImage}
+                      alt="Sermon Notes"
+                      className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
+                    />
+                  </div>
+                  <span className="block text-center text-base text-gray-500 mt-2 italic">From this…</span>
+                </div>
               </div>
               {/* Arrow/Divider */}
               <svg
                 width="32"
                 height="60"
-                className="my-2 md:my-4 text-secondary-200"
+                className="my-4 md:my-6 text-secondary-200"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -156,14 +160,16 @@ const HomePage = () => {
                 />
               </svg>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
               {toImages.map((img, idx) => (
                 <div key={img.src} className="flex flex-col items-center">
-                  <img
-                    src={img.src}
-                    alt={img.label}
-                    className="w-36 h-36 object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
-                  />
+                  <div className="w-full aspect-[3/2] relative">
+                    <img
+                      src={img.src}
+                      alt={img.label}
+                      className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
+                    />
+                  </div>
                   <span className="text-sm text-gray-500 mt-2 italic">{img.label}</span>
                 </div>
               ))}

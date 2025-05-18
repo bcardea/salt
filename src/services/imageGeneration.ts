@@ -124,6 +124,8 @@ export async function convertSummaryToPrompt(
   sermon_topic: string,
   stylePreset?: StylePreset
 ): Promise<string> {
+  const openai = getOpenAIClient();
+
   console.group('=== SUMMARY TO PROMPT CONVERSION ===');
   console.log('Step 1: Input Parameters');
   console.log({
@@ -137,41 +139,28 @@ export async function convertSummaryToPrompt(
     } : 'none'
   });
 
-  const openai = getOpenAIClient();
-
-  let parsedStylePreset;
-  try {
-    parsedStylePreset = stylePreset ? JSON.parse(stylePreset.promptModifiers) : {};
-  } catch (e) {
-    console.error("Error parsing style preset JSON:", e);
-    throw new Error("Invalid style preset JSON");
-  }
-
-  // Replace placeholders in the parsed style preset
-  const replacePlaceholders = (obj: any) => {
-    for (const key in obj) {
-      if (typeof obj[key] === 'string') {
-        obj[key] = obj[key]
-          .replace(/\{sermon_title\}/g, sermon_title)
-          .replace(/\{sermon_topic\}/g, sermon_topic);
-      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
-        replacePlaceholders(obj[key]);
+  const chat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert prompt engineer for GPT-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood. Ensure the sermon title and topic are prominently featured in the design."
+      },
+      {
+        role: "user",
+        content: `Convert this design concept into a detailed GPT-1 prompt. The sermon title is "${sermon_title}" and the topic is "${sermon_topic}":\n\n${summary}\n\n${
+          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+        }`
       }
-    }
-  };
+    ]
+  });
 
-  replacePlaceholders(parsedStylePreset);
-
-  const mergedPrompt = {
-    ...parsedStylePreset,
-    userSummary: summary, // Add the user's summary to the merged object
-  };
-
-  console.log('Step 3: Converted Prompt');
-  console.log(JSON.stringify(mergedPrompt, null, 2));
-
+  const fullPrompt = chat.choices[0].message.content!.trim();
+  console.log('Step 2: Generated Full Prompt');
+  console.log(fullPrompt);
   console.groupEnd();
-  return JSON.stringify(mergedPrompt);
+
+  return fullPrompt;
 }
 
 /* ------------------------------------------------------------------ */
@@ -192,39 +181,28 @@ export async function generateSermonArt(
 
   const openai = getOpenAIClient();
 
-  // Parse the prompt string into a JSON object
-  let parsedPrompt;
-  try {
-    parsedPrompt = JSON.parse(prompt);
-    console.log('Step 2: Parsed Prompt');
-    console.log(parsedPrompt);
-  } catch (e) {
-    console.error("Error parsing prompt JSON:", e);
-    throw new Error("Invalid prompt JSON");
-  }
-
   // Download reference image if style is selected
   let referenceFile: File | undefined;
   if (stylePreset) {
     try {
       referenceFile = await urlToFile(stylePreset.referenceUrl);
-      console.log('Step 3: Reference Image Downloaded');
+      console.log('Step 2: Reference Image Downloaded');
     } catch (error) {
       console.error('Error downloading reference image:', error);
       throw new Error('Failed to download reference image');
     }
   }
 
-  // Append reference image instructions to the prompt
+  // Construct final prompt with reference image instructions if needed
   const finalPrompt = stylePreset
-    ? `${parsedPrompt.userSummary}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
-    : parsedPrompt.userSummary;
+    ? `${prompt}\n\nNOTE: Use this image as a style reference only. Follow the composition and layout style while incorporating the specific content and elements from the prompt above. Do not copy specific elements from the reference image.`
+    : prompt;
 
-  console.log('Step 4: Final Prompt');
+  console.log('Step 3: Final Prompt');
   console.log(finalPrompt);
 
   try {
-    console.log('Step 5: Sending Request to OpenAI');
+    console.log('Step 4: Sending Request to OpenAI');
     const rsp = referenceFile
       ? await openai.images.edit({
           model: "gpt-image-1",
@@ -242,7 +220,7 @@ export async function generateSermonArt(
           n: 1
         });
 
-    console.log('Step 6: OpenAI Response');
+    console.log('Step 5: OpenAI Response');
     console.log(JSON.stringify(rsp, null, 2));
 
     if (!rsp?.data?.[0]) {
@@ -251,10 +229,12 @@ export async function generateSermonArt(
 
     const { url, b64_json } = rsp.data[0];
     if (url) {
-      console.log('Step 7: Generated Image URL');
+      console.log('Step 6: Generated Image URL');
       console.log(url);
+      console.groupEnd();
       return url;
     }
+
     if (!b64_json) {
       throw new Error("No image data received");
     }
@@ -265,7 +245,7 @@ export async function generateSermonArt(
     const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
     const objectUrl = URL.createObjectURL(blob);
 
-    console.log('Step 7: Generated Object URL');
+    console.log('Step 6: Generated Object URL');
     console.groupEnd();
     return objectUrl;
   } catch (error: any) {

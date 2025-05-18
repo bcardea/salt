@@ -123,29 +123,32 @@ const HomePage = () => {
           </div>
 
           {/* RIGHT: TRANSFORMATION IMAGES */}
-          <div className="w-full flex flex-col items-center relative">
-            <div className="flex flex-col items-center mb-2">
-              <div className="relative w-full max-w-md">
-                {/* Salty SVG positioned to the left */}
+          <div className="w-full flex flex-col items-center">
+            {/* From Image Container */}
+            <div className="w-full max-w-2xl relative mb-8">
+              {/* Salty mascot */}
+              <img
+                src={saltyImage}
+                alt=""
+                className="absolute -left-24 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
+              />
+              {/* From image with 3:2 aspect ratio */}
+              <div className="aspect-[3/2] w-full relative">
                 <img
-                  src={saltyImage}
-                  alt=""
-                  className="absolute -left-16 top-1/2 -translate-y-1/2 w-20 h-auto z-10"
+                  src={fromImage}
+                  alt="Sermon Notes"
+                  className="w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
                 />
-                <div className="aspect-[3/2] relative">
-                  <img
-                    src={fromImage}
-                    alt="Sermon Notes"
-                    className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
-                  />
-                </div>
-                <span className="block text-center text-base text-gray-500 mt-2 italic">From this…</span>
               </div>
-              {/* Arrow/Divider */}
+              <span className="block text-center text-base text-gray-500 mt-3 italic">
+                From this…
+              </span>
+            </div>
+
+            {/* Arrow/Divider */}
+            <div className="w-8 h-16 flex items-center justify-center my-8">
               <svg
-                width="32"
-                height="60"
-                className="my-4 md:my-6 text-secondary-200"
+                className="w-full h-full text-secondary-200"
                 fill="none"
                 viewBox="0 0 24 24"
               >
@@ -158,17 +161,21 @@ const HomePage = () => {
                 />
               </svg>
             </div>
-            <div className="grid grid-cols-2 gap-4 w-full max-w-md">
-              {toImages.map((img, idx) => (
+
+            {/* To Images Grid */}
+            <div className="w-full max-w-2xl grid grid-cols-2 gap-6">
+              {toImages.map((img) => (
                 <div key={img.src} className="flex flex-col items-center">
-                  <div className="w-full aspect-[3/2] relative">
+                  <div className="aspect-[3/2] w-full relative">
                     <img
                       src={img.src}
                       alt={img.label}
-                      className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
+                      className="w-full h-full object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
                     />
                   </div>
-                  <span className="text-sm text-gray-500 mt-2 italic">{img.label}</span>
+                  <span className="text-sm text-gray-500 mt-3 italic">
+                    {img.label}
+                  </span>
                 </div>
               ))}
             </div>

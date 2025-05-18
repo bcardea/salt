@@ -1120,8 +1120,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "Dynamic ink clouds with modern typography",
     promptModifiers: `{
       "scene": "high-speed macro photography of acrylic ink clouds diffusing in clear water, captured against a soft light-grey studio backdrop",
-      "image_dimensions": "1920×1080",
-      "aspect_ratio": "16:9 landscape",
+      "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
       "composition": "central focus; ink mass takes up the middle two vertical thirds and spreads horizontally from left edge to two-thirds right; negative space in far left/right edges and upper corners keeps composition balanced; text is horizontally and vertically centered over the densest ink area",
       "color_palette": {
         "background": "#d8dcd8",
@@ -1200,8 +1200,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "High-contrast monochrome double-exposure artwork",
     promptModifiers: `{
       "scene": "high-contrast monochrome double-exposure artwork: a young woman's left-facing profile blended with a mist-covered mountain landscape, set on a distressed white concrete background",
-      "image_dimensions": "1920×960",
-      "aspect_ratio": "2:1 landscape",
+       "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
       "composition": {
         "grid": "rule-of-thirds; face occupies the entire left vertical third, text spans the central third, right third remains largely negative space",
         "flow": "viewer eye enters at woman's nose tip, follows river valley inward toward center, then across headline to right edge"
@@ -1293,8 +1293,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "Contemporary sermon graphic with vintage halftone aesthetics",
     promptModifiers: `{
       "scene": "contemporary sermon–series title graphic combining vintage halftone print aesthetics with a classical 19th-century painting of Jesus preaching (Sermon on the Mount)",
-      "image_dimensions": "1920×1080",
-      "aspect_ratio": "16:9 landscape",
+     "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
       "composition": {
         "split": "50% left typographic block, 50% right illustrative block",
         "padding_left": 150,
@@ -1414,8 +1414,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "Retro-washed ministry poster with playful doodles",
     promptModifiers: `{
       "scene": "retro-washed ministry poster featuring a warm-toned illustration of Jesus helping a kneeling figure in a sun-bleached courtyard; bold modern lettering and playful white doodles collide with heavy film-grain texture",
-      "image_dimensions": "2048×1147",
-      "aspect_ratio": "16:9 landscape",
+    "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
       "composition": {
         "foreground_block": "monolithic headline centred horizontally, spanning from very top of middle third to just below halfway line; letterforms intentionally overlap main illustration to feel pasted on",
         "illustration_anchor": "Jesus (standing) just right of centre, head 70 px below top safe-zone; kneeling receiver at lower centre; adobe wall and foliage frame action",
@@ -1527,8 +1527,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "Vintage-print sermon graphic with handwritten elements",
     promptModifiers: `{
       "scene": "vintage-print sermon-series graphic poster, laid out on warm recycled paper stock with visible pulp fibers, faint fold-creases, and scattered black ink specks",
-      "image_dimensions": "2048×1148",
-      "aspect_ratio": "16:9 landscape",
+      "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
       "style": [
         "1960s offset-print / 1970s church bulletin aesthetic",
         "heavy halftone dots, slight CMYK mis-registration",
@@ -1644,8 +1644,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "Architectural elements with geometric framing",
     promptModifiers: `{
       "canvas": {
-        "dimensions": "1920×1080",
-        "aspect_ratio": "16:9",
+      "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
         "background": {
           "base_color": "#8f8677",
           "texture": "high-resolution parchment / aged map paper with fine marbling, faint latitude–longitude grid lines and hairline cracks",
@@ -1802,8 +1802,8 @@ export const STYLE_PRESETS: StylePreset[] = [
     description: "Modern collage with dreamy pastel-desert sky",
     promptModifiers: `{
       "scene": "modern collage-style sermon graphic built around the single word '{sermon_title}', blending photography, geometric shapes, and flat UI icons against a dreamy pastel-desert sky",
-      "image_dimensions": "2048×1148",
-      "aspect_ratio": "16:9 landscape",
+      "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
       "style": [
         "contemporary worship-media collage",
         "grainy matte film texture (8 % noise)",

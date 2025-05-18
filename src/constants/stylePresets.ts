@@ -1,4 +1,3 @@
-export const STYLE_PRESETS = [
   {
     id: "folded-paper-minimal",
     title: "Folded Paper Minimal",
@@ -1010,4 +1009,3 @@ export const STYLE_PRESETS = [
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291fade5ca6c1eebf32ba4.jpeg",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291fade5ca6c1eebf32ba4.jpeg"
   }
-];

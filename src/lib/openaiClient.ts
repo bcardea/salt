@@ -33,7 +33,7 @@ export const analyzeSermonInput = async (input: string): Promise<SermonAnalysis>
     messages: [
       {
         role: "system",
-        content: "You are an expert at analyzing sermon content. Your task is to extract or create an appropriate title and topic from the given input. For longer sermon notes, create a concise title that captures the main theme.
+        content: `You are an expert at analyzing sermon content. Your task is to extract or create an appropriate title and topic from the given input. For longer sermon notes, create a concise title that captures the main theme.
 
 Your response MUST be a JSON object with "title" and "topic" keys. The "title" should be a concise title for the sermon artwork, and the "topic" should be a brief description of the sermon's subject.
 
@@ -43,7 +43,7 @@ Example:
   "topic": "Seeking and Saving the Lost"
 }
 
-Even if you cannot determine a separate title and topic, return the input as both the title and the topic."
+Even if you cannot determine a separate title and topic, return the input as both the title and the topic.`
       },
       {
         role: "user",

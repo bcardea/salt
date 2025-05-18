@@ -25,6 +25,7 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
   const [hoveredStyle, setHoveredStyle] = useState<StylePreset | undefined>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
+  const [previewPosition, setPreviewPosition] = useState<{ top: number; left: number } | null>(null);
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
@@ -46,12 +47,30 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
     };
   }, [emblaApi]);
 
+  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>, style: StylePreset) => {
+    const button = e.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    
+    setPreviewPosition({
+      top: rect.top + scrollTop - 20, // Position above the button with 20px gap
+      left: rect.left + (rect.width / 2)
+    });
+    setHoveredStyle(style);
+  };
+
   return (
-    <div className="relative">
+    <div className="relative pt-[300px]"> {/* Add padding to reserve space for preview */}
       {/* Preview Modal */}
-      {hoveredStyle && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-4 w-96 opacity-100 scale-100 transition-all duration-200 z-50">
-          <div className="bg-white rounded-lg shadow-xl overflow-hidden">
+      {hoveredStyle && previewPosition && (
+        <div 
+          className="fixed z-50 transform -translate-x-1/2 transition-all duration-200"
+          style={{
+            top: `${previewPosition.top - 300}px`, // Height of preview
+            left: `${previewPosition.left}px`
+          }}
+        >
+          <div className="bg-white rounded-lg shadow-xl overflow-hidden w-[400px]">
             <img
               src={hoveredStyle.previewUrl}
               alt={`${hoveredStyle.title} preview`}
@@ -96,8 +115,11 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
             >
               <button
                 onClick={() => onStyleSelect(style)}
-                onMouseEnter={() => setHoveredStyle(style)}
-                onMouseLeave={() => setHoveredStyle(undefined)}
+                onMouseEnter={(e) => handleMouseEnter(e, style)}
+                onMouseLeave={() => {
+                  setHoveredStyle(undefined);
+                  setPreviewPosition(null);
+                }}
                 className={`w-full h-full p-4 rounded-lg border transition-all ${
                   disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-500'
                 } ${

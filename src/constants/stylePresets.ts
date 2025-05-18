@@ -1161,18 +1161,13 @@ export const STYLE_PRESETS: StylePreset[] = [
           "type": "ink_cloud_burnt_orange",
           "description": "narrow streaks of warm burnt orange emerging from the top-center of olive cloud, providing warm contrast",
           "position": "top-center"
-        },
-        {
-          "type": "geometric_object",
-          "description": "matte-white acrylic three-pointed downward star/chevron (two long isosceles triangles joined at 90°), edges slightly rough from laser cut, faint water droplets on surface",
-          "position": "lower-center beneath ink clouds, pointing down toward bottom edge; front edge in crisp focus, rear edge slightly blurred"
         }
       ],
       "graphic_elements": [],
       "typography": {
         "main_title": {
-          "text": "{sermon_title}",
-          "font": "condensed modern sans-serif with high verticality (similar to 'Oswald Light' with stylised open counters in A and R)",
+          "text": "{SERMON_TITLE}",
+          "font": "condensed modern sans-serif with high verticality (similar to 'Oswald Light' with stylised open counters in M and G)",
           "weight": "semi-bold",
           "size": "extra-large (spanning ~55% image width)",
           "color": "#ffffff",

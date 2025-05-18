@@ -8,79 +8,62 @@ interface PromptEditorProps {
   disabled?: boolean;
 }
 
-const ElementEditor: React.FC<{
+interface PopoverProps {
   element: PromptElement;
   onChange: (value: string) => void;
-  disabled?: boolean;
-}> = ({ element, onChange, disabled }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  onClose: () => void;
+}
+
+const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose }) => {
   const [customValue, setCustomValue] = useState('');
   const [isCustom, setIsCustom] = useState(false);
 
   const handleSelect = (value: string) => {
     onChange(value);
-    setIsOpen(false);
-    setIsCustom(false);
+    onClose();
   };
 
   const handleCustomSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (customValue.trim()) {
       onChange(customValue.trim());
-      setIsOpen(false);
-      setCustomValue('');
+      onClose();
     }
   };
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => !disabled && setIsOpen(!isOpen)}
-        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-          disabled
-            ? 'bg-secondary-100 text-secondary-400 cursor-not-allowed'
-            : 'bg-primary-100 text-primary-700 hover:bg-primary-200'
-        }`}
-      >
-        {element.value}
-        <ChevronDown className={`ml-1 w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-
-      {isOpen && (
-        <div className="absolute z-50 mt-2 w-64 bg-white rounded-lg shadow-lg border border-secondary-200">
-          <div className="p-2">
-            {element.suggestions.map((suggestion, index) => (
-              <button
-                key={index}
-                onClick={() => handleSelect(suggestion)}
-                className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-secondary-50 transition-colors"
-              >
-                {suggestion}
-              </button>
-            ))}
-            
-            {!isCustom ? (
-              <button
-                onClick={() => setIsCustom(true)}
-                className="w-full text-left px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-md transition-colors"
-              >
-                Custom Value...
-              </button>
-            ) : (
-              <form onSubmit={handleCustomSubmit} className="p-2">
-                <input
-                  type="text"
-                  value={customValue}
-                  onChange={(e) => setCustomValue(e.target.value)}
-                  placeholder="Enter custom value..."
-                  className="w-full px-3 py-2 text-sm border border-secondary-200 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  autoFocus
-                />
-              </form>
-            )}
-          </div>
-        </div>
-      )}
+    <div className="absolute z-50 mt-2 w-64 bg-white rounded-lg shadow-lg border border-secondary-200">
+      <div className="p-2">
+        {element.suggestions.map((suggestion, index) => (
+          <button
+            key={index}
+            onClick={() => handleSelect(suggestion)}
+            className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-secondary-50 transition-colors"
+          >
+            {suggestion}
+          </button>
+        ))}
+        
+        {!isCustom ? (
+          <button
+            onClick={() => setIsCustom(true)}
+            className="w-full text-left px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-md transition-colors"
+          >
+            Custom Value...
+          </button>
+        ) : (
+          <form onSubmit={handleCustomSubmit} className="p-2">
+            <input
+              type="text"
+              value={customValue}
+              onChange={(e) => setCustomValue(e.target.value)}
+              placeholder="Enter custom value..."
+              className="w-full px-3 py-2 text-sm border border-secondary-200 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              autoFocus
+            />
+          </form>
+        )}
+      </div>
     </div>
   );
 };
@@ -88,6 +71,7 @@ const ElementEditor: React.FC<{
 const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled = false }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
+  const [activeElement, setActiveElement] = useState<number | null>(null);
 
   useEffect(() => {
     setTempValue(value);
@@ -95,14 +79,15 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
 
   const handleElementChange = (index: number, newValue: string) => {
     const newElements = [...tempValue.elements];
+    const oldValue = newElements[index].value;
     newElements[index] = { ...newElements[index], value: newValue };
     
     setTempValue({
       ...tempValue,
       elements: newElements,
       summary: tempValue.summary.replace(
-        new RegExp(tempValue.elements[index].value, 'g'),
-        newValue
+        new RegExp(`{${oldValue}}`, 'g'),
+        `{${newValue}}`
       )
     });
   };
@@ -110,11 +95,51 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
   const handleSave = () => {
     onChange(tempValue);
     setIsEditing(false);
+    setActiveElement(null);
   };
 
   const handleCancel = () => {
     setTempValue(value);
     setIsEditing(false);
+    setActiveElement(null);
+  };
+
+  const renderInteractiveSummary = () => {
+    const parts = tempValue.summary.split(/({[^}]+})/g);
+    return parts.map((part, index) => {
+      if (part.startsWith('{') && part.endsWith('}')) {
+        const value = part.slice(1, -1);
+        const elementIndex = tempValue.elements.findIndex(e => e.value === value);
+        if (elementIndex === -1) return part;
+
+        return (
+          <span key={index} className="relative inline-block">
+            <button
+              onClick={() => !disabled && isEditing && setActiveElement(elementIndex)}
+              className={`inline-flex items-center px-2 py-0.5 rounded text-sm transition-colors ${
+                disabled || !isEditing
+                  ? 'bg-secondary-100 text-secondary-700'
+                  : 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white hover:from-primary-600 hover:to-secondary-600'
+              }`}
+              disabled={disabled || !isEditing}
+            >
+              {value}
+              {isEditing && !disabled && (
+                <ChevronDown className="ml-1 w-3 h-3" />
+              )}
+            </button>
+            {activeElement === elementIndex && (
+              <Popover
+                element={tempValue.elements[elementIndex]}
+                onChange={(newValue) => handleElementChange(elementIndex, newValue)}
+                onClose={() => setActiveElement(null)}
+              />
+            )}
+          </span>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
   };
 
   return (
@@ -150,24 +175,9 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
         </div>
       </div>
       <div className="p-4">
-        <div className="space-y-4">
-          {tempValue.elements.map((element, index) => (
-            <div key={index} className="flex items-center space-x-2">
-              <span className="text-sm font-medium text-secondary-600 capitalize w-20">
-                {element.type}:
-              </span>
-              <ElementEditor
-                element={element}
-                onChange={(value) => handleElementChange(index, value)}
-                disabled={!isEditing || disabled}
-              />
-            </div>
-          ))}
-          
-          <div className="mt-4 pt-4 border-t border-secondary-200">
-            <p className="text-secondary-700 whitespace-pre-wrap">{tempValue.summary}</p>
-          </div>
-        </div>
+        <p className="text-secondary-700 leading-relaxed">
+          {renderInteractiveSummary()}
+        </p>
       </div>
     </div>
   );

@@ -863,76 +863,82 @@ export const STYLE_PRESETS: StylePreset[] = [
     title: "Retro Gym Poster",
     description: "Boxing-glove spiritual warfare poster",
     promptModifiers: `{
-      "scene": "centered minimalist layout with crossed boxing gloves illustration on a red textured background",
-      "image_dimensions": "1536×1024",
-      "aspect_ratio": "3:2 landscape",
-      "composition": "centered alignment with boxing gloves forming a visual X at center; title text layered above and below",
-      "color_palette": {
-        "background_red": "#d9453a",
-        "engraving_blue": "#1c2441",
-        "text_white": "#ffffff"
-      },
-      "lighting": "flat poster-style lighting with no realistic shadows",
-      "mood": "resolute, commanding, spiritually militant and motivational",
-      "texture": [
-        "gritty red stucco texture",
-        "fine crosshatch engraving style on boxing gloves"
-      ],
-      "background": {
-        "elements": [
-          "solid red wash with grunge overlay"
-        ],
-        "depth_of_field": "flat, screenprint effect"
-      },
-      "subjects": [
-        {
-          "type": "illustration",
-          "description": "crossed boxing gloves",
-          "position": "dead center"
-        },
-        {
-          "type": "typographic element",
-          "description": "{sermon_title}",
-          "position": "centered over boxing gloves"
-        },
-        {
-          "type": "typographic element",
-          "description": "{sermon_topic}",
-          "position": "beneath title"
-        }
-      ],
-      "graphic_elements": [],
-      "typography": {
-        "hierarchy": [
-          {
-            "text": "{sermon_title}",
-            "font": "bold geometric sans-serif",
-            "weight": "heavy",
-            "size": "extra large",
-            "color": "#ffffff",
-            "letter_spacing": "wide",
-            "case": "uppercase",
-            "position": "center"
-          }
-        ],
-        "subtitle": {
-          "text": "{sermon_topic}",
-          "font": "modern sans-serif",
-          "weight": "medium",
-          "size": "medium",
-          "color": "#ffffff",
-          "letter_spacing": "normal",
-          "position": "below main title"
-        }
-      },
-      "style": "vintage gym poster meets spiritual illustration",
-      "post_processing": [
-        "vibrancy enhancement on red background",
-        "grain and ink texture overlay on illustration lines"
-      ]
+  "scene": "centered minimalist layout with crossed boxing gloves illustration on a red textured background",
+  "image_dimensions": "1536×1024",
+  "aspect_ratio": "3:2 landscape",
+  "composition": "oversized 'SPIRITUAL WARFARE' text sits mid-frame; crossed boxing gloves overlap the very bottom of this headline, creating depth; subtitle 'FIGHT THE GOOD FIGHT' is layered in front of the gloves, aligned just below the X-intersection",
+  "color_palette": {
+    "background_red": "#d9453a",
+    "engraving_blue": "#1c2441",
+    "text_white": "#ffffff"
+  },
+  "lighting": "flat poster-style lighting with no realistic shadows; emphasis on bold color contrast",
+  "mood": "resolute, commanding, spiritually militant and motivational",
+  "texture": [
+    "gritty red stucco or wall texture across background",
+    "fine crosshatch engraving on gloves and hanging laces",
+    "paper-like matte finish on typography"
+  ],
+  "background": {
+    "elements": [
+      "solid red wash with subtle grunge overlay"
+    ],
+    "depth_of_field": "flat, screenprint effect"
+  },
+  "subjects": [
+    {
+      "type": "typographic element",
+      "description": "{SERMON_TITLE}' in bold all-caps sans-serif, very large, spanning most of the width; serves as backdrop layer",
+      "position": "centered",
+      "layer": "background"
+    },
+    {
+      "type": "illustration",
+      "description": "vintage boxing gloves crossed at 45° with long loose strings hanging straight down; gloves positioned so their lowest edge barely covers the bottom stroke of the headline letters, emphasizing overlap and depth",
+      "position": "centered over headline",
+      "layer": "midground"
+    },
+    {
+      "type": "typographic element",
+      "description": "'{SERMON_TOPIC}' in clean uppercase sans-serif, slightly smaller than headline, placed in front of the gloves, horizontally centered, tight to the glove laces",
+      "position": "just below glove intersection",
+      "layer": "foreground"
+    }
+  ],
+  "graphic_elements": [],
+  "typography": {
+    "hierarchy": [
+      {
+        "text": "{SERMON_TITLE}",
+        "font": "bold geometric sans-serif (e.g., Helvetica Neue, Montserrat)",
+        "weight": "heavy",
+        "size": "extra large",
+        "color": "#ffffff",
+        "letter_spacing": "wide",
+        "case": "uppercase",
+        "layer": "background"
+      }
+    ],
+    "subtitle": {
+      "text": "{SERMON_TOPIC}}",
+      "font": "modern sans-serif",
+      "weight": "medium",
+      "size": "medium",
+      "color": "#ffffff",
+      "letter_spacing": "normal",
+      "layer": "foreground"
+    }
+  },
+  "style": "vintage gym poster meets spiritual illustration; bold, heroic, mission-driven aesthetic",
+  "post_processing": [
+    "vibrancy boost on red background",
+    "grainy ink overlay on illustration lines",
+    "slight transparency on headline to keep gloves readable",
+    "maintain flat print look—no drop shadows"
+  ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22a6cf150d4f66dbe3.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22a6cf150d4f66dbe3.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682937dfd0838545fb16a768.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682937dfd0838545fb16a768.jpeg"
   },
   {
     id: "luminous-desert-cross",

@@ -110,7 +110,7 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood. Match the exact structure and layout of the included style reference, use JSON if JSON is included in the style preset given, but make sure the details align with the new prompt you've been given."
       },
       {
         role: "user",

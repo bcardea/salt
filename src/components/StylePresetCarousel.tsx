@@ -25,7 +25,6 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
   const [hoveredStyle, setHoveredStyle] = useState<StylePreset | undefined>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
-  const [previewPosition, setPreviewPosition] = useState<{ top: number; left: number } | null>(null);
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
@@ -47,28 +46,13 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
     };
   }, [emblaApi]);
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>, style: StylePreset) => {
-    const button = e.currentTarget;
-    const rect = button.getBoundingClientRect();
-    const scrollTop = window.scrollY || document.documentElement.scrollTop;
-    
-    setPreviewPosition({
-      top: rect.top + scrollTop - 20, // Position above the button with 20px gap
-      left: rect.left + (rect.width / 2)
-    });
-    setHoveredStyle(style);
-  };
-
   return (
-    <div className="relative pt-[300px]"> {/* Add padding to reserve space for preview */}
+    <div className="relative">
       {/* Preview Modal */}
-      {hoveredStyle && previewPosition && (
+      {hoveredStyle && (
         <div 
-          className="fixed z-50 transform -translate-x-1/2 transition-all duration-200"
-          style={{
-            top: `${previewPosition.top - 300}px`, // Height of preview
-            left: `${previewPosition.left}px`
-          }}
+          className="absolute top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
+          style={{ transform: 'translateY(calc(-100% - 16px))' }}
         >
           <div className="bg-white rounded-lg shadow-xl overflow-hidden w-[400px]">
             <img
@@ -107,7 +91,7 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
 
       {/* Carousel */}
       <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4 py-4">
+        <div className="flex gap-4">
           {presets.map((style) => (
             <div
               key={style.id}
@@ -115,11 +99,8 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
             >
               <button
                 onClick={() => onStyleSelect(style)}
-                onMouseEnter={(e) => handleMouseEnter(e, style)}
-                onMouseLeave={() => {
-                  setHoveredStyle(undefined);
-                  setPreviewPosition(null);
-                }}
+                onMouseEnter={() => setHoveredStyle(style)}
+                onMouseLeave={() => setHoveredStyle(undefined)}
                 className={`w-full h-full p-4 rounded-lg border transition-all ${
                   disabled ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-500'
                 } ${

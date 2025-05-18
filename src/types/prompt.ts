@@ -1,5 +1,5 @@
 export interface PromptElement {
-  type: 'subject' | 'location' | 'text' | 'extras';
+  type: 'subject' | 'setting' | 'style' | 'mood';
   value: string;
   suggestions: string[];
 }

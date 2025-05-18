@@ -42,7 +42,7 @@ export async function generateSermonArtPrompt(
 1. Analyze the input and create a detailed image generation prompt
 2. Break down the key elements into a structured JSON format
 3. Generate alternative suggestions for each element
-4. Create a user-friendly summary
+4. Create a user-friendly summary with variables
 
 The JSON structure should include:
 {
@@ -50,27 +50,29 @@ The JSON structure should include:
     {
       "type": "subject",
       "value": "the main subject/focus",
-      "suggestions": ["4 alternative subjects"]
+      "suggestions": ["4 alternative subjects that fit the theme"]
     },
     {
-      "type": "location",
+      "type": "setting",
       "value": "the setting/environment",
-      "suggestions": ["4 alternative locations"]
+      "suggestions": ["4 alternative settings that fit the theme"]
     },
     {
-      "type": "text",
-      "value": "text treatment description",
-      "suggestions": ["4 alternative text styles"]
+      "type": "style",
+      "value": "visual style description",
+      "suggestions": ["4 alternative style approaches"]
     },
     {
-      "type": "extras",
-      "value": "additional elements",
-      "suggestions": ["4 alternative extras"]
+      "type": "mood",
+      "value": "emotional tone",
+      "suggestions": ["4 alternative moods"]
     }
   ],
-  "summary": "A clear, plain-language description of the design",
+  "summary": "A clear description using {variables} for each element value",
   "rawPrompt": "The complete, technical prompt for image generation"
-}`;
+}
+
+IMPORTANT: In the summary, wrap each element's value in curly braces to make them variables, like: "A {dramatic} scene showing {a shepherd} in {a vast desert}..."`;
 
   const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",

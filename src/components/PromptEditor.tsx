@@ -18,26 +18,16 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose }) => {
   const [customValue, setCustomValue] = useState('');
   const [isCustom, setIsCustom] = useState(false);
 
-  const handleSelect = (value: string) => {
-    onChange(value);
-    onClose();
-  };
-
-  const handleCustomSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (customValue.trim()) {
-      onChange(customValue.trim());
-      onClose();
-    }
-  };
-
   return (
     <div className="absolute z-50 mt-2 w-64 bg-white rounded-lg shadow-lg border border-secondary-200">
       <div className="p-2">
         {element.suggestions.map((suggestion, index) => (
           <button
             key={index}
-            onClick={() => handleSelect(suggestion)}
+            onClick={() => {
+              onChange(suggestion);
+              onClose();
+            }}
             className="w-full text-left px-3 py-2 text-sm rounded-md hover:bg-secondary-50 transition-colors"
           >
             {suggestion}
@@ -52,7 +42,16 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose }) => {
             Custom Value...
           </button>
         ) : (
-          <form onSubmit={handleCustomSubmit} className="p-2">
+          <form 
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (customValue.trim()) {
+                onChange(customValue.trim());
+                onClose();
+              }
+            }} 
+            className="p-2"
+          >
             <input
               type="text"
               value={customValue}
@@ -82,13 +81,16 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
     const oldValue = newElements[index].value;
     newElements[index] = { ...newElements[index], value: newValue };
     
+    // Update the summary text, replacing the old value with the new one
+    const newSummary = tempValue.summary.replace(
+      new RegExp(`{${oldValue}}`, 'g'),
+      `{${newValue}}`
+    );
+    
     setTempValue({
       ...tempValue,
       elements: newElements,
-      summary: tempValue.summary.replace(
-        new RegExp(`{${oldValue}}`, 'g'),
-        `{${newValue}}`
-      )
+      summary: newSummary
     });
   };
 

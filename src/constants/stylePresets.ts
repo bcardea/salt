@@ -250,8 +250,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "neon bloom effects on compass rim and title strokes"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22954010514b79671c.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22954010514b79671c.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3954010285f797ab2.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3954010285f797ab2.jpeg"
   },
   {
     id: "neon-pastel",
@@ -330,8 +330,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "no harsh shadows or high-contrast areas to maintain softness"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22d083855a19168da7.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22d083855a19168da7.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3a6cf1574cd66f04e.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3a6cf1574cd66f04e.jpeg"
   },
   {
     id: "retro-revival",
@@ -574,8 +574,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "light starfield blur around corners"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f228acc4aeb7bb7e7c0.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f228acc4aeb7bb7e7c0.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3a6cf15371566f04d.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3a6cf15371566f04d.jpeg"
   },
   {
     id: "ancient-maps",
@@ -675,8 +675,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "ink-bleed softening on text edges"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22954010809c79671d.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291f22954010809c79671d.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d395401013a9797ab3.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d395401013a9797ab3.jpeg"
   },
   {
     id: "tropical-easter",
@@ -1009,8 +1009,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "star enhancement in sky layer"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291fade5ca6c1eebf32ba4.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68291fade5ca6c1eebf32ba4.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3d083856dad16a0d9.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682930d3d083856dad16a0d9.jpeg"
   },
 
   {

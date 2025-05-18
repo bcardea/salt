@@ -1,7 +1,9 @@
 import axios from "axios";
 import { getOpenAIClient } from "../lib/openaiClient";
-import { PromptData } from "../types/prompt";
 
+/* ------------------------------------------------------------------ */
+/* Types                                                              */
+/* ------------------------------------------------------------------ */
 export type StylePreset = {
   id: string;
   title: string;
@@ -11,6 +13,9 @@ export type StylePreset = {
   referenceUrl: string;
 };
 
+/* ------------------------------------------------------------------ */
+/* 1) Utility: fetch URL → File                                       */
+/* ------------------------------------------------------------------ */
 async function urlToFile(url: string): Promise<File> {
   const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
   const type = res.headers["content-type"] ?? "image/png";
@@ -19,72 +24,22 @@ async function urlToFile(url: string): Promise<File> {
   return file;
 }
 
+/* ------------------------------------------------------------------ */
+/* 2) Generate prompt text                                            */
+/* ------------------------------------------------------------------ */
 export async function generateSermonArtPrompt(
   sermTitle: string,
   topic: string,
   stylePreset?: StylePreset
-): Promise<{ fullPrompt: string; promptData: PromptData }> {
+): Promise<{ fullPrompt: string; summary: string }> {
   const openai = getOpenAIClient();
 
   const isFullNotes = topic.length > 100;
-  
-  const systemPrompt = `You are an expert prompt engineer for graphic design with over 20 years of experience. Your task is to create a detailed image generation prompt that captures the essence of a sermon topic. The prompt should be broken down into interactive elements that can be customized.
+  const typographyInstructions = "Typography: If the prompt modifier in the style reference includes typography information, prioritize using that. If it doesn't, always fall back on the following rules: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
 
-Your response must be a JSON object with this exact structure:
-{
-  "elements": [
-    {
-      "type": "style",
-      "value": "the main visual style for the image",
-      "suggestions": ["4 alternative style suggestions"]
-    },
-    {
-      "type": "title_style",
-      "value": "how the main title text should be styled",
-      "suggestions": ["4 alternative title style suggestions"]
-    },
-    {
-      "type": "subtitle_style",
-      "value": "how the subtitle/topic text should be styled",
-      "suggestions": ["4 alternative subtitle style suggestions"]
-    },
-    {
-      "type": "subject",
-      "value": "the main visual element or focal point",
-      "suggestions": ["4 alternative subject suggestions"]
-    },
-    {
-      "type": "setting",
-      "value": "the background and environment",
-      "suggestions": ["4 alternative setting suggestions"]
-    },
-    {
-      "type": "mood",
-      "value": "the emotional tone and atmosphere",
-      "suggestions": ["4 alternative mood suggestions"]
-    }
-  ],
-  "summary": "A natural language description using {variables} that match the element values exactly",
-  "rawPrompt": "The complete technical prompt for the image generation API"
-}
-
-Each element must have:
-1. A clear, specific value that fits the sermon theme
-2. Exactly 4 creative alternative suggestions
-3. Values that work together cohesively
-4. Natural language that flows well when combined
-
-The summary must:
-1. Use {variables} that exactly match the element values
-2. Flow naturally as a sentence
-3. Include all key elements
-4. Be easy to read and understand
-
-The raw prompt must:
-1. Be technically detailed and specific
-2. Include all necessary parameters for image generation
-2. Specify image dimensions (1536x1024)
-3. Include typography and layout details`;
+  const systemPrompt = isFullNotes
+    ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
+    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.`;
 
   const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -96,25 +51,44 @@ The raw prompt must:
       {
         role: "user",
         content: isFullNotes
-          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${
+          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
               stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
-          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${
+          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
               stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
       }
     ]
   });
 
-  const response = JSON.parse(promptChat.choices[0].message.content!);
+  const fullPrompt = promptChat.choices[0].message.content!.trim();
+
+  // Generate a user-friendly summary
+  const summaryChat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert at explaining complex design concepts in simple terms. Create a clear, concise summary that captures the key visual elements and artistic direction in plain language."
+      },
+      {
+        role: "user",
+        content: `Summarize this image generation prompt in a single, easy-to-understand paragraph:\n\n${fullPrompt}`
+      }
+    ]
+  });
+
   return {
-    fullPrompt: response.rawPrompt,
-    promptData: response
+    fullPrompt,
+    summary: summaryChat.choices[0].message.content!.trim()
   };
 }
 
+/* ------------------------------------------------------------------ */
+/* 3) Convert summary back to full prompt                             */
+/* ------------------------------------------------------------------ */
 export async function convertSummaryToPrompt(
-  promptData: PromptData,
+  summary: string,
   stylePreset?: StylePreset
 ): Promise<string> {
   const openai = getOpenAIClient();
@@ -124,11 +98,11 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
       },
       {
         role: "user",
-        content: `Convert this design concept into a detailed image generation prompt:\n\n${promptData.summary}\n\n${
+        content: `Convert this design concept into a detailed gpt-image-1 prompt:\n\n${summary}\n\n${
           stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
         }`
       }
@@ -138,6 +112,9 @@ export async function convertSummaryToPrompt(
   return chat.choices[0].message.content!.trim();
 }
 
+/* ------------------------------------------------------------------ */
+/* 4) Generate image                                                  */
+/* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,
   stylePreset?: StylePreset

@@ -21,6 +21,18 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose, position 
   const popoverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Handle click outside
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [onClose]);
+
+  useEffect(() => {
     // Adjust position if popover would go off screen
     if (popoverRef.current) {
       const rect = popoverRef.current.getBoundingClientRect();
@@ -48,7 +60,7 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose, position 
   return (
     <div 
       ref={popoverRef}
-      className="fixed z-50 w-64 bg-white rounded-lg shadow-lg border border-secondary-200"
+      className="fixed z-50 w-64 bg-white rounded-lg shadow-lg border border-secondary-200 overflow-hidden"
       style={{ top: position.top, left: position.left }}
     >
       <div className="p-2">

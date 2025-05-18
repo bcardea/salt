@@ -7,13 +7,13 @@ import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
 import CreditDisplay from '../components/CreditDisplay';
 import PromptEditor from '../components/PromptEditor';
+import StylePresetCarousel from '../components/StylePresetCarousel';
 import { useCredits } from '../hooks/useCredits';
 
 const GeneratorPage: React.FC = () => {
   const [session, setSession] = useState(null);
   const [topic, setTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
-  const [hoveredStyle, setHoveredStyle] = useState<StylePreset | undefined>();
   const [fullPrompt, setFullPrompt] = useState('');
   const [promptSummary, setPromptSummary] = useState('');
   const [imgSrc, setImgSrc] = useState<string | null>(null);
@@ -199,41 +199,12 @@ const GeneratorPage: React.FC = () => {
           {/* Step 2: Choose Style */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 2: Choose Your Style</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {STYLE_PRESETS.map((style) => (
-                <div key={style.id} className="relative group">
-                  {/* Preview Image */}
-                  <div 
-                    className={`absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 opacity-0 scale-95 transition-all duration-200 pointer-events-none z-50
-                      ${hoveredStyle?.id === style.id ? 'opacity-100 scale-100' : ''}`}
-                  >
-                    <img
-                      src={style.previewUrl}
-                      alt={`${style.title} preview`}
-                      className="w-full h-auto rounded-lg shadow-xl"
-                    />
-                  </div>
-                  
-                  {/* Style Button */}
-                  <button
-                    onClick={() => setSelectedStyle(style)}
-                    onMouseEnter={() => setHoveredStyle(style)}
-                    onMouseLeave={() => setHoveredStyle(undefined)}
-                    className={`w-full p-3 text-left rounded-md border transition-all ${
-                      status !== 'idle' ? 'opacity-50 cursor-not-allowed' : 'hover:border-primary-500'
-                    } ${
-                      selectedStyle?.id === style.id
-                        ? 'border-primary-500 bg-primary-50 text-primary-900'
-                        : 'border-secondary-200 bg-white'
-                    }`}
-                    disabled={status !== 'idle'}
-                  >
-                    <div className="font-medium text-sm">{style.title}</div>
-                    <div className="text-xs text-secondary-600 mt-1">{style.description}</div>
-                  </button>
-                </div>
-              ))}
-            </div>
+            <StylePresetCarousel
+              presets={STYLE_PRESETS}
+              selectedStyle={selectedStyle}
+              onStyleSelect={setSelectedStyle}
+              disabled={status !== 'idle'}
+            />
           </div>
 
           {/* Step 3: Generate Concept */}

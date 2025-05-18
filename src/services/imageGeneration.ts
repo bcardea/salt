@@ -141,13 +141,28 @@ export async function convertSummaryToPrompt(
   const messages = [
     {
       role: "system",
-      content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood. IMPORTANT: Preserve any specific text content (titles, subtitles) from the original summary."
+      content: `You are an expert prompt engineer for gpt-image-1 image generation. Your task is to convert a user-friendly design concept into a detailed technical prompt while maintaining the structure and format of the provided style preset.
+
+Key requirements:
+1. Use the exact JSON structure from the style preset
+2. Customize the attributes based on the user's design concept
+3. Keep all technical specifications (dimensions, coordinates, etc.) from the preset
+4. Preserve the layer structure and types
+5. Update visual elements, colors, and content to match the user's concept
+6. Replace any text content with {sermon_title} and {sermon_topic} placeholders
+7. Maintain all post-processing settings unless explicitly modified in the concept
+
+The final prompt should be a perfect blend of the style preset's technical structure and the user's creative direction.`
     },
     {
       role: "user",
-      content: `Convert this design concept into a detailed gpt-image-1 prompt:\n\n${summary}\n\n${
-        stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
-      }`
+      content: `Convert this design concept into a detailed prompt that follows the structure of the style preset, while incorporating the user's creative direction:
+
+User's Design Concept:
+${summary}
+
+Style Preset Structure:
+${stylePreset?.promptModifiers || "No style preset provided"}`
     }
   ];
 

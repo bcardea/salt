@@ -27,7 +27,13 @@ export async function generateSermonArtPrompt(
   const openai = getOpenAIClient();
 
   const isFullNotes = topic.length > 100;
-  const typographyInstructions = "Typography: If the prompt modifier in the style reference includes typography information, prioritize using that. If it doesn't, always fall back on the following rules: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
+  const typographyInstructions = `Typography: If the prompt modifier in the style reference includes typography information, prioritize using that. If it doesn't, always follow these rules:
+- Title text: "${sermTitle}" in a clean, contemporary sans-serif font (e.g., Montserrat, Gotham, or Inter)
+- Subtitle text: "${topic}" in a complementary style that provides contrast (e.g., elegant script font like Great Vibes for artistic concepts)
+- Ensure all text remains crisp, legible, and contemporary
+- Avoid dated or default fonts
+- Position title prominently in the composition
+- Place subtitle in a supporting, hierarchical position`;
 
   const systemPrompt = `You are an expert prompt engineer for graphic design with over 20 years of experience. Your task is to:
 1. Analyze the input and create a detailed image generation prompt
@@ -38,6 +44,16 @@ export async function generateSermonArtPrompt(
 The JSON structure should include:
 {
   "elements": [
+    {
+      "type": "title",
+      "value": "the title text and its styling",
+      "suggestions": ["4 alternative title treatments"]
+    },
+    {
+      "type": "subtitle",
+      "value": "the subtitle text and its styling",
+      "suggestions": ["4 alternative subtitle treatments"]
+    },
     {
       "type": "subject",
       "value": "the main subject/focus",
@@ -64,11 +80,14 @@ The JSON structure should include:
 }
 
 IMPORTANT: 
+- Always include title and subtitle elements with their typography treatments
 - In the summary, wrap each element's value in curly braces to make them variables
 - Each element should have exactly 4 alternative suggestions
 - Make suggestions concise but descriptive
 - Ensure suggestions maintain the overall theme and message
-- The summary should read naturally while incorporating all variables`;
+- The summary should read naturally while incorporating all variables
+- Title text should be: "${sermTitle}"
+- Subtitle/topic text should be: "${topic}"`;
 
   const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -110,7 +129,7 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood. Match the exact structure and layout of the included style reference, use JSON if JSON is included in the style preset given, but make sure the details align with the new prompt you've been given."
+        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, mood, and typography. Match the exact structure and layout of the included style reference, use JSON if JSON is included in the style preset given, but make sure the details align with the new prompt you've been given. Pay special attention to title and subtitle placement and styling."
       },
       {
         role: "user",

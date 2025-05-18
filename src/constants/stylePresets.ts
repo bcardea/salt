@@ -1486,7 +1486,7 @@ export const STYLE_PRESETS: StylePreset[] = [
         },
         {
           "type": "circular_text_path",
-          "description": "lower-case sentence '{sermon_topic}' repeated around 360 ° path, font - condensed sans, 28 pt, tracking 30",
+          "description": "lower-case sentence '{sermon_subtitle}' repeated around 360 ° path, font - condensed sans, 28 pt, tracking 30",
           "color": "#ffffff",
           "position": [
             { "x": "29 %", "y": "58 %" },

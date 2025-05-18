@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import Auth from '../components/Auth';
 import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
+import { analyzeSermonInput } from '../lib/openaiClient';
 import { STYLE_PRESETS } from '../constants/stylePresets';
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
@@ -12,13 +13,14 @@ import { useCredits } from '../hooks/useCredits';
 
 const GeneratorPage: React.FC = () => {
   const [session, setSession] = useState(null);
+  const [rawInput, setRawInput] = useState('');
   const [sermon_title, setSermonTitle] = useState('');
   const [sermon_topic, setSermonTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
   const [fullPrompt, setFullPrompt] = useState('');
   const [promptSummary, setPromptSummary] = useState('');
   const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'analyzing' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
   const { credits, loading: creditsLoading } = useCredits();
 
@@ -91,7 +93,7 @@ const GeneratorPage: React.FC = () => {
     
     try {
       const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
-        sermon_topic.length > 100 ? 'Sermon Artwork' : sermon_topic.toUpperCase(),
+        sermon_title,
         sermon_topic,
         selectedStyle
       );
@@ -147,14 +149,21 @@ const GeneratorPage: React.FC = () => {
     }
   };
 
-  const handleInputChange = (value: string) => {
-    const isFullNotes = value.length > 100;
-    if (isFullNotes) {
-      setSermonTitle('Sermon Artwork');
-      setSermonTopic(value);
-    } else {
+  const handleInputChange = async (value: string) => {
+    setRawInput(value);
+    setStatus('analyzing');
+    
+    try {
+      const analysis = await analyzeSermonInput(value);
+      setSermonTitle(analysis.title);
+      setSermonTopic(analysis.topic);
+    } catch (e) {
+      console.error('Error analyzing input:', e);
+      // Fallback to using the raw input for both title and topic
       setSermonTitle(value);
       setSermonTopic(value);
+    } finally {
+      setStatus('idle');
     }
   };
 

@@ -27,67 +27,87 @@ export async function generateSermonArtPrompt(
   const openai = getOpenAIClient();
 
   const isFullNotes = topic.length > 100;
-  const typographyInstructions = `Typography: If the prompt modifier in the style reference includes typography information, prioritize using that. If it doesn't, always follow these rules:
-- Title text: "${sermTitle}" in a clean, contemporary sans-serif font (e.g., Montserrat, Gotham, or Inter)
-- Subtitle text: "${topic}" in a complementary style that provides contrast (e.g., elegant script font like Great Vibes for artistic concepts)
-- Ensure all text remains crisp, legible, and contemporary
-- Avoid dated or default fonts
-- Position title prominently in the composition
-- Place subtitle in a supporting, hierarchical position`;
-
+  
   const systemPrompt = `You are an expert prompt engineer for graphic design with over 20 years of experience. Your task is to:
 1. Analyze the input and create a detailed image generation prompt
 2. Break down the key elements into a structured JSON format
 3. Generate alternative suggestions for each element
 4. Create a user-friendly summary with variables
 
-The JSON structure should include:
+The JSON response MUST follow this exact structure:
 {
   "elements": [
     {
-      "type": "title",
-      "value": "the title text and its styling",
-      "suggestions": ["4 alternative title treatments"]
+      "type": "title_style",
+      "value": "clean, contemporary sans-serif, uppercase, white font with neon glow",
+      "suggestions": [
+        "elegant serif, gold with subtle shadow",
+        "bold geometric sans, gradient fill with outline",
+        "modern condensed sans, metallic with light rays",
+        "hand-drawn script, glowing with sparkles"
+      ]
     },
     {
-      "type": "subtitle",
-      "value": "the subtitle text and its styling",
-      "suggestions": ["4 alternative subtitle treatments"]
+      "type": "subtitle_style",
+      "value": "elegant script in soft white, small supporting position",
+      "suggestions": [
+        "minimal sans-serif in muted gold",
+        "condensed caps with thin strokes",
+        "classic serif with delicate flourishes",
+        "modern geometric with gradient"
+      ]
     },
     {
       "type": "subject",
-      "value": "the main subject/focus",
-      "suggestions": ["4 alternative subjects that fit the theme"]
+      "value": "macro photo of a hand holding a classic analog compass",
+      "suggestions": [
+        "vintage suitcase beside a winding road",
+        "weathered wooden door slightly ajar",
+        "paper boat on turbulent waters",
+        "lone figure on a mountain path"
+      ]
     },
     {
       "type": "setting",
-      "value": "the setting/environment",
-      "suggestions": ["4 alternative settings that fit the theme"]
+      "value": "neon duotone gradient in purple and blue with ambient haze",
+      "suggestions": [
+        "misty dawn with golden rays breaking through",
+        "stormy skies with dramatic lightning",
+        "desert landscape under starlit sky",
+        "abstract geometric patterns with light beams"
+      ]
     },
     {
       "type": "style",
-      "value": "visual style description",
-      "suggestions": ["4 alternative style approaches"]
+      "value": "spiritual synthwave aesthetic",
+      "suggestions": [
+        "vintage film photography",
+        "minimal geometric design",
+        "watercolor and ink fusion",
+        "retro poster art"
+      ]
     },
     {
       "type": "mood",
-      "value": "emotional tone",
-      "suggestions": ["4 alternative moods"]
+      "value": "reflective and directional, adventurous and energized by divine clarity",
+      "suggestions": [
+        "peaceful and contemplative with hope",
+        "dramatic and powerful with purpose",
+        "gentle and nurturing with wisdom",
+        "bold and inspiring with conviction"
+      ]
     }
   ],
-  "summary": "A clear description using {variables} for each element value",
-  "rawPrompt": "The complete, technical prompt for image generation"
+  "summary": "A {style} image featuring {title_style} as the title, centered over a {subject}. Below, the subtitle is styled in {subtitle_style}. The background is a {setting}, incorporating faded repeated text in the corners. The mood is {mood}.",
+  "rawPrompt": "The complete technical prompt that will be sent to the image generation API"
 }
 
 IMPORTANT: 
-- Always include title and subtitle elements with their typography treatments
-- In the summary, wrap each element's value in curly braces to make them variables
-- Each element should have exactly 4 alternative suggestions
-- Make suggestions concise but descriptive
-- Ensure suggestions maintain the overall theme and message
-- The summary should read naturally while incorporating all variables
-- Title text should be: "${sermTitle}"
-- Subtitle/topic text should be: "${topic}"`;
+- Each element MUST have exactly 4 alternative suggestions
+- Make suggestions specific and varied while maintaining theme
+- The summary MUST use {variables} that exactly match element values
+- Ensure title and subtitle styling are separate elements
+- Keep the structure exactly as shown above`;
 
   const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -99,10 +119,10 @@ IMPORTANT:
       {
         role: "user",
         content: isFullNotes
-          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
+          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\nTitle text: "${sermTitle}"\nSubtitle text: "${topic}"${
               stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
-          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
+          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\nTitle text: "${sermTitle}"\nSubtitle text: "${topic}"${
               stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
       }
@@ -129,7 +149,7 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, mood, and typography. Match the exact structure and layout of the included style reference, use JSON if JSON is included in the style preset given, but make sure the details align with the new prompt you've been given. Pay special attention to title and subtitle placement and styling."
+        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, mood, and typography. Pay special attention to title and subtitle placement and styling."
       },
       {
         role: "user",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { StylePreset } from '../constants/stylePresets';
@@ -25,6 +25,24 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
   const [hoveredStyle, setHoveredStyle] = useState<StylePreset | undefined>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  // Extract unique categories from presets
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set<string>();
+    presets.forEach(preset => {
+      preset.categories?.forEach(category => uniqueCategories.add(category));
+    });
+    return ['all', ...Array.from(uniqueCategories)];
+  }, [presets]);
+
+  // Filter presets based on selected category
+  const filteredPresets = useMemo(() => {
+    if (selectedCategory === 'all') return presets;
+    return presets.filter(preset => 
+      preset.categories?.includes(selectedCategory)
+    );
+  }, [presets, selectedCategory]);
 
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
@@ -46,8 +64,31 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
     };
   }, [emblaApi]);
 
+  React.useEffect(() => {
+    emblaApi?.reInit();
+  }, [filteredPresets, emblaApi]);
+
   return (
     <div className="relative">
+      {/* Category Filter */}
+      <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            disabled={disabled}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap
+              ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+              ${selectedCategory === category
+                ? 'bg-secondary-900 text-white'
+                : 'bg-secondary-100 text-secondary-600 hover:bg-secondary-200'
+              }`}
+          >
+            {category.charAt(0).toUpperCase() + category.slice(1)}
+          </button>
+        ))}
+      </div>
+
       {/* Navigation Buttons */}
       <button
         onClick={scrollPrev}
@@ -72,7 +113,7 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
       {/* Carousel */}
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex gap-4">
-          {presets.map((style) => (
+          {filteredPresets.map((style) => (
             <div
               key={style.id}
               className="flex-none w-64"

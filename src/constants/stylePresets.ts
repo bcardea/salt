@@ -1186,8 +1186,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "linear white text layer with drop opacity 100%, no shadow or effects"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827bbef80f93eb0fcaef0c3.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827bbef80f93eb0fcaef0c3.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d49540100fc9797e22.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d49540100fc9797e22.jpeg"
   },
   {
     id: "bw-double-exposure",
@@ -1513,8 +1513,8 @@ export const STYLE_PRESETS: StylePreset[] = [
         "final Unsharp Mask (amount 65 %, radius 1.0, threshold 3) to emphasise grain"
       ]
     }`,
-    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827ced275852d6b69345c13.jpeg",
-    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6827ced275852d6b69345c13.jpeg"
+    previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d49540100fc9797e22.jpeg",
+    referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682934d49540100fc9797e22.jpeg"
   },
   {
     id: "vintage-red-sharpie",

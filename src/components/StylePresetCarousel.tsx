@@ -48,26 +48,6 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
 
   return (
     <div className="relative">
-      {/* Preview Modal */}
-      {hoveredStyle && (
-        <div 
-          className="absolute top-0 left-0 right-0 z-50 flex justify-center pointer-events-none"
-          style={{ transform: 'translateY(calc(-100% - 16px))' }}
-        >
-          <div className="bg-white rounded-lg shadow-xl overflow-hidden w-[400px]">
-            <img
-              src={hoveredStyle.previewUrl}
-              alt={`${hoveredStyle.title} preview`}
-              className="w-full h-auto"
-            />
-            <div className="p-4">
-              <h3 className="font-semibold text-lg mb-1">{hoveredStyle.title}</h3>
-              <p className="text-sm text-secondary-600">{hoveredStyle.description}</p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Navigation Buttons */}
       <button
         onClick={scrollPrev}
@@ -126,6 +106,25 @@ const StylePresetCarousel: React.FC<StylePresetCarouselProps> = ({
           ))}
         </div>
       </div>
+
+      {/* Preview Modal */}
+      {hoveredStyle && (
+        <div 
+          className="absolute left-0 right-0 z-50 flex justify-center pointer-events-none mt-4"
+        >
+          <div className="bg-white rounded-lg shadow-xl overflow-hidden w-[400px]">
+            <img
+              src={hoveredStyle.previewUrl}
+              alt={`${hoveredStyle.title} preview`}
+              className="w-full h-auto"
+            />
+            <div className="p-4">
+              <h3 className="font-semibold text-lg mb-1">{hoveredStyle.title}</h3>
+              <p className="text-sm text-secondary-600">{hoveredStyle.description}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

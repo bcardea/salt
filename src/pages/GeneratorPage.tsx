@@ -12,15 +12,15 @@ import { useCredits } from '../hooks/useCredits';
 
 const GeneratorPage: React.FC = () => {
   const [session, setSession] = useState(null);
-  const [topic, setTopic] = useState('');
+  const [sermon_title, setSermonTitle] = useState('');
+  const [sermon_topic, setSermonTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
   const [fullPrompt, setFullPrompt] = useState('');
   const [promptSummary, setPromptSummary] = useState('');
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
-  const [inputText, setInputText] = useState('');
-  const { credits, loading: creditsLoading, error: creditsError } = useCredits();
+  const { credits, loading: creditsLoading } = useCredits();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -56,7 +56,7 @@ const GeneratorPage: React.FC = () => {
         user_id: session?.user.id,
         url: publicUrl,
         prompt: fullPrompt,
-        topic
+        topic: sermon_topic
       });
 
       if (insertError) throw insertError;
@@ -76,7 +76,7 @@ const GeneratorPage: React.FC = () => {
       return;
     }
 
-    if (!inputText.trim()) {
+    if (!sermon_topic.trim()) {
       setError('Please enter your sermon details');
       return;
     }
@@ -88,12 +88,11 @@ const GeneratorPage: React.FC = () => {
 
     setError('');
     setStatus('generating-prompt');
-    setTopic(inputText);
     
     try {
       const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
-        inputText.length > 100 ? 'Sermon Artwork' : inputText.toUpperCase(),
-        inputText,
+        sermon_topic.length > 100 ? 'Sermon Artwork' : sermon_topic.toUpperCase(),
+        sermon_topic,
         selectedStyle
       );
       setFullPrompt(generatedPrompt);
@@ -148,6 +147,17 @@ const GeneratorPage: React.FC = () => {
     }
   };
 
+  const handleInputChange = (value: string) => {
+    const isFullNotes = value.length > 100;
+    if (isFullNotes) {
+      setSermonTitle('Sermon Artwork');
+      setSermonTopic(value);
+    } else {
+      setSermonTitle(value);
+      setSermonTopic(value);
+    }
+  };
+
   if (!session) {
     return (
       <div className="py-8 px-4 sm:px-6 lg:px-8 animate-fade-in">
@@ -190,7 +200,7 @@ const GeneratorPage: React.FC = () => {
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Details</h2>
             <SermonForm
-              onSubmit={setInputText}
+              onSubmit={handleInputChange}
               isLoading={status !== 'idle'}
               disabled={status !== 'idle'}
             />
@@ -212,9 +222,9 @@ const GeneratorPage: React.FC = () => {
             <h2 className="text-xl font-semibold mb-4">Step 3: Generate Your Concept</h2>
             <button
               onClick={handleGeneratePrompt}
-              disabled={status !== 'idle' || !inputText.trim() || !selectedStyle || !credits?.credits_remaining}
+              disabled={status !== 'idle' || !sermon_topic.trim() || !selectedStyle || !credits?.credits_remaining}
               className={`btn-primary w-full flex items-center justify-center ${
-                status !== 'idle' || !inputText.trim() || !selectedStyle || !credits?.credits_remaining ? 'opacity-70 cursor-not-allowed' : ''
+                status !== 'idle' || !sermon_topic.trim() || !selectedStyle || !credits?.credits_remaining ? 'opacity-70 cursor-not-allowed' : ''
               }`}
             >
               {status === 'generating-prompt' ? (

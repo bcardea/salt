@@ -126,19 +126,21 @@ const HomePage = () => {
           <div className="w-full flex flex-col items-center">
             {/* From Image Container */}
             <div className="w-full max-w-2xl relative mb-8">
-              {/* Salty mascot */}
-              <img
-                src={saltyImage}
-                alt=""
-                className="absolute -left-24 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
-              />
-              {/* From image with 3:2 aspect ratio */}
-              <div className="aspect-[3/2] w-full relative">
+              <div className="pl-32 relative"> {/* Added padding to accommodate Salty */}
+                {/* Salty mascot */}
                 <img
-                  src={fromImage}
-                  alt="Sermon Notes"
-                  className="w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
+                  src={saltyImage}
+                  alt=""
+                  className="absolute -left-8 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
                 />
+                {/* From image with 3:2 aspect ratio */}
+                <div className="aspect-[3/2] w-full relative">
+                  <img
+                    src={fromImage}
+                    alt="Sermon Notes"
+                    className="w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
+                  />
+                </div>
               </div>
               <span className="block text-center text-base text-gray-500 mt-3 italic">
                 From this…

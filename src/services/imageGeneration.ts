@@ -2,9 +2,6 @@ import axios from "axios";
 import { getOpenAIClient } from "../lib/openaiClient";
 import { PromptData } from "../types/prompt";
 
-/* ------------------------------------------------------------------ */
-/* Types                                                              */
-/* ------------------------------------------------------------------ */
 export type StylePreset = {
   id: string;
   title: string;
@@ -14,9 +11,6 @@ export type StylePreset = {
   referenceUrl: string;
 };
 
-/* ------------------------------------------------------------------ */
-/* 1) Utility: fetch URL → File                                       */
-/* ------------------------------------------------------------------ */
 async function urlToFile(url: string): Promise<File> {
   const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
   const type = res.headers["content-type"] ?? "image/png";
@@ -25,9 +19,6 @@ async function urlToFile(url: string): Promise<File> {
   return file;
 }
 
-/* ------------------------------------------------------------------ */
-/* 2) Generate prompt text                                            */
-/* ------------------------------------------------------------------ */
 export async function generateSermonArtPrompt(
   sermTitle: string,
   topic: string,
@@ -72,7 +63,12 @@ The JSON structure should include:
   "rawPrompt": "The complete, technical prompt for image generation"
 }
 
-IMPORTANT: In the summary, wrap each element's value in curly braces to make them variables, like: "A {dramatic} scene showing {a shepherd} in {a vast desert}..."`;
+IMPORTANT: 
+- In the summary, wrap each element's value in curly braces to make them variables
+- Each element should have exactly 4 alternative suggestions
+- Make suggestions concise but descriptive
+- Ensure suggestions maintain the overall theme and message
+- The summary should read naturally while incorporating all variables`;
 
   const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -103,9 +99,6 @@ IMPORTANT: In the summary, wrap each element's value in curly braces to make the
   };
 }
 
-/* ------------------------------------------------------------------ */
-/* 3) Convert summary back to full prompt                             */
-/* ------------------------------------------------------------------ */
 export async function convertSummaryToPrompt(
   promptData: PromptData,
   stylePreset?: StylePreset
@@ -136,16 +129,12 @@ ${stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""}`
   return chat.choices[0].message.content!.trim();
 }
 
-/* ------------------------------------------------------------------ */
-/* 4) Generate image                                                  */
-/* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,
   stylePreset?: StylePreset
 ): Promise<string | null> {
   const openai = getOpenAIClient();
 
-  // Download reference image if style is selected
   let referenceFile: File | undefined;
   if (stylePreset) {
     try {
@@ -156,7 +145,6 @@ export async function generateSermonArt(
     }
   }
 
-  // Append reference image instructions to the prompt
   const finalPrompt = stylePreset 
     ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
     : prompt;
@@ -191,7 +179,6 @@ export async function generateSermonArt(
       throw new Error("No image data received");
     }
 
-    // Convert base64 to Blob URL for better performance
     const byteChars = atob(b64_json);
     const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
     const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });

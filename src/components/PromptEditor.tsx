@@ -21,7 +21,6 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose, position 
   const popoverRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Handle click outside
     const handleClickOutside = (event: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(event.target as Node)) {
         onClose();
@@ -32,38 +31,22 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose, position 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [onClose]);
 
-  useEffect(() => {
-    // Adjust position if popover would go off screen
-    if (popoverRef.current) {
-      const rect = popoverRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-      const viewportWidth = window.innerWidth;
-      
-      let adjustedTop = position.top;
-      let adjustedLeft = position.left;
-
-      // Check vertical overflow
-      if (rect.bottom > viewportHeight) {
-        adjustedTop = position.top - rect.height - 30; // Position above the element
-      }
-
-      // Check horizontal overflow
-      if (rect.right > viewportWidth) {
-        adjustedLeft = viewportWidth - rect.width - 20;
-      }
-
-      popoverRef.current.style.top = `${adjustedTop}px`;
-      popoverRef.current.style.left = `${adjustedLeft}px`;
-    }
-  }, [position]);
-
   return (
     <div 
       ref={popoverRef}
-      className="fixed z-50 w-64 bg-white rounded-lg shadow-lg border border-secondary-200 overflow-hidden"
-      style={{ top: position.top, left: position.left }}
+      className="fixed z-50 w-64 bg-white rounded-lg shadow-xl border border-secondary-200 overflow-hidden"
+      style={{ 
+        top: Math.min(position.top, window.innerHeight - 300),
+        left: Math.min(position.left, window.innerWidth - 300)
+      }}
     >
       <div className="p-2">
+        <div className="mb-2 px-3 py-1">
+          <span className="text-xs font-medium text-secondary-500 uppercase">
+            {element.type}
+          </span>
+        </div>
+        
         {element.suggestions.map((suggestion, index) => (
           <button
             key={index}
@@ -80,7 +63,7 @@ const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose, position 
         {!isCustom ? (
           <button
             onClick={() => setIsCustom(true)}
-            className="w-full text-left px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-md transition-colors"
+            className="w-full text-left px-3 py-2 text-sm text-primary-600 hover:bg-primary-50 rounded-md transition-colors mt-2 border-t border-secondary-100"
           >
             Custom Value...
           </button>
@@ -115,6 +98,7 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
   const [tempValue, setTempValue] = useState(value);
   const [activeElement, setActiveElement] = useState<number | null>(null);
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setTempValue(value);
@@ -124,8 +108,12 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
     if (disabled || !isEditing) return;
     
     const rect = event.currentTarget.getBoundingClientRect();
+    const containerRect = containerRef.current?.getBoundingClientRect();
+    
+    if (!containerRect) return;
+
     setPopoverPosition({
-      top: rect.bottom + window.scrollY + 5,
+      top: rect.bottom + window.scrollY,
       left: rect.left + window.scrollX
     });
     setActiveElement(index);
@@ -133,11 +121,12 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
 
   const handleElementChange = (index: number, newValue: string) => {
     const newElements = [...tempValue.elements];
-    const oldValue = newElements[index].value;
     newElements[index] = { ...newElements[index], value: newValue };
     
-    // Update the summary text, replacing the old value with the new one
-    const newSummary = tempValue.summary.replace(
+    // Update the summary text by replacing all instances of the old value
+    let newSummary = tempValue.summary;
+    const oldValue = tempValue.elements[index].value;
+    newSummary = newSummary.replace(
       new RegExp(`{${oldValue}}`, 'g'),
       `{${newValue}}`
     );
@@ -161,6 +150,16 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
     setActiveElement(null);
   };
 
+  const getGradientForType = (type: string) => {
+    const gradients = {
+      subject: 'from-blue-500 to-purple-500',
+      setting: 'from-green-500 to-teal-500',
+      style: 'from-orange-500 to-red-500',
+      mood: 'from-pink-500 to-rose-500'
+    };
+    return gradients[type as keyof typeof gradients] || 'from-gray-500 to-gray-600';
+  };
+
   const renderInteractiveSummary = () => {
     const parts = tempValue.summary.split(/({[^}]+})/g);
     return parts.map((part, index) => {
@@ -170,38 +169,24 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
         if (elementIndex === -1) return part;
 
         const element = tempValue.elements[elementIndex];
-        const gradientClasses = {
-          subject: 'from-blue-500 to-purple-500',
-          setting: 'from-green-500 to-teal-500',
-          style: 'from-orange-500 to-red-500',
-          mood: 'from-pink-500 to-rose-500'
-        }[element.type];
+        const gradientClasses = getGradientForType(element.type);
 
         return (
-          <span key={index} className="relative inline-block">
-            <button
-              onClick={(e) => handleElementClick(elementIndex, e)}
-              className={`inline-flex items-center px-2 py-0.5 rounded text-sm transition-colors ${
-                disabled || !isEditing
-                  ? 'bg-secondary-100 text-secondary-700'
-                  : `bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90`
-              }`}
-              disabled={disabled || !isEditing}
-            >
-              {value}
-              {isEditing && !disabled && (
-                <ChevronDown className="ml-1 w-3 h-3" />
-              )}
-            </button>
-            {activeElement === elementIndex && (
-              <Popover
-                element={tempValue.elements[elementIndex]}
-                onChange={(newValue) => handleElementChange(elementIndex, newValue)}
-                onClose={() => setActiveElement(null)}
-                position={popoverPosition}
-              />
+          <button
+            key={index}
+            onClick={(e) => handleElementClick(elementIndex, e)}
+            className={`inline-flex items-center px-2 py-0.5 rounded text-sm transition-colors ${
+              disabled || !isEditing
+                ? 'bg-secondary-100 text-secondary-700'
+                : `bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90`
+            }`}
+            disabled={disabled || !isEditing}
+          >
+            {value}
+            {isEditing && !disabled && (
+              <ChevronDown className="ml-1 w-3 h-3" />
             )}
-          </span>
+          </button>
         );
       }
       return <span key={index}>{part}</span>;
@@ -209,7 +194,7 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-secondary-200 overflow-visible">
+    <div ref={containerRef} className="bg-white rounded-lg shadow-sm border border-secondary-200 overflow-visible">
       <div className="p-4 bg-secondary-50 border-b border-secondary-200">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-secondary-700">Design Concept</h3>
@@ -245,6 +230,14 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
           {renderInteractiveSummary()}
         </p>
       </div>
+      {activeElement !== null && (
+        <Popover
+          element={tempValue.elements[activeElement]}
+          onChange={(newValue) => handleElementChange(activeElement, newValue)}
+          onClose={() => setActiveElement(null)}
+          position={popoverPosition}
+        />
+      )}
     </div>
   );
 };

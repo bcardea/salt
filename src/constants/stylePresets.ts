@@ -2015,7 +2015,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   "lighting": "cinematic, soft rim light with gentle background separation",
   "mood": "emotive, professional, cinematic",
   "style": "modern, cinematic, photo-realistic with subtle environmental storytelling"
-}`
+}`,
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
   },
@@ -2049,7 +2049,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   "lighting": "soft, ambient, no harsh shadows",
   "mood": "calm, focused, modern",
   "style": "modern editorial minimalism with restrained color palette and clear hierarchy"
-}`
+}`,
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
   },
@@ -2085,7 +2085,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   "lighting": "glowing neon, dramatic light streaks",
   "mood": "energetic, nostalgic, bold",
   "style": "retro-futurist, synthwave, geometric shapes, high contrast"
-}`
+}`,
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
   },
@@ -2120,7 +2120,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   "lighting": "strong directional light, deep shadows, cinematic mood",
   "mood": "epic, timeless, profound",
   "style": "cinematic, biblical, ancient, dramatic with symbolic detail"
-}`
+}`,
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
   },
@@ -2155,7 +2155,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   "lighting": "flat collage lighting",
   "mood": "energetic, youthful, layered",
   "style": "grunge collage, mixed media, youth poster aesthetic"
-}`
+}`,
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
   },
@@ -2189,7 +2189,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   "lighting": "flat print-style lighting",
   "mood": "timeless, classic, crafted",
   "style": "vintage print, classic, textured, high attention to print detail"
-}`
+}`,
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png"
   }

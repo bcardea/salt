@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Pencil, Check, X, ChevronDown } from 'lucide-react';
 import { PromptData, PromptElement } from '../types/prompt';
 
@@ -12,14 +12,45 @@ interface PopoverProps {
   element: PromptElement;
   onChange: (value: string) => void;
   onClose: () => void;
+  position: { top: number; left: number };
 }
 
-const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose }) => {
+const Popover: React.FC<PopoverProps> = ({ element, onChange, onClose, position }) => {
   const [customValue, setCustomValue] = useState('');
   const [isCustom, setIsCustom] = useState(false);
+  const popoverRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Adjust position if popover would go off screen
+    if (popoverRef.current) {
+      const rect = popoverRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+      
+      let adjustedTop = position.top;
+      let adjustedLeft = position.left;
+
+      // Check vertical overflow
+      if (rect.bottom > viewportHeight) {
+        adjustedTop = position.top - rect.height - 30; // Position above the element
+      }
+
+      // Check horizontal overflow
+      if (rect.right > viewportWidth) {
+        adjustedLeft = viewportWidth - rect.width - 20;
+      }
+
+      popoverRef.current.style.top = `${adjustedTop}px`;
+      popoverRef.current.style.left = `${adjustedLeft}px`;
+    }
+  }, [position]);
 
   return (
-    <div className="absolute z-50 mt-2 w-64 bg-white rounded-lg shadow-lg border border-secondary-200">
+    <div 
+      ref={popoverRef}
+      className="fixed z-50 w-64 bg-white rounded-lg shadow-lg border border-secondary-200"
+      style={{ top: position.top, left: position.left }}
+    >
       <div className="p-2">
         {element.suggestions.map((suggestion, index) => (
           <button
@@ -71,10 +102,22 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
   const [isEditing, setIsEditing] = useState(false);
   const [tempValue, setTempValue] = useState(value);
   const [activeElement, setActiveElement] = useState<number | null>(null);
+  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
     setTempValue(value);
   }, [value]);
+
+  const handleElementClick = (index: number, event: React.MouseEvent) => {
+    if (disabled || !isEditing) return;
+    
+    const rect = event.currentTarget.getBoundingClientRect();
+    setPopoverPosition({
+      top: rect.bottom + window.scrollY + 5,
+      left: rect.left + window.scrollX
+    });
+    setActiveElement(index);
+  };
 
   const handleElementChange = (index: number, newValue: string) => {
     const newElements = [...tempValue.elements];
@@ -114,14 +157,22 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
         const elementIndex = tempValue.elements.findIndex(e => e.value === value);
         if (elementIndex === -1) return part;
 
+        const element = tempValue.elements[elementIndex];
+        const gradientClasses = {
+          subject: 'from-blue-500 to-purple-500',
+          setting: 'from-green-500 to-teal-500',
+          style: 'from-orange-500 to-red-500',
+          mood: 'from-pink-500 to-rose-500'
+        }[element.type];
+
         return (
           <span key={index} className="relative inline-block">
             <button
-              onClick={() => !disabled && isEditing && setActiveElement(elementIndex)}
+              onClick={(e) => handleElementClick(elementIndex, e)}
               className={`inline-flex items-center px-2 py-0.5 rounded text-sm transition-colors ${
                 disabled || !isEditing
                   ? 'bg-secondary-100 text-secondary-700'
-                  : 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white hover:from-primary-600 hover:to-secondary-600'
+                  : `bg-gradient-to-r ${gradientClasses} text-white hover:opacity-90`
               }`}
               disabled={disabled || !isEditing}
             >
@@ -135,6 +186,7 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
                 element={tempValue.elements[elementIndex]}
                 onChange={(newValue) => handleElementChange(elementIndex, newValue)}
                 onClose={() => setActiveElement(null)}
+                position={popoverPosition}
               />
             )}
           </span>
@@ -145,7 +197,7 @@ const PromptEditor: React.FC<PromptEditorProps> = ({ value, onChange, disabled =
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-secondary-200 overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm border border-secondary-200 overflow-visible">
       <div className="p-4 bg-secondary-50 border-b border-secondary-200">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-medium text-secondary-700">Design Concept</h3>

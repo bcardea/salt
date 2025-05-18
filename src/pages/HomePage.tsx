@@ -1,5 +1,3 @@
-I don't hate the overall flow of my homepage but I feel like it could be a more clean and professional design, currently the heading text starts right in the middle of the page and I think it's because of the way the graphics are laid out. It's vitally important that this looks great on all screens across all desktop and mobile. Please look at my code, adjust it and make it much better and more beautiful. Don't add any new components, you'll do your job well if i can copy the full, non snippet but full code you provide me and drop it right into my app and have it work perfect. Don't change any details, just do a serious polish on the UI and make it look more professional, modern, clean and high-end:
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Play } from "lucide-react";
@@ -89,57 +87,24 @@ const HomePage = () => {
   return (
     <div className="bg-white text-gray-900 font-sans">
       {/* Hero Section */}
-      <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-32 bg-gradient-to-b from-secondary-50 to-white">
+      <section className="w-full px-4 md:px-8 lg:px-16 pt-10 md:pt-20 pb-28 bg-gradient-to-b from-secondary-50 to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
-            {/* LEFT: TEXT */}
-            <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
-                Your Words,<br />
-                <span className="block mt-1">
-                  <span className="young-serif gradient-text">Divinely</span>{" "}
-                  <span className="text-secondary-900">Visualized</span>
-                </span>
-              </h1>
-              <p className="text-lg md:text-xl text-gray-700 mb-6">
-                The world has enough ordinary sermon slides. <span className="font-semibold text-secondary-700">Yours should be extraordinary</span> — in just 120 seconds.
-              </p>
-              <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
-                You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  to="/generator"
-                  className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
-                >
-                  Create Your First Masterpiece
-                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Link>
-                <button
-                  onClick={handleOpenVideo}
-                  className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-600 hover:text-secondary-900 transition-colors group"
-                >
-                  Watch Demo Video
-                  <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </div>
-            </div>
-
+          <div className="flex flex-col md:flex-row-reverse gap-12 items-center">
             {/* RIGHT: TRANSFORMATION IMAGES */}
-            <div className="w-full max-w-2xl mx-auto">
+            <div className="w-full max-w-xl mx-auto md:mx-0 md:w-1/2">
               {/* From Image */}
-              <div className="relative mb-16">
+              <div className="relative mb-12">
                 <img
                   src={saltyImage}
                   alt=""
-                  className="absolute -left-8 top-1/2 -translate-y-1/2 w-24 h-auto z-10"
+                  className="absolute -left-7 top-1/2 -translate-y-1/2 w-20 h-auto z-10 drop-shadow-xl"
                 />
-                <div className="pl-20">
+                <div className="pl-16">
                   <div className="aspect-[3/2] w-full">
                     <img
                       src={fromImage}
                       alt="Sermon Notes"
-                      className="w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
+                      className="w-full h-full object-cover rounded-2xl shadow-2xl border-4 border-white"
                     />
                   </div>
                 </div>
@@ -149,11 +114,11 @@ const HomePage = () => {
               </div>
 
               {/* Arrow */}
-              <div className="flex justify-center mb-16">
+              <div className="flex justify-center mb-12">
                 <svg
                   className="w-8 h-16 text-secondary-200"
                   fill="none"
-                  viewBox="0 0 24 24"
+                  viewBox="0 0 24 54"
                 >
                   <path
                     d="M16 0v54M16 54l-8-8M16 54l8-8"
@@ -173,7 +138,7 @@ const HomePage = () => {
                       <img
                         src={img.src}
                         alt={img.label}
-                        className="w-full h-full object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
+                        className="w-full h-full object-cover rounded-2xl shadow-xl border-2 border-white transition-transform duration-200 hover:scale-105"
                       />
                     </div>
                     <p className="text-sm text-gray-500 mt-3 italic">
@@ -183,15 +148,55 @@ const HomePage = () => {
                 ))}
               </div>
             </div>
+
+            {/* LEFT: TEXT */}
+            <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16 md:w-1/2">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-5">
+                Your Words,<br />
+                <span className="block mt-2">
+                  <span className="young-serif gradient-text">Divinely</span>{" "}
+                  <span className="text-secondary-900">Visualized</span>
+                </span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-700 mb-5">
+                The world has enough ordinary sermon slides.{" "}
+                <span className="font-semibold text-secondary-700">
+                  Yours should be extraordinary
+                </span>{" "}
+                — in just 120 seconds.
+              </p>
+              <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
+                You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed.{" "}
+                <span className="font-semibold text-secondary-600">
+                  While you focus on the Word, we focus on making it seen.
+                </span>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/generator"
+                  className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-secondary-700"
+                >
+                  Create Your First Masterpiece
+                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <button
+                  onClick={handleOpenVideo}
+                  className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-600 hover:text-secondary-900 transition-colors group focus:outline-none"
+                >
+                  Watch Demo Video
+                  <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Ministry Use Cases Section */}
-      <section className="px-6 md:px-8 lg:px-12 py-16 bg-gray-50">
+      <section className="px-4 md:px-8 lg:px-16 py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-3">
               Design Anything You Need for Ministry
             </h2>
             <p className="text-lg text-secondary-600 max-w-2xl mx-auto">
@@ -199,11 +204,11 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {ministryUsesCases.map((useCase, index) => (
               <div 
                 key={index}
-                className={useCase.chat ? "bg-transparent" : "bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"}
+                className={useCase.chat ? "bg-transparent" : "bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"}
               >
                 {useCase.chat ? (
                   <div className="relative">
@@ -229,7 +234,7 @@ const HomePage = () => {
                       <img
                         src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68262fc2a32ad3673c166033.png"
                         alt=""
-                        className="w-96 h-auto"
+                        className="w-72 md:w-80 h-auto"
                       />
                     </div>
                   </div>
@@ -241,7 +246,7 @@ const HomePage = () => {
                         alt={useCase.title}
                         className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/15 to-transparent pointer-events-none" />
                     </div>
                     <div className="p-6">
                       <h3 className="text-xl font-bold text-secondary-900 mb-2">

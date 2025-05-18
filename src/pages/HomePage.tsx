@@ -87,7 +87,7 @@ const HomePage = () => {
   return (
     <div className="bg-white text-gray-900 font-sans">
       {/* Hero Section */}
-      <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-10 md:pb-20 bg-gradient-to-b from-secondary-50 to-white">
+      <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-32 md:pb-48 bg-gradient-to-b from-secondary-50 to-white">
         <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
           {/* LEFT: TEXT */}
           <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16">
@@ -125,13 +125,13 @@ const HomePage = () => {
           {/* RIGHT: TRANSFORMATION IMAGES */}
           <div className="w-full flex flex-col items-center">
             {/* From Image Container */}
-            <div className="w-full max-w-2xl relative mb-8">
-              <div className="pl-32 relative"> {/* Added padding to accommodate Salty */}
+            <div className="w-full max-w-xl mx-auto relative mb-12">
+              <div className="pl-32 relative">
                 {/* Salty mascot */}
                 <img
                   src={saltyImage}
                   alt=""
-                  className="absolute -left-0 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
+                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
                 />
                 {/* From image with 3:2 aspect ratio */}
                 <div className="aspect-[3/2] w-full relative">
@@ -148,7 +148,7 @@ const HomePage = () => {
             </div>
 
             {/* Arrow/Divider */}
-            <div className="w-8 h-16 flex items-center justify-center my-8">
+            <div className="w-8 h-16 flex items-center justify-center mb-12">
               <svg
                 className="w-full h-full text-secondary-200"
                 fill="none"
@@ -165,7 +165,7 @@ const HomePage = () => {
             </div>
 
             {/* To Images Grid */}
-            <div className="w-full max-w-2xl grid grid-cols-2 gap-6">
+            <div className="w-full max-w-xl mx-auto grid grid-cols-2 gap-6">
               {toImages.map((img) => (
                 <div key={img.src} className="flex flex-col items-center">
                   <div className="aspect-[3/2] w-full relative">

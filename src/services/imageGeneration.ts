@@ -123,12 +123,16 @@ export async function generateSermonArtPrompt(
 /* ------------------------------------------------------------------ */
 export async function convertSummaryToPrompt(
   summary: string,
+  sermon_title: string,
+  sermon_topic: string,
   stylePreset?: StylePreset
 ): Promise<string> {
   console.group('=== SUMMARY TO PROMPT CONVERSION ===');
   console.log('Step 1: Input Parameters');
   console.log({
     summary,
+    sermon_title,
+    sermon_topic,
     stylePreset: stylePreset ? {
       id: stylePreset.id,
       title: stylePreset.title,
@@ -149,7 +153,7 @@ Key requirements:
 3. Keep all technical specifications (dimensions, coordinates, etc.) from the preset
 4. Preserve the layer structure and types
 5. Update visual elements, colors, and content to match the user's concept
-6. Replace any text content with {sermon_title} and {sermon_topic} placeholders
+6. Replace text content with "${sermon_title}" for the main title and "${sermon_topic}" for the subtitle
 7. Maintain all post-processing settings unless explicitly modified in the concept
 
 The final prompt should be a perfect blend of the style preset's technical structure and the user's creative direction.`
@@ -160,6 +164,9 @@ The final prompt should be a perfect blend of the style preset's technical struc
 
 User's Design Concept:
 ${summary}
+
+Sermon Title: "${sermon_title}"
+Sermon Topic: "${sermon_topic}"
 
 Style Preset Structure:
 ${stylePreset?.promptModifiers || "No style preset provided"}`
@@ -181,7 +188,6 @@ ${stylePreset?.promptModifiers || "No style preset provided"}`
   console.groupEnd();
   return convertedPrompt;
 }
-
 /* ------------------------------------------------------------------ */
 /* 4) Generate image                                                  */
 /* ------------------------------------------------------------------ */

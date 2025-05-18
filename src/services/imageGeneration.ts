@@ -96,4 +96,109 @@ The raw prompt must:
       {
         role: "user",
         content: isFullNotes
-          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1
+          ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${
+              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
+            }`
+          : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${
+              stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
+            }`
+      }
+    ]
+  });
+
+  const response = JSON.parse(promptChat.choices[0].message.content!);
+  return {
+    fullPrompt: response.rawPrompt,
+    promptData: response
+  };
+}
+
+export async function convertSummaryToPrompt(
+  promptData: PromptData,
+  stylePreset?: StylePreset
+): Promise<string> {
+  const openai = getOpenAIClient();
+
+  const chat = await openai.chat.completions.create({
+    model: "gpt-4.1-2025-04-14",
+    messages: [
+      {
+        role: "system",
+        content: "You are an expert prompt engineer for image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+      },
+      {
+        role: "user",
+        content: `Convert this design concept into a detailed image generation prompt:\n\n${promptData.summary}\n\n${
+          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
+        }`
+      }
+    ]
+  });
+
+  return chat.choices[0].message.content!.trim();
+}
+
+export async function generateSermonArt(
+  prompt: string,
+  stylePreset?: StylePreset
+): Promise<string | null> {
+  const openai = getOpenAIClient();
+
+  // Download reference image if style is selected
+  let referenceFile: File | undefined;
+  if (stylePreset) {
+    try {
+      referenceFile = await urlToFile(stylePreset.referenceUrl);
+    } catch (error) {
+      console.error('Error downloading reference image:', error);
+      throw new Error('Failed to download reference image');
+    }
+  }
+
+  // Append reference image instructions to the prompt
+  const finalPrompt = stylePreset 
+    ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
+    : prompt;
+
+  try {
+    const rsp = referenceFile 
+      ? await openai.images.edit({
+          model: "gpt-image-1",
+          image: referenceFile,
+          prompt: finalPrompt,
+          size: "1536x1024",
+          quality: "high",
+          n: 1
+        })
+      : await openai.images.generate({
+          model: "gpt-image-1",
+          prompt: finalPrompt,
+          size: "1536x1024",
+          quality: "high",
+          n: 1
+        });
+
+    if (!rsp?.data?.[0]) {
+      throw new Error("No image data received from OpenAI");
+    }
+
+    const { url, b64_json } = rsp.data[0];
+    if (url) {
+      return url;
+    }
+    if (!b64_json) {
+      throw new Error("No image data received");
+    }
+
+    // Convert base64 to Blob URL for better performance
+    const byteChars = atob(b64_json);
+    const byteNumbers = new Array(byteChars.length).fill(0).map((_, i) => byteChars.charCodeAt(i));
+    const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
+    const objectUrl = URL.createObjectURL(blob);
+
+    return objectUrl;
+  } catch (error: any) {
+    console.error('OpenAI API error:', error);
+    throw new Error(`OpenAI API error: ${error.message || 'Unknown error'}`);
+  }
+}

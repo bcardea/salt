@@ -213,7 +213,7 @@ const HomePage = () => {
                           className={`flex ${message.role === 'response' ? 'justify-end' : 'justify-start'}`}
                         >
                           <div
-                            className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm sm:text-base ${ /* Increased padding and text size */ }
+                            className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm sm:text-base ${ /* Increased padding and text size */ },
                               message.role === 'response'
                                 ? 'bg-[#1e8efc] text-white rounded-br-lg' /* Tailored rounding */
                                 : 'bg-secondary-100 text-secondary-800 rounded-bl-lg' /* Tailored rounding */

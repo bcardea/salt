@@ -5,6 +5,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "folded-paper-minimal",
     title: "Folded Paper Minimal",
     description: "Neutral folded-paper minimal design",
+     categories: ["minimal", "modern", "editorial", "neutral"],
     promptModifiers: `{
       "scene": "flat, neutral-toned paper background with subtle center fold lines and minute grain texture",
       "image_dimensions": "1536×1024",
@@ -78,6 +79,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintage-floral",
     title: "Vintage Floral",
     description: "Broken-vase floral illustration with sacred iconography",
+    categories: ["vintage", "floral", "sacred", "iconography", "illustrative"],
     promptModifiers: `{
       "scene": "centered symbolic illustration of a broken clay vase with flowers, placed within an arched gold frame on a deep navy background",
       "image_dimensions": "1536×1024",
@@ -172,6 +174,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "neon-compass",
     title: "Neon Compass",
     description: "Synthwave compass with glowing type",
+    categories: ["retro", "synthwave", "neon", "adventure", "bold"],
     promptModifiers: `{
       "scene": "hand holding a compass, layered under glowing vintage typography on a neon duotone background with scratched light streak texture",
       "image_dimensions": "1536×1024",
@@ -257,6 +260,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "neon-pastel",
     title: "Neon Pastel",
     description: "Pastel dawn gradient with prayer hands line art",
+    categories: ["minimal", "pastel", "spiritual", "modern", "gradient"],
     promptModifiers: `{
       "scene": "calming, pastel-hued sky gradient fading from light lavender to peach and blue, suggesting dawn or spiritual awakening",
       "image_dimensions": "1536×1024",
@@ -337,6 +341,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "retro-revival",
     title: "Retro Revival",
     description: "Vintage revival flyer with praying hands",
+     categories: ["vintage", "revival", "spiritual", "bold", "print"],
     promptModifiers: `{
       "scene": "centered revival-style print featuring praying hands with typographic layering on a textured off-white background",
       "image_dimensions": "1536×1024",
@@ -467,6 +472,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintage-hoops",
     title: "Vintage Hoops",
     description: "Retro sports-inspired crossroads poster",
+    categories: ["vintage", "sports", "retro", "illustrative", "bold"],
     promptModifiers: `{
       "scene": "layered vintage backdrop blending an ancient world map with starry outer space textures; central panel shaped like a medieval shield or stone tablet",
       "image_dimensions": "1536×1024",
@@ -581,6 +587,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "ancient-maps",
     title: "Ancient Maps",
     description: "Antique parchment map with decision-point typography",
+    categories: ["vintage", "map", "ancient", "cartography", "editorial"],
     promptModifiers: `{
       "scene": "antique parchment map background centered on Corinth region, faintly labeled with aged, classical text and hand-drawn geographic lines",
       "image_dimensions": "1536×1024",
@@ -682,6 +689,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "tropical-easter",
     title: "Tropical Easter",
     description: "Dense tropical foliage around modern type",
+    categories: ["nature", "tropical", "modern", "botanical", "joyful", "holiday"],
     promptModifiers: `{
       "scene": "dense tropical foliage bursting with detailed leaves and vibrant blossoms over a deep forest green background",
       "image_dimensions": "1536×1024",
@@ -776,6 +784,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "retro-cartoon-fruit",
     title: "Retro Cartoon Fruit",
     description: "Playful vintage fruit characters poster",
+    categories: ["kids", "fun", "retro", "cartoon", "vintage", "playful"],
     promptModifiers: `{
       "scene": "cheerful lineup of colorful cartoon fruit characters on a lightly textured vintage paper background",
       "image_dimensions": "1536×1024",
@@ -862,6 +871,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "retro-gym-poster",
     title: "Retro Gym Poster",
     description: "Boxing-glove spiritual warfare poster",
+    categories: ["bold", "vintage", "gym", "spiritual", "poster"],
     promptModifiers: `{
   "scene": "centered minimalist layout with crossed boxing gloves illustration on a red textured background",
   "image_dimensions": "1536×1024",
@@ -944,6 +954,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "luminous-desert-cross",
     title: "Luminous Desert Cross",
     description: "Night desert with glowing cross and script",
+    categories: ["spiritual", "desert", "night", "cinematic", "hopeful"],
     promptModifiers: `{
       "scene": "desert landscape under a starry night sky with a luminous cross embedded in the sand, radiating light outward into the dunes",
       "image_dimensions": "1536×1024",
@@ -1023,6 +1034,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "desert-vintage",
     title: "Desert Vintage Poster",
     description: "Cinematic desert scene with vintage poster aesthetics",
+    categories: ["cinematic", "vintage", "desert", "photoreal", "film"],
     promptModifiers: `Hyper detailed, filmic, photorealistic shot on Sony a7iii: Create a hyper detailed filmic image using the following json prompt: {
       "scene": "vast, windswept desert under a hazy beige-grey sky, rendered in warm sepia tones with a subtle vintage paper grain overlay",
       "image_dimensions": "1536×1024",
@@ -1124,6 +1136,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "ink-clouds",
     title: "Colorful Ink Clouds",
     description: "Dynamic ink clouds with modern typography",
+    categories: ["modern", "artistic", "abstract", "bold", "colorful"],
     promptModifiers: `{
       "scene": "high-speed macro photography of acrylic ink clouds diffusing in clear water, captured against a soft light-grey studio backdrop",
       "image_dimensions": "1536×1024",
@@ -1199,6 +1212,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "bw-double-exposure",
     title: "BW Double Exposure",
     description: "High-contrast monochrome double-exposure artwork",
+    categories: ["modern", "bw", "double-exposure", "photoreal", "gritty"],
     promptModifiers: `{
       "scene": "high-contrast monochrome double-exposure artwork: a young woman's left-facing profile blended with a mist-covered mountain landscape, set on a distressed white concrete background",
        "image_dimensions": "1536×1024",
@@ -1292,6 +1306,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "pop-art-devotional",
     title: "Pop-Art Devotional",
     description: "Contemporary sermon graphic with vintage halftone aesthetics",
+    categories: ["pop-art", "modern", "vintage", "halftone", "illustrative"],
     promptModifiers: `{
       "scene": "contemporary sermon–series title graphic combining vintage halftone print aesthetics with a classical 19th-century painting of Jesus preaching (Sermon on the Mount)",
      "image_dimensions": "1536×1024",
@@ -1413,6 +1428,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "throwback-doodle",
     title: "Throwback-Doodle",
     description: "Retro-washed ministry poster with playful doodles",
+    categories: ["retro", "playful", "street", "film", "worship"],
     promptModifiers: `{
       "scene": "retro-washed ministry poster featuring a warm-toned illustration of Jesus helping a kneeling figure in a sun-bleached courtyard; bold modern lettering and playful white doodles collide with heavy film-grain texture",
     "image_dimensions": "1536×1024",
@@ -1526,6 +1542,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintage-red-sharpie",
     title: "Vintage Red Sharpie",
     description: "Vintage-print sermon graphic with handwritten elements",
+    categories: ["vintage", "handwritten", "print", "bulletin", "classic"],
     promptModifiers: `{
       "scene": "vintage-print sermon-series graphic poster, laid out on warm recycled paper stock with visible pulp fibers, faint fold-creases, and scattered black ink specks",
       "image_dimensions": "1536×1024",
@@ -1643,6 +1660,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "architecture-collage",
     title: "Architecture Collage",
     description: "Architectural elements with geometric framing",
+    categories: ["collage", "architectural", "geometric", "editorial", "vintage"],
     promptModifiers: `{
       "canvas": {
       "image_dimensions": "1536×1024",
@@ -1801,6 +1819,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "modern-earth-collage",
     title: "Modern-Earth Collage",
     description: "Modern collage with dreamy pastel-desert sky",
+    categories: ["collage", "modern", "dreamy", "nature", "abstract"],
     promptModifiers: `{
       "scene": "modern collage-style sermon graphic built around the single word '{sermon_title}', blending photography, geometric shapes, and flat UI icons against a dreamy pastel-desert sky",
       "image_dimensions": "1536×1024",
@@ -1970,6 +1989,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "photoreal",
     title: "Photographic",
     description: "Professional portrait style with cinematic lighting & subtle environmental storytelling",
+    categories: ["photoreal", "cinematic", "portrait", "modern", "emotive"],
     promptModifiers: "Create a Photo-realistic filmic style image. Consider a cinematic portrait approach with thoughtful environmental storytelling. Use professional lighting techniques, selective focus, and sophisticated color grading to create depth and emotion. The environment should subtly reinforce the sermon's theme without overshadowing the subject. Make sure it's photorealsitic and has the characterstics of an actual photograph",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9d9cd8fb87c29ba7f0.png"
@@ -1978,6 +1998,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "minimalist",
     title: "Modern Minimal",
     description: "Clean, editorial layout with purposeful negative space",
+    categories: ["minimal", "modern", "editorial", "clean", "sophisticated"],
     promptModifiers: "Draw inspiration from modern editorial design. Use purposeful negative space, strong typographic hierarchy, and a restrained color palette. Consider geometric elements, clean lines, or abstract shapes that complement the message. The design should feel sophisticated and intentional.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c183ce57ad6921011.png"
@@ -1986,6 +2007,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "retro80s",
     title: "Retro 80s",
     description: "Synthwave-inspired design with bold energy",
+    categories: ["retro", "80s", "bold", "synthwave", "colorful"],
     promptModifiers: "Channel retro-futuristic aesthetics with bold color gradients, dynamic lighting, and geometric elements. Consider how to incorporate synthwave elements while maintaining relevance to the sermon's message. The design should feel energetic and nostalgic without being cliché.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9db098801ec44508d0.png"
@@ -1994,6 +2016,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "biblical",
     title: "Cinematic",
     description: "Epic, dramatic artwork inspired by ancient narratives",
+    categories: ["cinematic", "epic", "biblical", "ancient", "dramatic"],
     promptModifiers: "Create a cinematic interpretation of biblical themes using dramatic lighting, rich textures, and meaningful symbolism. Consider architectural elements, natural phenomena, or historical artifacts that resonate with the message. The composition should feel timeless and profound, avoiding literal interpretations in favor of powerful visual metaphors.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251c81183ce502b0921294.png"
@@ -2002,6 +2025,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "youth",
     title: "Youthful Collage",
     description: "Modern grunge collage full of energy and layers",
+     categories: ["youth", "collage", "grunge", "energetic", "modern"],
     promptModifiers: "Create a dynamic collage composition with multiple overlapping elements, torn paper textures, and layered design elements. Include: 1) A base layer with grungy textures or distressed patterns 2) Multiple overlapping geometric shapes or torn paper elements 3) Typography treated as graphic elements with parts intentionally overlapping or breaking the frame 4) Subtle shadow effects to create depth between layers 5) Small decorative elements like paint splatters, tape, or paper clips scattered thoughtfully. The overall composition should feel energetic and intentionally layered, with clear visual hierarchy despite the complexity.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9dc469326aedc5682b.png"
@@ -2010,6 +2034,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintage",
     title: "Vintage Print",
     description: "Classic aesthetic with authentic print textures",
+    categories: ["vintage", "classic", "print", "timeless", "texture"],
     promptModifiers: "Draw from classic print design with authentic textures, traditional typography, and careful attention to detail. Consider how printing artifacts and techniques can add character without overwhelming the design. The result should feel crafted and timeless.",
     previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png",
     referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68251a9c9cd8fb4b3d9ba7ed.png"

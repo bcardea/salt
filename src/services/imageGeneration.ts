@@ -16,7 +16,6 @@ export type StylePreset = {
 
 /* ------------------------------------------------------------------ */
 /* 1) Utility: fetch URL → File                                       */
-/* ------------------------------------------------------------------ */
 async function urlToFile(url: string): Promise<File> {
   const res = await axios.get<ArrayBuffer>(url, { responseType: "arraybuffer" });
   const type = res.headers["content-type"] ?? "image/png";
@@ -27,7 +26,6 @@ async function urlToFile(url: string): Promise<File> {
 
 /* ------------------------------------------------------------------ */
 /* 2) Generate prompt text                                            */
-/* ------------------------------------------------------------------ */
 export async function generateSermonArtPrompt(
   sermon_title: string,
   sermon_topic: string,
@@ -142,55 +140,43 @@ export async function convertSummaryToPrompt(
 
   const openai = getOpenAIClient();
 
-  const messages = [
-    {
-      role: "system",
-      content: `You are an expert prompt engineer for gpt-image-1 image generation. Your task is to convert a user-friendly design concept into a detailed technical prompt while maintaining the structure and format of the provided style preset.
+  let parsedStylePreset;
+  try {
+    parsedStylePreset = stylePreset ? JSON.parse(stylePreset.promptModifiers) : {};
+  } catch (e) {
+    console.error("Error parsing style preset JSON:", e);
+    throw new Error("Invalid style preset JSON");
+  }
 
-Key requirements:
-1. Use the exact JSON structure from the style preset
-2. Customize the attributes based on the user's design concept
-3. Keep all technical specifications (dimensions, coordinates, etc.) from the preset
-4. Preserve the layer structure and types
-5. Update visual elements, colors, and content to match the user's concept
-6. Replace text content with "${sermon_title}" for the main title and "${sermon_topic}" for the subtitle
-7. Maintain all post-processing settings unless explicitly modified in the concept
-
-The final prompt should be a perfect blend of the style preset's technical structure and the user's creative direction.`
-    },
-    {
-      role: "user",
-      content: `Convert this design concept into a detailed prompt that follows the structure of the style preset, while incorporating the user's creative direction:
-
-User's Design Concept:
-${summary}
-
-Sermon Title: "${sermon_title}"
-Sermon Topic: "${sermon_topic}"
-
-Style Preset Structure:
-${stylePreset?.promptModifiers || "No style preset provided"}`
+  // Replace placeholders in the parsed style preset
+  const replacePlaceholders = (obj: any) => {
+    for (const key in obj) {
+      if (typeof obj[key] === 'string') {
+        obj[key] = obj[key]
+          .replace(/\{sermon_title\}/g, sermon_title)
+          .replace(/\{sermon_topic\}/g, sermon_topic);
+      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+        replacePlaceholders(obj[key]);
+      }
     }
-  ];
+  };
 
-  console.log('Step 2: Conversion Request');
-  console.log(JSON.stringify(messages, null, 2));
+  replacePlaceholders(parsedStylePreset);
 
-  const chat = await openai.chat.completions.create({
-    model: "gpt-4.1-2025-04-14",
-    messages
-  });
+  const mergedPrompt = {
+    ...parsedStylePreset,
+    userSummary: summary, // Add the user's summary to the merged object
+  };
 
-  const convertedPrompt = chat.choices[0].message.content!.trim();
   console.log('Step 3: Converted Prompt');
-  console.log(convertedPrompt);
+  console.log(JSON.stringify(mergedPrompt, null, 2));
 
   console.groupEnd();
-  return convertedPrompt;
+  return JSON.stringify(mergedPrompt);
 }
+
 /* ------------------------------------------------------------------ */
 /* 4) Generate image                                                  */
-/* ------------------------------------------------------------------ */
 export async function generateSermonArt(
   prompt: string,
   stylePreset?: StylePreset
@@ -207,12 +193,23 @@ export async function generateSermonArt(
 
   const openai = getOpenAIClient();
 
+  // Parse the prompt string into a JSON object
+  let parsedPrompt;
+  try {
+    parsedPrompt = JSON.parse(prompt);
+    console.log('Step 2: Parsed Prompt');
+    console.log(parsedPrompt);
+  } catch (e) {
+    console.error("Error parsing prompt JSON:", e);
+    throw new Error("Invalid prompt JSON");
+  }
+
   // Download reference image if style is selected
   let referenceFile: File | undefined;
   if (stylePreset) {
     try {
       referenceFile = await urlToFile(stylePreset.referenceUrl);
-      console.log('Step 2: Reference Image Downloaded');
+      console.log('Step 3: Reference Image Downloaded');
     } catch (error) {
       console.error('Error downloading reference image:', error);
       throw new Error('Failed to download reference image');
@@ -220,16 +217,16 @@ export async function generateSermonArt(
   }
 
   // Append reference image instructions to the prompt
-  const finalPrompt = stylePreset 
-    ? `${prompt}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
-    : prompt;
+  const finalPrompt = stylePreset
+    ? `${parsedPrompt.userSummary}\n\nNOTE: You're being given an image reference. Do not replicate the specifics of this image reference including characters, location, etc but instead pull those from the prompt itself. Use the image reference as an inspirational foundation and a guide for how to layout the image with text and design, do not copy the characters in the reference verbatim but instead use them as an example of how to incorporate the characters referenced in the prompt itself.`
+    : parsedPrompt.userSummary;
 
-  console.log('Step 3: Final Prompt');
+  console.log('Step 4: Final Prompt');
   console.log(finalPrompt);
 
   try {
-    console.log('Step 4: Sending Request to OpenAI');
-    const rsp = referenceFile 
+    console.log('Step 5: Sending Request to OpenAI');
+    const rsp = referenceFile
       ? await openai.images.edit({
           model: "gpt-image-1",
           image: referenceFile,
@@ -246,7 +243,7 @@ export async function generateSermonArt(
           n: 1
         });
 
-    console.log('Step 5: OpenAI Response');
+    console.log('Step 6: OpenAI Response');
     console.log(JSON.stringify(rsp, null, 2));
 
     if (!rsp?.data?.[0]) {
@@ -255,7 +252,7 @@ export async function generateSermonArt(
 
     const { url, b64_json } = rsp.data[0];
     if (url) {
-      console.log('Step 6: Generated Image URL');
+      console.log('Step 7: Generated Image URL');
       console.log(url);
       return url;
     }
@@ -269,7 +266,7 @@ export async function generateSermonArt(
     const blob = new Blob([new Uint8Array(byteNumbers)], { type: "image/png" });
     const objectUrl = URL.createObjectURL(blob);
 
-    console.log('Step 6: Generated Object URL');
+    console.log('Step 7: Generated Object URL');
     console.groupEnd();
     return objectUrl;
   } catch (error: any) {

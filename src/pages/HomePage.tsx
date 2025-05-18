@@ -4,7 +4,7 @@ import { ArrowRight, Play } from "lucide-react";
 import VideoModal from "../components/VideoModal";
 
 const fromImage =
-  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682523349cd8fb6bde9bbb09.jpeg";
+  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68293e458acc4a9f8cb8315f.jpeg";
 
 const saltyImage = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68253020b12e575165b9498e.svg";
 

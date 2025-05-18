@@ -11,7 +11,7 @@ interface Image {
   created_at: string;
 }
 
-const IMAGES_PER_PAGE = 9;
+const IMAGES_PER_PAGE = 3; // Reduced from 9 to 3
 
 const LibraryPage: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);

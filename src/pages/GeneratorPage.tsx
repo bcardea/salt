@@ -9,13 +9,14 @@ import CreditDisplay from '../components/CreditDisplay';
 import PromptEditor from '../components/PromptEditor';
 import StylePresetCarousel from '../components/StylePresetCarousel';
 import { useCredits } from '../hooks/useCredits';
+import { PromptData } from '../types/prompt';
 
 const GeneratorPage: React.FC = () => {
   const [session, setSession] = useState(null);
   const [topic, setTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
   const [fullPrompt, setFullPrompt] = useState('');
-  const [promptSummary, setPromptSummary] = useState('');
+  const [promptData, setPromptData] = useState<PromptData | null>(null);
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
@@ -91,13 +92,13 @@ const GeneratorPage: React.FC = () => {
     setTopic(inputText);
     
     try {
-      const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
+      const { fullPrompt: generatedPrompt, promptData: generatedPromptData } = await generateSermonArtPrompt(
         inputText.length > 100 ? 'Sermon Artwork' : inputText.toUpperCase(),
         inputText,
         selectedStyle
       );
       setFullPrompt(generatedPrompt);
-      setPromptSummary(summary);
+      setPromptData(generatedPromptData);
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -106,7 +107,7 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGenerateArt = async () => {
-    if (!promptSummary.trim()) return;
+    if (!promptData) return;
     
     if (!session) {
       setError('Please sign in to generate artwork');
@@ -121,9 +122,9 @@ const GeneratorPage: React.FC = () => {
     setError('');
     setStatus('generating-image');
     try {
-      // Convert the edited summary back to a full prompt
+      // Convert the edited prompt data back to a full prompt
       const updatedFullPrompt = await convertSummaryToPrompt(
-        promptSummary,
+        promptData,
         selectedStyle
       );
       setFullPrompt(updatedFullPrompt);
@@ -232,19 +233,19 @@ const GeneratorPage: React.FC = () => {
           </div>
 
           {/* Step 4: Review and Edit Concept */}
-          {promptSummary && (
+          {promptData && (
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Step 4: Review and Customize</h2>
               <div className="space-y-6">
                 <PromptEditor
-                  value={promptSummary}
-                  onChange={setPromptSummary}
+                  value={promptData}
+                  onChange={setPromptData}
                   disabled={status !== 'idle'}
                 />
 
                 <button
                   onClick={handleGenerateArt}
-                  disabled={status !== 'idle' || !promptSummary.trim() || !credits?.credits_remaining}
+                  disabled={status !== 'idle' || !promptData || !credits?.credits_remaining}
                   className="btn-primary w-full"
                 >
                   Generate Final Artwork

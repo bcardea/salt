@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getOpenAIClient } from "../lib/openaiClient";
+import { PromptData } from "../types/prompt";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
@@ -31,15 +32,45 @@ export async function generateSermonArtPrompt(
   sermTitle: string,
   topic: string,
   stylePreset?: StylePreset
-): Promise<{ fullPrompt: string; summary: string }> {
+): Promise<{ fullPrompt: string; promptData: PromptData }> {
   const openai = getOpenAIClient();
 
   const isFullNotes = topic.length > 100;
   const typographyInstructions = "Typography: If the prompt modifier in the style reference includes typography information, prioritize using that. If it doesn't, always fall back on the following rules: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
 
-  const systemPrompt = isFullNotes
-    ? `You are an expert prompt engineer for graphic design with over 20 years of experience. Analyze the provided sermon notes to extract key themes, metaphors, and imagery. Create a visually compelling prompt that captures the sermon's core message. Focus on creating a modern, impactful design that communicates the message effectively. ${typographyInstructions}`
-    : `You are an expert prompt engineer and creative director specializing in sermon artwork. You have a deep understanding of visual storytelling and how to create impactful, meaningful designs that enhance the message. Your role is to craft unique, creative prompts that align with the selected style while being original and specifically tailored to the sermon's message.`;
+  const systemPrompt = `You are an expert prompt engineer for graphic design with over 20 years of experience. Your task is to:
+1. Analyze the input and create a detailed image generation prompt
+2. Break down the key elements into a structured JSON format
+3. Generate alternative suggestions for each element
+4. Create a user-friendly summary
+
+The JSON structure should include:
+{
+  "elements": [
+    {
+      "type": "subject",
+      "value": "the main subject/focus",
+      "suggestions": ["4 alternative subjects"]
+    },
+    {
+      "type": "location",
+      "value": "the setting/environment",
+      "suggestions": ["4 alternative locations"]
+    },
+    {
+      "type": "text",
+      "value": "text treatment description",
+      "suggestions": ["4 alternative text styles"]
+    },
+    {
+      "type": "extras",
+      "value": "additional elements",
+      "suggestions": ["4 alternative extras"]
+    }
+  ],
+  "summary": "A clear, plain-language description of the design",
+  "rawPrompt": "The complete, technical prompt for image generation"
+}`;
 
   const promptChat = await openai.chat.completions.create({
     model: "gpt-4.1-2025-04-14",
@@ -58,29 +89,15 @@ export async function generateSermonArtPrompt(
               stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
             }`
       }
-    ]
+    ],
+    response_format: { type: "json_object" }
   });
 
-  const fullPrompt = promptChat.choices[0].message.content!.trim();
-
-  // Generate a user-friendly summary
-  const summaryChat = await openai.chat.completions.create({
-    model: "gpt-4.1-2025-04-14",
-    messages: [
-      {
-        role: "system",
-        content: "You are an expert at explaining complex design concepts in simple terms. Create a clear, concise summary that captures the key visual elements and artistic direction in plain language."
-      },
-      {
-        role: "user",
-        content: `Summarize this image generation prompt in a single, easy-to-understand paragraph:\n\n${fullPrompt}`
-      }
-    ]
-  });
+  const promptData = JSON.parse(promptChat.choices[0].message.content!) as PromptData;
 
   return {
-    fullPrompt,
-    summary: summaryChat.choices[0].message.content!.trim()
+    fullPrompt: promptData.rawPrompt,
+    promptData
   };
 }
 
@@ -88,7 +105,7 @@ export async function generateSermonArtPrompt(
 /* 3) Convert summary back to full prompt                             */
 /* ------------------------------------------------------------------ */
 export async function convertSummaryToPrompt(
-  summary: string,
+  promptData: PromptData,
   stylePreset?: StylePreset
 ): Promise<string> {
   const openai = getOpenAIClient();
@@ -98,13 +115,18 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
+        content: "You are an expert prompt engineer for gpt-image-1 image generation. Convert the given design concept and elements into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood."
       },
       {
         role: "user",
-        content: `Convert this design concept into a detailed gpt-image-1 prompt:\n\n${summary}\n\n${
-          stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""
-        }`
+        content: `Convert this design concept into a detailed gpt-image-1 prompt:
+
+Summary: ${promptData.summary}
+
+Elements:
+${promptData.elements.map(e => `${e.type}: ${e.value}`).join('\n')}
+
+${stylePreset ? `Style inspiration: ${stylePreset.promptModifiers}` : ""}`
       }
     ]
   });

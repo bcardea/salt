@@ -107,49 +107,49 @@ const GeneratorPage: React.FC = () => {
   };
 
   const handleGenerateArt = async () => {
-  if (!promptSummary.trim()) return;
-  
-  if (!session) {
-    setError('Please sign in to generate artwork');
-    return;
-  }
-
-  if (!credits?.credits_remaining) {
-    setError('You have no credits remaining. Please wait for your credits to reset.');
-    return;
-  }
-  
-  setError('');
-  setStatus('generating-image');
-  try {
-    // Convert the edited summary back to a full prompt
-    const updatedFullPrompt = await convertSummaryToPrompt(
-      promptSummary,
-      sermon_title,
-      sermon_topic,
-      selectedStyle
-    );
-    setFullPrompt(updatedFullPrompt);
-
-    // Attempt to decrement credits first
-    const { data: decrementResult, error: decrementError } = await supabase
-      .rpc('decrement_credits', { user_id: session.user.id });
-
-    if (decrementError || !decrementResult) {
-      throw new Error('Failed to use credit. Please try again.');
+    if (!promptSummary.trim()) return;
+    
+    if (!session) {
+      setError('Please sign in to generate artwork');
+      return;
     }
 
-    const src = await generateSermonArt(updatedFullPrompt, selectedStyle);
-    setImgSrc(src);
-    setStatus('complete');
-    if (src) {
-      await saveToLibrary(src);
+    if (!credits?.credits_remaining) {
+      setError('You have no credits remaining. Please wait for your credits to reset.');
+      return;
     }
-  } catch (e) {
-    setError((e as Error).message);
-    setStatus('idle');
-  }
-};
+    
+    setError('');
+    setStatus('generating-image');
+    try {
+      // Convert the edited summary back to a full prompt
+      const updatedFullPrompt = await convertSummaryToPrompt(
+        promptSummary,
+        sermon_title,
+        sermon_topic,
+        selectedStyle
+      );
+      setFullPrompt(updatedFullPrompt);
+
+      // Attempt to decrement credits first
+      const { data: decrementResult, error: decrementError } = await supabase
+        .rpc('decrement_credits', { user_id: session.user.id });
+
+      if (decrementError || !decrementResult) {
+        throw new Error('Failed to use credit. Please try again.');
+      }
+
+      const src = await generateSermonArt(updatedFullPrompt, selectedStyle);
+      setImgSrc(src);
+      setStatus('complete');
+      if (src) {
+        await saveToLibrary(src);
+      }
+    } catch (e) {
+      setError((e as Error).message);
+      setStatus('idle');
+    }
+  };
 
 
   const handleInputChange = async (value: string) => {
@@ -224,7 +224,6 @@ const GeneratorPage: React.FC = () => {
             <StylePresetCarousel
               presets={STYLE_PRESETS}
               selectedStyle={selectedStyle}
-              onStyleSelect={setSelectedStyle}
               disabled={status !== 'idle'}
             />
           </div>
@@ -295,5 +294,3 @@ const GeneratorPage: React.FC = () => {
     </div>
   );
 };
-
-export default GeneratorPage;

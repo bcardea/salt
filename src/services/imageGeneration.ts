@@ -29,8 +29,8 @@ async function urlToFile(url: string): Promise<File> {
 /* 2) Generate prompt text                                            */
 /* ------------------------------------------------------------------ */
 export async function generateSermonArtPrompt(
-  sermTitle: string,
-  topic: string,
+  sermon_title: string,
+  sermon_topic: string,
   stylePreset?: StylePreset
 ): Promise<{ fullPrompt: string; summary: string }> {
   const openai = getOpenAIClient();
@@ -38,8 +38,8 @@ export async function generateSermonArtPrompt(
   console.group('=== PROMPT GENERATION PROCESS ===');
   console.log('Step 1: Initial Parameters');
   console.log({
-    sermTitle,
-    topic,
+    sermon_title,
+    sermon_topic,
     stylePreset: stylePreset ? {
       id: stylePreset.id,
       title: stylePreset.title,
@@ -47,7 +47,7 @@ export async function generateSermonArtPrompt(
     } : 'none'
   });
 
-  const isFullNotes = topic.length > 100;
+  const isFullNotes = sermon_topic.length > 100;
   const typographyInstructions = "Typography: If the prompt modifier in the style reference includes typography information, prioritize using that. If it doesn't, always fall back on the following rules: Use a clean, contemporary sans-serif headline font reminiscent of Montserrat, Gotham, or Inter. If the concept benefits from contrast, pair the headline with a small, elegant hand-written/script sub-title (e.g. Great Vibes). Keep all text crisp, legible, and current; avoid dated or default fonts.";
 
   const systemPrompt = isFullNotes
@@ -68,10 +68,10 @@ export async function generateSermonArtPrompt(
     {
       role: "user",
       content: isFullNotes
-        ? `Create an image prompt based on these sermon notes:\n\n${topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
+        ? `Create an image prompt based on these sermon notes:\n\n${sermon_topic}\n\nCreate a fresh 1536×1024 landscape sermon graphic that captures the core message.\n${typographyInstructions}${
             stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
           }`
-        : `Create an image prompt for the title "${sermTitle}" (topic: ${topic}).\n${typographyInstructions}${
+        : `Create an image prompt for the title "${sermon_title}" (topic: ${sermon_topic}).\n${typographyInstructions}${
             stylePreset ? `\nStyle inspiration: ${stylePreset.promptModifiers}` : ""
           }`
     }

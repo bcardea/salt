@@ -87,99 +87,99 @@ const HomePage = () => {
   return (
     <div className="bg-white text-gray-900 font-sans">
       {/* Hero Section */}
-      <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-32 md:pb-48 bg-gradient-to-b from-secondary-50 to-white">
-        <div className="max-w-7xl mx-auto flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
-          {/* LEFT: TEXT */}
-          <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
-              Your Words,<br />
-              <span className="block mt-1">
-                <span className="young-serif gradient-text">Divinely</span>{" "}
-                <span className="text-secondary-900">Visualized</span>
-              </span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-700 mb-6">
-              The world has enough ordinary sermon slides. <span className="font-semibold text-secondary-700">Yours should be extraordinary</span> — in just 120 seconds.
-            </p>
-            <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
-              You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                to="/generator"
-                className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
-              >
-                Create Your First Masterpiece
-                <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <button
-                onClick={handleOpenVideo}
-                className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-600 hover:text-secondary-900 transition-colors group"
-              >
-                Watch Demo Video
-                <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+      <section className="w-full px-6 md:px-8 lg:px-12 pt-14 md:pt-24 pb-32 bg-gradient-to-b from-secondary-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:grid md:grid-cols-2 gap-10 items-center">
+            {/* LEFT: TEXT */}
+            <div className="relative flex flex-col items-start justify-center md:pr-10 lg:pr-16">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight mb-4">
+                Your Words,<br />
+                <span className="block mt-1">
+                  <span className="young-serif gradient-text">Divinely</span>{" "}
+                  <span className="text-secondary-900">Visualized</span>
+                </span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-700 mb-6">
+                The world has enough ordinary sermon slides. <span className="font-semibold text-secondary-700">Yours should be extraordinary</span> — in just 120 seconds.
+              </p>
+              <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl">
+                You didn't answer the call to ministry to spend hours wrestling with design software. SALT Creative transforms your sermon into captivating visuals with one click. No technical skills required. No creative team needed. <span className="font-semibold text-secondary-600">While you focus on the Word, we focus on making it seen.</span>
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/generator"
+                  className="inline-flex items-center px-8 py-4 text-lg font-bold text-white bg-secondary-900 rounded-full shadow-lg hover:bg-secondary-800 transition-all group"
+                >
+                  Create Your First Masterpiece
+                  <ArrowRight className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <button
+                  onClick={handleOpenVideo}
+                  className="inline-flex items-center px-8 py-4 text-lg font-medium text-secondary-600 hover:text-secondary-900 transition-colors group"
+                >
+                  Watch Demo Video
+                  <Play className="ml-3 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
-          </div>
 
-          {/* RIGHT: TRANSFORMATION IMAGES */}
-          <div className="w-full flex flex-col items-center">
-            {/* From Image Container */}
-            <div className="w-full max-w-xl mx-auto relative mb-12">
-              <div className="pl-32 relative">
-                {/* Salty mascot */}
+            {/* RIGHT: TRANSFORMATION IMAGES */}
+            <div className="w-full max-w-2xl mx-auto">
+              {/* From Image */}
+              <div className="relative mb-16">
                 <img
                   src={saltyImage}
                   alt=""
-                  className="absolute -left-4 top-1/2 -translate-y-1/2 w-32 h-auto z-10"
+                  className="absolute -left-8 top-1/2 -translate-y-1/2 w-24 h-auto z-10"
                 />
-                {/* From image with 3:2 aspect ratio */}
-                <div className="aspect-[3/2] w-full relative">
-                  <img
-                    src={fromImage}
-                    alt="Sermon Notes"
-                    className="w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
-                  />
-                </div>
-              </div>
-              <span className="block text-center text-base text-gray-500 mt-3 italic">
-                From this…
-              </span>
-            </div>
-
-            {/* Arrow/Divider */}
-            <div className="w-8 h-16 flex items-center justify-center mb-12">
-              <svg
-                className="w-full h-full text-secondary-200"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M16 0v54M16 54l-8-8M16 54l8-8"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-
-            {/* To Images Grid */}
-            <div className="w-full max-w-xl mx-auto grid grid-cols-2 gap-6">
-              {toImages.map((img) => (
-                <div key={img.src} className="flex flex-col items-center">
-                  <div className="aspect-[3/2] w-full relative">
+                <div className="pl-20">
+                  <div className="aspect-[3/2] w-full">
                     <img
-                      src={img.src}
-                      alt={img.label}
-                      className="w-full h-full object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
+                      src={fromImage}
+                      alt="Sermon Notes"
+                      className="w-full h-full object-cover rounded-xl shadow-xl border-4 border-white"
                     />
                   </div>
-                  <span className="text-sm text-gray-500 mt-3 italic">
-                    {img.label}
-                  </span>
                 </div>
-              ))}
+                <p className="text-center text-base text-gray-500 mt-4 italic">
+                  From this…
+                </p>
+              </div>
+
+              {/* Arrow */}
+              <div className="flex justify-center mb-16">
+                <svg
+                  className="w-8 h-16 text-secondary-200"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M16 0v54M16 54l-8-8M16 54l8-8"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
+
+              {/* To Images Grid */}
+              <div className="grid grid-cols-2 gap-6">
+                {toImages.map((img) => (
+                  <div key={img.src} className="flex flex-col items-center">
+                    <div className="aspect-[3/2] w-full">
+                      <img
+                        src={img.src}
+                        alt={img.label}
+                        className="w-full h-full object-cover rounded-xl shadow-lg border-2 border-white transition-transform hover:scale-105"
+                      />
+                    </div>
+                    <p className="text-sm text-gray-500 mt-3 italic">
+                      {img.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

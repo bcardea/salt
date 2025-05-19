@@ -210,6 +210,7 @@ export async function generateSermonArt(
           prompt: finalPrompt,
           size: "1536x1024",
           quality: "high",
+          moderation: "low",
           n: 1
         })
       : await openai.images.generate({
@@ -217,6 +218,7 @@ export async function generateSermonArt(
           prompt: finalPrompt,
           size: "1536x1024",
           quality: "high",
+          moderation: "low",
           n: 1
         });
 

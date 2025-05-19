@@ -112,8 +112,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682bb92bf08c4628785c8f5e.jpeg",
   referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682bb92bf08c4628785c8f5e.jpeg"
 },
- 
-z {
+ {
     id: "folded-paper-minimal",
     title: "Folded Paper Minimal",
     description: "Neutral folded-paper minimal design",

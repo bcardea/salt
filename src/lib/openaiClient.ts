@@ -29,7 +29,7 @@ export const analyzeSermonInput = async (input: string): Promise<SermonAnalysis>
   const openai = getOpenAIClient();
   
   const response = await openai.chat.completions.create({
-    model: "gpt-4o-mini-2024-07-18",
+    model: "o4-mini-2025-04-16",
     messages: [
       {
         role: "system",

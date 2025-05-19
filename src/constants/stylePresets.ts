@@ -4,7 +4,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   {
   id: "luminous-dove",
   title: "Luminous Dove",
-  description: "Ethereal worship art with luminous fibers, radiant dove, and monumental Didone typography",
+  description: "Ethereal worship art with monumental Didone typography",
   categories: ["ethereal", "worship", "modern", "light", "editorial", "christian"],
   promptModifiers: `{
     "scene": "ethereal worship graphic fusing luminous flowing-fiber motifs with a radiant dove silhouette and monumental Didone typography reading \\"{sermon_title}\\"",

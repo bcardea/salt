@@ -2,6 +2,124 @@ import { StylePreset } from '../services/imageGeneration';
 
 export const STYLE_PRESETS: StylePreset[] = [
   {
+  id: "fathers-day-3d",
+  title: "Father's Day 3D",
+  description: "Playful, balloon-style 3D Father's Day design with classic hat and mustache, festive accents, and a crisp modern vibe.",
+  categories: ["3d", "holiday", "father's day", "playful", "balloon", "modern", "celebratory"],
+  promptModifiers: `{
+    "scene": "A playful, three-dimensional Father's Day greeting composed of glossy blue balloon-style letters spelling '{sermon_title}', decorated with a classic bowler hat, a shiny black mustache, and a scattering of celebratory elements against a soft blue background.",
+    "image_dimensions": "1536x1024",
+    "aspect_ratio": "3:2 landscape",
+    "composition": "The central focus is the large, extruded balloon letters '{sermon_title}', centered horizontally and positioned just above the vertical midpoint. The top of the middle letter is capped with a 3D bowler hat, and a large black mustache is centered under the crossbar of the central letter, visually 'wearing' the mustache. Around the word, floating in the foreground and background, are decorative elements: metallic gold and white stars, glossy streamers, and abstract shapes. The phrase '{sermon_topic}' appears in crisp, dark blue sans-serif capitals below the main composition, centered horizontally.",
+    "color_palette": {
+      "background_blue": "#d4e4ed",
+      "balloon_light_blue": "#65a9db",
+      "balloon_dark_blue": "#2473a6",
+      "mustache_black": "#181d31",
+      "hat_navy": "#32425b",
+      "hat_gold_band": "#f8c55a",
+      "star_gold": "#c0a75a",
+      "star_white": "#f4f4f4",
+      "accent_mint": "#7ed2c5",
+      "accent_teal": "#38b2be",
+      "accent_dark_blue": "#2e4a67",
+      "text_navy": "#23355c"
+    },
+    "lighting": "Soft, high-key studio lighting with gentle falloff. Subtle reflections and highlights define the glossy, inflatable look of the balloon letters and accessories. Each 3D element has smooth, realistic shadowing and specular highlights, adding depth and volume.",
+    "mood": "Festive, cheerful, and whimsical—conveying a sense of celebration and warmth for Father’s Day. The playful colors and cartoon-like forms evoke joy and a family-friendly vibe.",
+    "texture": [
+      "Smooth, high-gloss plastic for the balloon letters and 3D accents",
+      "Metallic shine on gold stars and hat band",
+      "Matte, slightly fuzzy finish on mustache",
+      "Soft, diffused background with faint shadows beneath the main elements"
+    ],
+    "background": {
+      "elements": [
+        "Solid pale blue background with a hint of vignette for gentle depth",
+        "No visible seams, gradients, or patterns aside from subtle soft shadowing around central objects"
+      ],
+      "depth_of_field": "Mild, all elements in crisp focus except slight background blur on distant accents"
+    },
+    "subjects": [
+      {
+        "type": "balloon_letters",
+        "description": "'{sermon_title}' in uppercase balloon-style lettering; thick, rounded, and extruded with a smooth, reflective finish. The letters are colored in light-to-mid blue with subtle highlights and shadow gradients, giving a semi-transparent, air-filled look.",
+        "position": "center"
+      },
+      {
+        "type": "hat",
+        "description": "Classic bowler hat resting on the top of the central letter, rendered in matte navy blue with a shiny gold band around the crown. The hat casts a soft shadow on the balloon below.",
+        "position": "center, top of middle letter"
+      },
+      {
+        "type": "mustache",
+        "description": "Large, curved, glossy black mustache with exaggerated handlebar tips, positioned to look as if it’s attached to the central letter. High-gloss highlights give it a stylized, playful effect.",
+        "position": "center, below crossbar of central letter"
+      }
+    ],
+    "graphic_elements": [
+      {
+        "type": "star_gold",
+        "description": "Three-dimensional, rounded, metallic gold star, four-pointed with extruded center. Two placed to the left of the word, one to the right.",
+        "positions": ["left-top", "left-center", "right-bottom"]
+      },
+      {
+        "type": "star_white",
+        "description": "Matte white, puffy four-pointed star, placed above the hat on the right.",
+        "positions": ["right-top"]
+      },
+      {
+        "type": "streamer_blue",
+        "description": "Curved, shiny blue 3D streamer, with reflective highlights, positioned top-left and bottom-center.",
+        "positions": ["top-left", "bottom-center"]
+      },
+      {
+        "type": "streamer_mint",
+        "description": "Matte mint-green, twisted streamer shape placed lower left and upper right.",
+        "positions": ["lower-left", "upper-right"]
+      },
+      {
+        "type": "starburst_teal",
+        "description": "Small, six-pointed, teal burst resembling a stylized flower or asterisk, placed to the right of the first letter.",
+        "positions": ["right"]
+      },
+      {
+        "type": "round_pearl",
+        "description": "Small, white, glossy pearl ball, adding extra 3D effect, positioned lower right of the composition.",
+        "positions": ["lower-right"]
+      }
+    ],
+    "typography": {
+      "title": {
+        "text": "{sermon_title}",
+        "font": "Custom 3D balloon style (not standard)",
+        "weight": "extra bold, inflated",
+        "size": "extra large, main focus",
+        "color": "light blue with deep blue shadows and specular white highlights",
+        "position": "center"
+      },
+      "subtitle": {
+        "text": "{sermon_topic}",
+        "font": "Geometric sans-serif, spaced capitals",
+        "weight": "medium",
+        "size": "small, label",
+        "color": "text_navy",
+        "letter_spacing": "very wide",
+        "position": "centered horizontally, below main objects"
+      }
+    },
+    "style": "3D rendered illustration, merging playful toy-like forms with a modern, minimal studio backdrop. The design is influenced by balloon sculpture, children’s party decor, and classic Father's Day icons (mustache, hat). Colors are saturated yet soothing, and every element is rendered with cartoon-like exaggeration.",
+    "post_processing": [
+      "Subtle vignette around the background perimeter for focus",
+      "Gentle drop shadows below all 3D objects to enhance depth",
+      "High-gloss, ray-traced reflections for realism on balloon letters, mustache, and stars",
+      "Slight color grading to boost contrast and keep the scene light and bright"
+    ]
+  }`,
+  previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682bbf7619f31d05a0c540f3.jpeg",
+  referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682bbf7619f31d05a0c540f3.jpeg"
+},
+  {
   id: "luminous-dove",
   title: "Luminous Dove",
   description: "Ethereal worship art with monumental Didone typography",

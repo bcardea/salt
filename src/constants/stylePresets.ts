@@ -1,7 +1,119 @@
 import { StylePreset } from '../services/imageGeneration';
 
 export const STYLE_PRESETS: StylePreset[] = [
-   {
+  {
+  id: "luminous-dove",
+  title: "Luminous Dove",
+  description: "Ethereal worship art with luminous fibers, radiant dove, and monumental Didone typography",
+  categories: ["ethereal", "worship", "modern", "light", "editorial", "christian"],
+  promptModifiers: `{
+    "scene": "ethereal worship graphic fusing luminous flowing-fiber motifs with a radiant dove silhouette and monumental Didone typography reading \\"{sermon_title}\\"",
+    "image_dimensions": "1536×1024",
+    "aspect_ratio": "3:2 landscape",
+    "style": [
+      "contemporary Christian worship art",
+      "long-exposure light-painting wisps rendered with volumetric depth",
+      "iridescent foil-stamp letterforms (subtle RGB shift)",
+      "film-grain & low-contrast Kodak Ektachrome palette"
+    ],
+    "color_palette": {
+      "midnight_black": "#0b0f14",
+      "azure_flame": "#1e7ad7",
+      "electric_cyan": "#35baff",
+      "ember_orange": "#f47b4a",
+      "iridescent_silver": "#d8e1e0",
+      "grain_speck": "#2d2d2d"
+    },
+    "background": {
+      "base_fill": "midnight_black",
+      "light_fiber_field": {
+        "color_gradient": ["azure_flame", "electric_cyan"],
+        "secondary_burn": "ember_orange (10% fringe)",
+        "stroke_width_px": 4,
+        "motion_blur_px": 12,
+        "turbulence_noise_seed": 42,
+        "density_pct": 70,
+        "flow_map": "sinusoidal swirl emanating from dove center",
+        "blend_mode": "screen"
+      },
+      "texture_overlay": {
+        "kind": "fine film grain",
+        "color": "grain_speck",
+        "opacity_pct": 8
+      }
+    },
+    "subjects": [
+      {
+        "type": "photo_cutout",
+        "description": "dove mid-flight, wings fully spread; color treated with ember orange and cyan glows; object appears light-emissive with no shadow",
+        "position": "center (52% x, 52% y)",
+        "scale": "58%"
+      },
+      {
+        "type": "typographic element",
+        "description": "{sermon_title} in monumental Didone (Didot Display) font, iridescent silver stroke with pastel foil gradient, centered over dove",
+        "position": "centered, 54% y"
+      }
+    ],
+    "graphic_elements": [
+      {
+        "type": "corner_caption_cycle",
+        "words": ["{sermon_topic}"],
+        "font": "Neo-Grotesque ExtraLight",
+        "size_px": 80,
+        "tracking_px": 12,
+        "color": "iridescent_silver",
+        "positions": [
+          { "anchor": "top_left",     "offset_px": { "x": 60,  "y": 38 } },
+          { "anchor": "top_center",   "offset_px": { "x": 0,   "y": 38 } },
+          { "anchor": "top_right",    "offset_px": { "x": -60, "y": 38 } },
+          { "anchor": "right_top",    "offset_px": { "x": -60, "y": 380 } },
+          { "anchor": "bottom_right", "offset_px": { "x": -60, "y": -38 } },
+          { "anchor": "bottom_left",  "offset_px": { "x": 60,  "y": -38 } }
+        ],
+        "blend_mode": "overlay",
+        "opacity_pct": 78
+      }
+    ],
+    "typography": {
+      "hierarchy": [
+        {
+          "text": "{sermon_title}",
+          "font": "Didot Display / Modern Didone",
+          "weight": "bold",
+          "size": "monumental",
+          "color": "iridescent_silver",
+          "letter_spacing": "wide",
+          "case": "uppercase",
+          "position": "centered"
+        }
+      ],
+      "footer": {
+        "text": "{sermon_topic}",
+        "font": "Neo-Grotesque ExtraLight",
+        "weight": "regular",
+        "size": "small",
+        "color": "iridescent_silver",
+        "letter_spacing": "wide",
+        "position": "corner cycle"
+      }
+    },
+    "post_processing": [
+      "add 9% blue channel chromatic aberration on outer 8% frame",
+      "soft bloom on highlights (threshold 0.85, radius 12)",
+      "very subtle vignette: −4% brightness at corners"
+    ],
+    "export_settings": {
+      "format": "PNG",
+      "compression": "lossless",
+      "color_profile": "sRGB"
+    }
+  }`,
+  previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682bb92bf08c4628785c8f5e.jpeg",
+  referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682bb92bf08c4628785c8f5e.jpeg"
+},
+ 
+z {
     id: "folded-paper-minimal",
     title: "Folded Paper Minimal",
     description: "Neutral folded-paper minimal design",

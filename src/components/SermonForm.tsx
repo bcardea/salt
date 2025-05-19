@@ -12,18 +12,21 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
   const [topic, setTopic] = useState('');
   const [sermonNotes, setSermonNotes] = useState('');
   const [isNotesMode, setIsNotesMode] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   
-  // Debounce the onSubmit callback
+  // Debounce the onSubmit callback with a longer delay
   const debouncedSubmit = useCallback(
     debounce((value: string) => {
       if (value.trim()) {
+        setIsTyping(false);
         onSubmit(value.trim());
       }
-    }, 500),
+    }, 1000),
     [onSubmit]
   );
   
   const handleInputChange = (value: string) => {
+    setIsTyping(true);
     if (isNotesMode) {
       setSermonNotes(value);
     } else {
@@ -36,6 +39,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
     e.preventDefault();
     const value = isNotesMode ? sermonNotes.trim() : topic.trim();
     if (value) {
+      setIsTyping(false);
       onSubmit(value);
     }
   };
@@ -74,8 +78,11 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
               disabled={isLoading || disabled}
               required
             />
-            <p className="mt-1 text-sm text-secondary-500">
-              Our AI will analyze your notes to create the perfect artwork concept
+            <p className="mt-1 text-sm text-secondary-500 flex items-center justify-between">
+              <span>Our AI will analyze your notes to create the perfect artwork concept</span>
+              {isTyping && (
+                <span className="text-primary-600">Processing...</span>
+              )}
             </p>
           </div>
         ) : (
@@ -94,8 +101,11 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
                 required
               />
             </div>
-            <p className="mt-1 text-sm text-secondary-500">
-              Provide details about your sermon topic, scripture reference, or key message
+            <p className="mt-1 text-sm text-secondary-500 flex items-center justify-between">
+              <span>Provide details about your sermon topic, scripture reference, or key message</span>
+              {isTyping && (
+                <span className="text-primary-600">Processing...</span>
+              )}
             </p>
           </div>
         )}

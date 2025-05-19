@@ -29,21 +29,24 @@ export const analyzeSermonInput = async (input: string): Promise<SermonAnalysis>
   const openai = getOpenAIClient();
   
   const response = await openai.chat.completions.create({
-    model: "o4-mini-2025-04-16",
+    model: "gpt-4.1-2025-04-14",
     messages: [
       {
         role: "system",
-        content: `You are an expert at analyzing sermon content. Your task is to extract or create an appropriate title and topic from the given input. For longer sermon notes, create a concise title that captures the main theme.
-
-Your response MUST be a JSON object with "title" and "topic" keys. The "title" should be a concise title for the sermon artwork, and the "topic" should be a brief description of the sermon's subject.
-
-Example:
+        content: `
+Reply ONLY with a valid JSON object in this format:
 {
   "title": "The Good Shepherd",
   "topic": "Seeking and Saving the Lost"
 }
 
-Even if you cannot determine a separate title and topic, return the input as both the title and the topic.`
+You are an expert at analyzing sermon content. Your job is to extract or create an appropriate title and topic from the given input. For longer sermon notes, create a concise title that captures the main theme.
+
+Your response must be ONLY a valid JSON object with "title" and "topic" keys, parseable by JSON.parse().
+
+Do NOT include any commentary, explanation, or extra text before or after the JSON. Only output the JSON object.
+
+If you cannot determine a separate title and topic, use the input as both title and topic.`
       },
       {
         role: "user",

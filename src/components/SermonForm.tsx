@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { BookOpen, SwitchCamera } from 'lucide-react';
+import { debounce } from '../utils/debounce';
 
 interface SermonFormProps {
   onSubmit: (topic: string) => void;
@@ -12,13 +13,15 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
   const [sermonNotes, setSermonNotes] = useState('');
   const [isNotesMode, setIsNotesMode] = useState(false);
   
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const value = isNotesMode ? sermonNotes.trim() : topic.trim();
-    if (value) {
-      onSubmit(value);
-    }
-  };
+  // Debounce the onSubmit callback
+  const debouncedSubmit = useCallback(
+    debounce((value: string) => {
+      if (value.trim()) {
+        onSubmit(value.trim());
+      }
+    }, 500),
+    [onSubmit]
+  );
   
   const handleInputChange = (value: string) => {
     if (isNotesMode) {
@@ -26,9 +29,14 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
     } else {
       setTopic(value);
     }
-    // Immediately submit the value to the parent
-    if (value.trim()) {
-      onSubmit(value.trim());
+    debouncedSubmit(value);
+  };
+  
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const value = isNotesMode ? sermonNotes.trim() : topic.trim();
+    if (value) {
+      onSubmit(value);
     }
   };
   

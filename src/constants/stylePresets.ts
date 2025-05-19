@@ -4,7 +4,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   {
   id: "fathers-day-3d",
   title: "Father's Day 3D",
-  description: "Playful, balloon-style 3D Father's Day design with classic hat and mustache, festive accents, and a crisp modern vibe.",
+  description: "Playful, balloon-style 3D Father's Day.",
   categories: ["3d", "holiday", "father's day", "playful", "balloon", "modern", "celebratory"],
   promptModifiers: `{
     "scene": "A playful, three-dimensional Father's Day greeting composed of glossy blue balloon-style letters spelling '{sermon_title}', decorated with a classic bowler hat, a shiny black mustache, and a scattering of celebratory elements against a soft blue background.",

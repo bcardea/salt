@@ -4,7 +4,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   {
   id: "fathers-day-clean",
   title: "Father's Day Clean",
-  description: "Naturalistic, heartwarming Father's Day scene in a golden wheat field, featuring modern editorial headline typography and a bright, sunlit mood.",
+  description: "Heartwarming Father's Day scene in a golden wheat field.",
   categories: ["photographic", "holiday", "father's day", "clean", "modern", "editorial", "lifestyle"],
   promptModifiers: `{
     "scene": "A naturalistic, heartwarming Father's Day celebration image featuring a father carrying his young child on his shoulders, standing in a golden wheat field under a bright blue sky. The scene radiates warmth and togetherness, with an oversized, bold white '{sermon_title}' title across the top.",

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import React, { useState } from 'react';
+import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
 import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
 import { analyzeSermonInput } from '../lib/openaiClient';
@@ -11,8 +11,11 @@ import PromptEditor from '../components/PromptEditor';
 import StylePresetCarousel from '../components/StylePresetCarousel';
 import { useCredits } from '../hooks/useCredits';
 
-const GeneratorPage: React.FC = () => {
-  const [session, setSession] = useState(null);
+interface GeneratorPageProps {
+  session: Session | null;
+}
+
+const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const [rawInput, setRawInput] = useState('');
   const [sermon_title, setSermonTitle] = useState('');
   const [sermon_topic, setSermonTopic] = useState('');
@@ -23,20 +26,6 @@ const GeneratorPage: React.FC = () => {
   const [status, setStatus] = useState<'idle' | 'analyzing' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
   const { credits, loading: creditsLoading } = useCredits();
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
 
   const saveToLibrary = async (imageUrl: string) => {
     try {
@@ -122,7 +111,6 @@ const GeneratorPage: React.FC = () => {
     setError('');
     setStatus('generating-image');
     try {
-      // Convert the edited summary back to a full prompt
       const updatedFullPrompt = await convertSummaryToPrompt(
         promptSummary,
         sermon_title,
@@ -131,7 +119,6 @@ const GeneratorPage: React.FC = () => {
       );
       setFullPrompt(updatedFullPrompt);
 
-      // Attempt to decrement credits first
       const { data: decrementResult, error: decrementError } = await supabase
         .rpc('decrement_credits', { user_id: session.user.id });
 
@@ -161,7 +148,6 @@ const GeneratorPage: React.FC = () => {
       setSermonTopic(analysis.topic);
     } catch (e) {
       console.error('Error analyzing input:', e);
-      // Fallback to using the raw input for both title and topic
       setSermonTitle(value);
       setSermonTopic(value);
     } finally {
@@ -207,7 +193,6 @@ const GeneratorPage: React.FC = () => {
         </div>
 
         <div className="card p-6 max-w-3xl mx-auto">
-          {/* Step 1: Enter Sermon Details */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 1: Enter Your Sermon Details</h2>
             <SermonForm
@@ -217,7 +202,6 @@ const GeneratorPage: React.FC = () => {
             />
           </div>
 
-          {/* Step 2: Choose Style */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 2: Choose Your Style</h2>
             <StylePresetCarousel
@@ -228,7 +212,6 @@ const GeneratorPage: React.FC = () => {
             />
           </div>
 
-          {/* Step 3: Generate Concept */}
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4">Step 3: Generate Your Concept</h2>
             <button
@@ -252,7 +235,6 @@ const GeneratorPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Step 4: Review and Edit Concept */}
           {promptSummary && (
             <div className="mb-8">
               <h2 className="text-xl font-semibold mb-4">Step 4: Review and Customize</h2>
@@ -274,14 +256,12 @@ const GeneratorPage: React.FC = () => {
             </div>
           )}
 
-          {/* Error Display */}
           {error && (
             <div className="mb-6 p-3 bg-red-50 border border-red-200 text-red-700 rounded-md">
               {error}
             </div>
           )}
 
-          {/* Image Display */}
           <div className="rounded-lg overflow-hidden border border-secondary-200">
             <ImageDisplay
               imageUrl={imgSrc || ''}

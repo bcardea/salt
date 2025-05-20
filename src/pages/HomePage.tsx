@@ -1,8 +1,11 @@
-import React from 'react';
-// (Assuming any required imports like Link, useState, etc., are already handled above)
+import React, { useState } from 'react';
+import { VideoModal } from '../components/VideoModal';
 
 const HomePage: React.FC = () => {
-  // (If there's state or handlers for the demo video, assume they're defined above, e.g., showDemoVideo)
+  const [showDemo, setShowDemo] = useState(false);
+  
+  const showDemoVideo = () => setShowDemo(true);
+
   return (
     <div className="homepage">
       {/* Hero Section: clear value proposition and primary CTA */}
@@ -62,6 +65,8 @@ const HomePage: React.FC = () => {
           </button>
         </section>
       </main>
+
+      <VideoModal isOpen={showDemo} onClose={() => setShowDemo(false)} />
     </div>
   );
 };

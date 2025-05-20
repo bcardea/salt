@@ -7,5 +7,15 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  envPrefix: ['VITE_'] // Changed to use standard Vite env prefix
+  envPrefix: ['VITE_'], // Changed to use standard Vite env prefix
+  build: {
+    outDir: 'dist',
+    // Copy the _redirects file to the build output
+    rollupOptions: {
+      input: {
+        main: './index.html',
+      },
+    },
+    copyPublicDir: true,
+  },
 });

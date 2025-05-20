@@ -75,3 +75,5 @@ const Header: React.FC<HeaderProps> = ({ session }) => {
     </header>
   );
 };
+
+export default Header

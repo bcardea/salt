@@ -40,3 +40,5 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUr
     </div>
   );
 };
+
+export default VideoModal

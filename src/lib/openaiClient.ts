@@ -36,17 +36,31 @@ export const analyzeSermonInput = async (input: string): Promise<SermonAnalysis>
         content: `
 Reply ONLY with a valid JSON object in this format:
 {
-  "title": "The Good Shepherd",
-  "topic": "Seeking and Saving the Lost"
+  "title": "Come Get Prayer",
+  "topic": "Wednesday at 7pm"
 }
 
-You are an expert at analyzing sermon content. Your job is to extract or create an appropriate title and topic from the given input. For longer sermon notes, create a concise title that captures the main theme.
+You are an expert at analyzing sermon content. Your job is to extract or create an appropriate title and topic from the given input. If the input includes a time, date, location, or event details (e.g. "Wednesday at 7pm" or "Main Sanctuary"), use the first part as the title and treat the time/date/etc as the topic. For longer sermon notes, create a concise title that captures the main theme.
 
-Your response must be ONLY a valid JSON object with "title" and "topic" keys, parseable by JSON.parse().
+Only ever reply with a valid JSON object containing just these two keys: "title" and "topic". Never add any explanation, commentary, or text before or after the JSON. The response must be a JSON object that can be parsed directly by JSON.parse().
 
-Do NOT include any commentary, explanation, or extra text before or after the JSON. Only output the JSON object.
+Here are some examples:
 
-If you cannot determine a separate title and topic, use the input as both title and topic.`
+Input: "Come Get Prayer: Wednesday Night at 7pm"  
+Output: { "title": "Come Get Prayer", "topic": "Wednesday Night at 7pm" }
+
+Input: "For God So Loved You - A Study on John 3:16"  
+Output: { "title": "For God So Loved You", "topic": "A Study on John 3:16" }
+
+Input: "Youth Worship Night, Friday at 6pm in Main Hall"  
+Output: { "title": "Youth Worship Night", "topic": "Friday at 6pm in Main Hall" }
+
+Input: "Faith That Moves Mountains (Matthew 17:20)"  
+Output: { "title": "Faith That Moves Mountains", "topic": "Matthew 17:20" }
+
+If you cannot determine a separate title and topic, use the input as both title and topic.
+
+Never return anything except the JSON object.`
       },
       {
         role: "user",

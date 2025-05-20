@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
+import { supabase } from '../lib/supabase';
 import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
 import { analyzeSermonInput } from '../lib/openaiClient';
 import { STYLE_PRESETS } from '../constants/stylePresets';

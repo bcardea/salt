@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { KeyRound } from 'lucide-react';
 
@@ -9,18 +9,20 @@ const ResetPasswordPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const type = searchParams.get('type');
-    const token = searchParams.get('token');
+    // Parse the hash fragment
+    const params = new URLSearchParams(location.hash.replace('#', ''));
+    const type = params.get('type');
+    const accessToken = params.get('access_token');
 
     // Only allow access if we have a recovery token
-    if (!token || type !== 'recovery') {
+    if (!accessToken || type !== 'recovery') {
       navigate('/');
     }
-  }, [searchParams, navigate]);
+  }, [location, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,18 +41,7 @@ const ResetPasswordPage: React.FC = () => {
     setLoading(true);
 
     try {
-      // Get the token from the URL
-      const token = searchParams.get('token');
-      
-      // First verify the recovery token
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        token: token!,
-        type: 'recovery'
-      });
-
-      if (verifyError) throw verifyError;
-
-      // Then update the password
+      // Update the user's password
       const { error: updateError } = await supabase.auth.updateUser({
         password: password
       });

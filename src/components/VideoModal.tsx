@@ -7,7 +7,7 @@ interface VideoModalProps {
   videoUrl: string;
 }
 
-const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUrl }) => {
+export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUrl }) => {
   if (!isOpen) return null;
 
   return (
@@ -40,5 +40,3 @@ const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUrl }) =>
     </div>
   );
 };
-
-export default VideoModal;

@@ -7,6 +7,7 @@ import GeneratorPage from './pages/GeneratorPage';
 import LibraryPage from './pages/LibraryPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
 import { ApiKeyProvider } from './context/ApiKeyContext';
 import VideoModal from './components/VideoModal';
 
@@ -29,6 +30,7 @@ function App() {
             <Route path="/library" element={<LibraryPage />} />
             <Route path="/terms" element={<TermsPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
           </Routes>
         </main>
         <Footer onWatchDemo={handleOpenVideo} />
@@ -42,4 +44,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

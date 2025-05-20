@@ -101,7 +101,6 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col md:flex-row-reverse gap-12 lg:gap-16 items-center">
             {/* RIGHT: TRANSFORMATION IMAGES */}
             <div className="w-full max-w-xl mx-auto md:mx-0 md:w-1/2">
-              {/* From Image */}
               <div className="relative mb-10">
                 <img
                   src={saltyImage}
@@ -122,7 +121,6 @@ const HomePage: React.FC = () => {
                 </p>
               </div>
 
-              {/* Arrow */}
               <div className="flex justify-center mb-10">
                 <svg
                   className="w-10 h-20 text-secondary-400"
@@ -139,7 +137,6 @@ const HomePage: React.FC = () => {
                 </svg>
               </div>
 
-              {/* To Images Grid */}
               <div className="grid grid-cols-2 gap-5 md:gap-6">
                 {toImages.map((img) => (
                   <div
@@ -172,18 +169,21 @@ const HomePage: React.FC = () => {
               </h1>
 
               <p className="text-lg md:text-xl text-gray-700 mb-4 leading-relaxed">
+                The world has enough ordinary sermon slides.{" "}
                 <span className="font-semibold text-secondary-700">
-                  Extraordinary sermon and ministry graphics
+                  Yours should be extraordinary
                 </span>{" "}
-                created in just <strong>2&nbsp;minutes</strong>—no design
-                skills, no creative team, no stress.
+                — created in just <strong>120 seconds</strong>.
               </p>
 
               <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl leading-relaxed">
-                Spend less time wrestling with design software and more time
-                shepherding your people. SALT transforms your sermon notes into
-                stunning visuals with a single click—so you can focus on the
-                Word while we make it seen.
+                You didn’t answer the call to ministry to spend hours wrestling
+                with design software. SALT Creative transforms your sermon into
+                captivating visuals with a single click. No technical skills
+                required. No creative team needed.{" "}
+                <span className="font-semibold text-secondary-600">
+                  While you focus on the Word, we focus on making it seen.
+                </span>
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 items-center">
@@ -214,18 +214,22 @@ const HomePage: React.FC = () => {
             More Time for Ministry, Less Time on Graphics
           </h2>
           <p className="text-lg text-secondary-700 max-w-3xl mx-auto leading-relaxed mb-4">
-            SALT Creative is your on-demand design team. In a few clicks, craft
-            beautiful visuals without the cost, wait, or learning curve of
-            traditional design tools.
+            We know you’re juggling sermons, events, and caring for your
+            congregation. That’s why SALT Creative is built for busy church
+            leaders—within a few clicks you can craft beautiful visuals and get
+            back to what matters most.
           </p>
           <p className="text-lg text-secondary-700 max-w-3xl mx-auto leading-relaxed">
-            The result? <strong>Polished, modern graphics</strong> that engage
-            your congregation—created by <em>you</em> in minutes.
+            Using SALT feels like having a professional design team at your side
+            whenever you need it—without the high costs or long wait. The
+            result? <strong>Polished, modern graphics</strong> that engage your
+            audience, created by <em>you</em> in minutes <em>and without the
+            stress</em>.
           </p>
         </div>
       </section>
 
-      {/* Ministry Use Cases Section */}
+      {/* Ministry Use Cases */}
       <section className="px-4 md:px-8 lg:px-16 py-16 md:py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 md:mb-20">
@@ -317,7 +321,7 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Final CTA Section */}
+      {/* Final CTA */}
       <section className="px-4 md:px-8 lg:px-16 py-16 md:py-20 bg-white">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-6">

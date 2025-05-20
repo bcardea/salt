@@ -1,26 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { LogOut } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { Session } from '@supabase/supabase-js';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  session: Session | null;
+}
+
+const Header: React.FC<HeaderProps> = ({ session }) => {
   const location = useLocation();
-  const [session, setSession] = useState(null);
   
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
@@ -85,5 +75,3 @@ const Header: React.FC = () => {
     </header>
   );
 };
-
-export default Header;

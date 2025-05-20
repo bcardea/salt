@@ -9,18 +9,27 @@ const ResetPasswordPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [canShowForm, setCanShowForm] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        navigate('/');
-      }
-    };
-    
-    checkSession();
-  }, [navigate]);
+    const { data: listener } = supabase.auth.onAuthStateChange((_evt, session) => {
+      if (session) setCanShowForm(true);
+    });
+
+    // also check once on mount
+    supabase.auth.getSession().then(({ data }) => setCanShowForm(!!data.session));
+
+    return () => listener?.subscription.unsubscribe();
+  }, []);
+
+  if (!canShowForm) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-secondary-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

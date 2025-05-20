@@ -47,7 +47,7 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`
+        redirectTo: 'https://usesaltcreative.com/reset-password'
       });
 
       if (error) throw error;

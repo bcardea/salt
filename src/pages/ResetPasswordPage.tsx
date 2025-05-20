@@ -13,8 +13,11 @@ const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if we have a token in the URL
-    if (!searchParams.get('token')) {
+    const type = searchParams.get('type');
+    const token = searchParams.get('token');
+
+    // Only allow access if we have a recovery token
+    if (!token || type !== 'recovery') {
       navigate('/');
     }
   }, [searchParams, navigate]);
@@ -36,11 +39,23 @@ const ResetPasswordPage: React.FC = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.updateUser({
+      // Get the token from the URL
+      const token = searchParams.get('token');
+      
+      // First verify the recovery token
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        token: token!,
+        type: 'recovery'
+      });
+
+      if (verifyError) throw verifyError;
+
+      // Then update the password
+      const { error: updateError } = await supabase.auth.updateUser({
         password: password
       });
 
-      if (error) throw error;
+      if (updateError) throw updateError;
 
       setSuccess(true);
       setTimeout(() => {

@@ -3,68 +3,84 @@ import { BookOpen, SwitchCamera } from 'lucide-react';
 import { debounce } from '../utils/debounce';
 
 interface SermonFormProps {
-  onSubmit: (topic: string) => void;
+  onSubmit: (data: { title: string; topic: string }) => void;
   isLoading: boolean;
   disabled?: boolean;
 }
 
 const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }) => {
+  const [title, setTitle] = useState('');
   const [topic, setTopic] = useState('');
   const [sermonNotes, setSermonNotes] = useState('');
   const [isNotesMode, setIsNotesMode] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   
-  // Debounce the onSubmit callback with a longer delay
+  // Debounce the onSubmit callback
   const debouncedSubmit = useCallback(
-    debounce((value: string) => {
-      if (value.trim()) {
+    debounce((data: { title: string; topic: string }) => {
+      if (data.title.trim() || data.topic.trim()) {
         setIsTyping(false);
-        onSubmit(value.trim());
+        onSubmit(data);
       }
     }, 1000),
     [onSubmit]
   );
   
-  const handleInputChange = (value: string) => {
+  const handleInputChange = (value: string, type: 'title' | 'topic' | 'notes') => {
     setIsTyping(true);
-    if (isNotesMode) {
+    
+    if (type === 'notes') {
       setSermonNotes(value);
+      debouncedSubmit({ title: value, topic: value });
+    } else if (type === 'title') {
+      setTitle(value);
+      debouncedSubmit({ title: value, topic });
     } else {
       setTopic(value);
+      debouncedSubmit({ title, topic: value });
     }
-    debouncedSubmit(value);
   };
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const value = isNotesMode ? sermonNotes.trim() : topic.trim();
-    if (value) {
-      setIsTyping(false);
-      onSubmit(value);
+    setIsTyping(false);
+    
+    if (isNotesMode) {
+      const value = sermonNotes.trim();
+      if (value) {
+        onSubmit({ title: value, topic: value });
+      }
+    } else {
+      const titleValue = title.trim();
+      const topicValue = topic.trim();
+      if (titleValue || topicValue) {
+        onSubmit({ title: titleValue, topic: topicValue });
+      }
     }
+  };
+  
+  const handleSwitchMode = () => {
+    setIsNotesMode(!isNotesMode);
+    setTitle('');
+    setTopic('');
+    setSermonNotes('');
+    onSubmit({ title: '', topic: '' });
   };
   
   return (
     <div>
       <div className="mb-6">
         <div className="flex items-center justify-between mb-4">
-          <label 
-            className="block text-sm font-medium text-secondary-800"
-          >
-            {isNotesMode ? 'Sermon Notes' : 'Sermon Topic or Scripture'}
+          <label className="block text-sm font-medium text-secondary-800">
+            {isNotesMode ? 'Sermon Notes' : 'Sermon Details'}
           </label>
           <button
             type="button"
-            onClick={() => {
-              setIsNotesMode(!isNotesMode);
-              setTopic('');
-              setSermonNotes('');
-              onSubmit(''); // Clear the parent's input value
-            }}
+            onClick={handleSwitchMode}
             className="flex items-center text-sm text-secondary-600 hover:text-secondary-900 transition-colors"
           >
             <SwitchCamera className="h-4 w-4 mr-1" />
-            Switch to {isNotesMode ? 'Quick Topic' : 'Full Notes'}
+            Switch to {isNotesMode ? 'Quick Entry' : 'Full Notes'}
           </button>
         </div>
         
@@ -74,7 +90,7 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
               className="input-field font-mono text-sm min-h-[200px]"
               placeholder="Paste your full sermon notes here..."
               value={sermonNotes}
-              onChange={(e) => handleInputChange(e.target.value)}
+              onChange={(e) => handleInputChange(e.target.value, 'notes')}
               disabled={isLoading || disabled}
               required
             />
@@ -86,23 +102,42 @@ const SermonForm: React.FC<SermonFormProps> = ({ onSubmit, isLoading, disabled }
             </p>
           </div>
         ) : (
-          <div>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <BookOpen className="h-5 w-5 text-secondary-400" />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-secondary-700 mb-1">
+                Sermon Title
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <BookOpen className="h-5 w-5 text-secondary-400" />
+                </div>
+                <input
+                  type="text"
+                  className="input-field pl-10"
+                  placeholder="e.g., The Prodigal Son"
+                  value={title}
+                  onChange={(e) => handleInputChange(e.target.value, 'title')}
+                  disabled={isLoading || disabled}
+                />
               </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-secondary-700 mb-1">
+                Topic or Subtitle
+              </label>
               <input
                 type="text"
-                className="input-field pl-10"
-                placeholder="e.g., The Prodigal Son, John 3:16, God's Grace..."
+                className="input-field"
+                placeholder="e.g., A story of God's unconditional love and forgiveness"
                 value={topic}
-                onChange={(e) => handleInputChange(e.target.value)}
+                onChange={(e) => handleInputChange(e.target.value, 'topic')}
                 disabled={isLoading || disabled}
-                required
               />
             </div>
-            <p className="mt-1 text-sm text-secondary-500 flex items-center justify-between">
-              <span>Provide details about your sermon topic, scripture reference, or key message</span>
+            
+            <p className="text-sm text-secondary-500 flex items-center justify-between">
+              <span>Enter your sermon title and topic to create custom artwork</span>
               {isTyping && (
                 <span className="text-primary-600">Processing...</span>
               )}

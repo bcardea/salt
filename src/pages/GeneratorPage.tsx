@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
 import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
-import { analyzeSermonInput } from '../lib/openaiClient';
 import { STYLE_PRESETS } from '../constants/stylePresets';
 import ImageDisplay from '../components/ImageDisplay';
 import SermonForm from '../components/SermonForm';
@@ -10,13 +9,13 @@ import CreditDisplay from '../components/CreditDisplay';
 import PromptEditor from '../components/PromptEditor';
 import StylePresetCarousel from '../components/StylePresetCarousel';
 import { useCredits } from '../hooks/useCredits';
+import { supabase } from '../lib/supabase';
 
 interface GeneratorPageProps {
   session: Session | null;
 }
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
-  const [rawInput, setRawInput] = useState('');
   const [sermon_title, setSermonTitle] = useState('');
   const [sermon_topic, setSermonTopic] = useState('');
   const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
@@ -138,21 +137,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     }
   };
 
-  const handleInputChange = async (value: string) => {
-    setRawInput(value);
-    setStatus('analyzing');
-    
-    try {
-      const analysis = await analyzeSermonInput(value);
-      setSermonTitle(analysis.title);
-      setSermonTopic(analysis.topic);
-    } catch (e) {
-      console.error('Error analyzing input:', e);
-      setSermonTitle(value);
-      setSermonTopic(value);
-    } finally {
-      setStatus('idle');
-    }
+  const handleInputChange = (data: { title: string; topic: string }) => {
+    setSermonTitle(data.title);
+    setSermonTopic(data.topic);
+    setStatus('idle');
   };
 
   if (!session) {

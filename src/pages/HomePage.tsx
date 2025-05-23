@@ -85,7 +85,7 @@ const ministryUsesCases = [
 ];
 
 const DEMO_VIDEO_URL =
-  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/682b7349aea9c626efc2e702.mp4";
+  "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6825fdd739adaa074fde36eb.mp4";
 
 const HomePage: React.FC = () => {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -138,9 +138,9 @@ const HomePage: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-5 md:gap-6">
-                {toImages.map((img) => (
+                {toImages.map((img, index) => (
                   <div
-                    key={img.src}
+                    key={index}
                     className="flex flex-col items-center group"
                   >
                     <div className="aspect-[3/2] w-full">
@@ -177,7 +177,7 @@ const HomePage: React.FC = () => {
               </p>
 
               <p className="mb-8 text-base md:text-lg text-gray-600 max-w-xl leading-relaxed">
-                You didn’t answer the call to ministry to spend hours wrestling
+                You didn't answer the call to ministry to spend hours wrestling
                 with design software. SALT Creative transforms your sermon into
                 captivating visuals with a single click. No technical skills
                 required. No creative team needed.{" "}
@@ -214,8 +214,8 @@ const HomePage: React.FC = () => {
             More Time for Ministry, Less Time on Graphics
           </h2>
           <p className="text-lg text-secondary-700 max-w-3xl mx-auto leading-relaxed mb-4">
-            We know you’re juggling sermons, events, and caring for your
-            congregation. That’s why SALT Creative is built for busy church
+            We know you're juggling sermons, events, and caring for your
+            congregation. That's why SALT Creative is built for busy church
             leaders—within a few clicks you can craft beautiful visuals and get
             back to what matters most.
           </p>
@@ -250,7 +250,7 @@ const HomePage: React.FC = () => {
                 className={
                   useCase.chat
                     ? "bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 flex flex-col"
-                    : "bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group border border-transparent hover:border-secondary-100 flex flex-col"
+                    : "feature-card"
                 }
               >
                 {useCase.chat ? (
@@ -268,7 +268,7 @@ const HomePage: React.FC = () => {
                           <div
                             className={`max-w-[90%] rounded-xl px-4 py-3 text-sm sm:text-base shadow-sm ${
                               message.role === "response"
-                                ? "bg-blue-500 text-white rounded-br-lg"
+                                ? "bg-secondary-900 text-white rounded-br-lg"
                                 : "bg-gray-200 text-gray-800 rounded-bl-lg"
                             }`}
                           >
@@ -328,7 +328,7 @@ const HomePage: React.FC = () => {
             Ready to Get Started?
           </h2>
           <p className="text-lg text-secondary-700 max-w-2xl mx-auto leading-relaxed mb-8">
-            You’re minutes away from your next show-stopping graphic. Empower
+            You're minutes away from your next show-stopping graphic. Empower
             your ministry with stress-free, stunning visuals—no design
             experience required.
           </p>

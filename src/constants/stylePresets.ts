@@ -2,6 +2,108 @@ import { StylePreset } from '../services/imageGeneration';
 
 export const STYLE_PRESETS: StylePreset[] = [
   {
+  id: "Minimal_Stones",
+  title: "Minimal Stones",
+  description: "Editorial minimalism meets sacred illustration with stone cairn metaphor.",
+  categories: ["minimalist", "sacred", "photorealistic", "stone", "typographic", "modern", "sermon series"],
+  promptModifiers: `{
+    "scene": "A minimalist, modern sermon series slide featuring a balanced stack of rough, photorealistic stones at the center, with bold, contrasting typography overlaying a large speech bubble, all set on a soft gray paper-textured background.",
+    "image_dimensions": "1536x1024",
+    "aspect_ratio": "3:2",
+    "composition": "The visual structure is horizontally centered and slightly bottom-weighted. A realistic, grayscale stone cairn (stacked rocks) sits upright in the bottom center, its base just above a soft, elliptical shadow. Above and behind the cairn, the phrase '{sermon_title}' is split between three typographic styles: 'WHEN' is simple and small, 'stones' is large and italicized in serif, and 'speak' is bold modern sans-serif, placed inside a tan speech bubble graphic that overlaps the word 'stones.' The speech bubble is right-aligned, balancing the visual weight. Lower right, the Bible reference '{sermon_topic}' appears in clean, geometric sans-serif.",
+    "color_palette": {
+      "background_gray": "#e4e4e4",
+      "speech_bubble_tan": "#c7beb4",
+      "stone_dark_gray": "#3a3838",
+      "stone_light_gray": "#c2bdb9",
+      "text_black": "#2e2929",
+      "branding_gray": "#b7b0a7"
+    },
+    "lighting": "Soft, diffused ambient light throughout, with very gentle shadowing beneath the stone cairn for grounding. Stones are shaded realistically, with subtle texture and natural gradients for a tactile, 3D effect.",
+    "mood": "Contemplative, calm, and dignified—evoking a sense of memory, legacy, and storytelling. The restrained palette and elegant typography create a thoughtful and serious tone appropriate for scriptural reflection.",
+    "texture": [
+      "Fine, subtle paper grain overlay across the whole canvas",
+      "Natural, rough surface detail on each stone in the cairn",
+      "Crisp, vector-smooth edges on text and the speech bubble"
+    ],
+    "background": {
+      "elements": [
+        "Solid pale gray field with faint visible fibers and a soft mottled paper texture, slightly lighter in the center for visual focus"
+      ],
+      "depth_of_field": "All elements in sharp, even focus"
+    },
+    "subjects": [
+      {
+        "type": "stone_cairn",
+        "description": "A carefully stacked tower of 8 rough-edged, irregular stones in grayscale, realistically lit and shaded. The cairn stands upright and vertically centered, with each stone balanced naturally on the next. The bottom stone is widest, and the stack narrows toward the top.",
+        "position": "center-bottom",
+        "shadow": "soft oval shadow directly below the lowest stone"
+      }
+    ],
+    "graphic_elements": [
+      {
+        "type": "speech_bubble",
+        "description": "Large, rounded-corner rectangular speech bubble in tan, horizontally stretched. The bubble's tail points subtly to the right, placed behind the word 'speak' so the text is fully contained within the bubble. The speech bubble overlaps the last letters of 'stones' and extends toward the upper right of the slide.",
+        "position": "top-right quadrant, behind text"
+      }
+    ],
+    "typography": {
+      "hierarchy": [
+        {
+          "text": "WHEN",
+          "font": "Modern geometric sans-serif (e.g., Gotham Book)",
+          "weight": "regular",
+          "size": "medium-small",
+          "color": "text_black",
+          "letter_spacing": "wide",
+          "case": "uppercase",
+          "position": "upper left, above 'stones'"
+        },
+        {
+          "text": "stones",
+          "font": "Classic high-contrast italic serif (e.g., Didot Italic, Playfair Display Italic)",
+          "weight": "bold",
+          "size": "extra large",
+          "color": "text_black",
+          "letter_spacing": "tight",
+          "case": "lowercase",
+          "position": "centered, overlapping left half of speech bubble"
+        },
+        {
+          "text": "speak",
+          "font": "Modern bold sans-serif (e.g., Gotham Black, Proxima Nova Bold)",
+          "weight": "heavy",
+          "size": "large",
+          "color": "text_black",
+          "letter_spacing": "normal",
+          "case": "lowercase",
+          "position": "center-right, inside speech bubble"
+        },
+        {
+          "text": "{sermon_topic}",
+          "font": "Modern geometric sans-serif (e.g., Gotham Medium, Montserrat)",
+          "weight": "medium",
+          "size": "medium",
+          "color": "text_black",
+          "letter_spacing": "normal",
+          "case": "uppercase",
+          "position": "lower right, to the right of the cairn"
+        }
+      ]
+    },
+    "style": "Editorial minimalism meets sacred illustration: combines high-contrast serif and modern sans-serif in a refined, magazine-like layout with real photographic stone imagery for visual gravity. The speech bubble is a contemporary, flat vector shape, grounding the spiritual metaphor in the language of modern communication.",
+    "post_processing": [
+      "Overall matte finish; slight vignette for focus",
+      "Texture overlay for subtle tactile depth",
+      "Stone cairn given realistic cast and core shadow to ground it on the page",
+      "No gradients or color fades in text; all type is flat and sharp"
+    ]
+  }`,
+  previewUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/683083f502f9435eb29c4e71.jpeg",
+  referenceUrl: "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/683083f502f9435eb29c4e71.jpeg"
+},
+
+  {
   id: "fathers-day-3d",
   title: "Father's Day 3D",
   description: "Playful, balloon-style 3D Father's Day.",

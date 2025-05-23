@@ -21,7 +21,7 @@ const Header: React.FC<HeaderProps> = ({ session }) => {
         <div className="flex justify-between items-center py-6">
           <Link to="/" className="flex items-center">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6823ca4c265ab54a423ecbb6.png"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6830d6176126fb5dc2343645.png"
               alt="SALT Creative"
               className="h-12 w-auto"
             />

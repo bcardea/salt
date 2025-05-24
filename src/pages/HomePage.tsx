@@ -148,16 +148,19 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
 
         <div className="relative z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 sm:pt-40 pt-52">
+            {/* 2-minute badge */}
+            <div className="mb-8 sm:mb-12">
+              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EFD9A0]/30 to-[#F5F5DC] border border-[#EFD9A0] rounded-full px-4 py-2">
+                <Zap className="w-4 h-4 text-[#345A7C]" />
+                <span className="text-sm font-semibold text-[#345A7C]">Create stunning visuals in under 2 minutes</span>
+                <Sparkles className="w-4 h-4 text-[#345A7C]" />
+              </div>
+            </div>
+
             {/* Hero Content */}
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Left Column - Text */}
               <div className="space-y-8 lg:pr-8">
-                {/* 2-minute badge */}
-                <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EFD9A0]/30 to-[#F5F5DC] border border-[#EFD9A0] rounded-full px-4 py-2">
-                  <Zap className="w-4 h-4 text-[#345A7C]" />
-                  <span className="text-sm font-semibold text-[#345A7C]">Create stunning visuals in under 2 minutes</span>
-                  <Sparkles className="w-4 h-4 text-[#345A7C]" />
-                </div>
 
                 <div>
                   <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
@@ -292,14 +295,14 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
                     <span className="text-sm font-bold text-[#345A7C]">Check out these real examples made with SALT!</span>
                   </div>
                   
-                  <div className="absolute -bottom-6 -left-6 bg-white rounded-xl shadow-xl p-4 border border-gray-100">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-gradient-to-br from-[#345A7C] to-[#A1C1D7] rounded-lg flex items-center justify-center text-white">
-                        <Sparkles className="w-5 h-5" />
+                  <div className="absolute bottom-4 sm:-bottom-6 left-4 sm:-left-6 bg-white rounded-xl shadow-xl p-3 sm:p-4 border border-gray-100 max-w-[200px] sm:max-w-none">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-[#345A7C] to-[#A1C1D7] rounded-lg flex items-center justify-center text-white">
+                        <Sparkles className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold text-gray-900">AI-Powered</p>
-                        <p className="text-xs text-gray-600">Sermon Art created in seconds!</p>
+                        <p className="text-xs sm:text-sm font-bold text-gray-900">AI-Powered</p>
+                        <p className="text-[10px] sm:text-xs text-gray-600 leading-tight">Sermon Art created in seconds!</p>
                       </div>
                     </div>
                   </div>

@@ -32,20 +32,20 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
       isScrolled ? 'bg-white/70 backdrop-blur-sm border-b border-[#A1C1D7]/10' : ''
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center pt-4 pb-6">
+        <div className="flex flex-col items-center pt-4 pb-4 sm:pb-6">
           {/* Logo */}
-          <Link to="/" className="mb-6">
+          <Link to="/" className="mb-4 sm:mb-6">
             <img 
               src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6830d6176126fb5dc2343645.png"
               alt="SALT Creative"
-              className="h-12 w-auto"
+              className="h-10 sm:h-12 w-auto"
             />
           </Link>
           
           {/* Navigation */}
-          <div className="flex items-center justify-between w-full max-w-4xl">
+          <div className="flex flex-col sm:flex-row items-center w-full max-w-4xl gap-4 sm:gap-0 relative">
             {/* Left side - Main nav links */}
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-6 sm:gap-8 order-1">
               <Link 
                 to="/" 
                 className={`text-sm font-semibold transition-all duration-300 hover:scale-105 ${
@@ -81,13 +81,13 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
             </div>
 
             {/* Right side - Role toggle and auth */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-6 order-2 sm:ml-auto">
               {/* Role Toggle - Only show on homepage */}
               {location.pathname === '/' && onRoleChange && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-1 rounded-full p-1.5 shadow-xl border border-[#A1C1D7]/20">
+                <div className="sm:absolute sm:left-1/2 sm:transform sm:-translate-x-1/2 flex items-center gap-1 rounded-full p-1 sm:p-1.5 shadow-xl border border-[#A1C1D7]/20">
                   <button
                     onClick={() => onRoleChange('pastor')}
-                    className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                    className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
                       currentRole === 'pastor' 
                         ? 'bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white shadow-lg transform scale-105' 
                         : 'text-[#345A7C] hover:text-[#345A7C] hover:bg-white/30'
@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
                   </button>
                   <button
                     onClick={() => onRoleChange('staff')}
-                    className={`px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 ${
+                    className={`px-3 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
                       currentRole === 'staff' 
                         ? 'bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white shadow-lg transform scale-105' 
                         : 'text-[#345A7C] hover:text-[#345A7C] hover:bg-white/30'

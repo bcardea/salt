@@ -63,8 +63,8 @@ const LibraryPage: React.FC = () => {
 
   if (loading && page === 0) {
     return (
-      <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
+      <div className="min-h-screen pt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
               <div key={i} className="animate-pulse">
@@ -80,8 +80,8 @@ const LibraryPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 animate-fade-in">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen pt-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-secondary-900 mb-4">
             Your Artwork Library

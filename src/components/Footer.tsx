@@ -47,7 +47,7 @@ const Footer: React.FC = () => {
                 href="mailto:salt-support@usebeanstalk.com"
                 className="text-white hover:text-secondary-200 transition-colors"
               >
-                salt-support@usebeanstalk.com
+                support@usesaltcreative.com
               </a>
             </p>
           </div>

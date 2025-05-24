@@ -18,6 +18,7 @@ function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [session, setSession] = useState(null);
+  const [currentRole, setCurrentRole] = useState<'pastor' | 'staff'>('pastor');
 
   useEffect(() => {
     // Initial session check
@@ -42,27 +43,37 @@ function App() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-500"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#345A7C]"></div>
       </div>
     );
   }
 
   return (
     <ApiKeyProvider>
-      <div className="flex flex-col min-h-screen">
-        <Header session={session} />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/generator" element={<GeneratorPage session={session} />} />
-            <Route path="/library" element={<LibraryPage />} />
-            <Route path="/terms" element={<TermsPage />} />
-            <Route path="/privacy" element={<PrivacyPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />
-          </Routes>
-        </main>
-        <Footer onWatchDemo={handleOpenVideo} />
+      <div className="relative">
+        <Header 
+          session={session} 
+          currentRole={currentRole}
+          onRoleChange={setCurrentRole}
+        />
+        <Routes>
+          <Route 
+            path="/" 
+            element={
+              <HomePage 
+                currentRole={currentRole}
+                onOpenVideo={handleOpenVideo}
+              />
+            } 
+          />
+          <Route path="/generator" element={<GeneratorPage session={session} />} />
+          <Route path="/library" element={<LibraryPage session={session} />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+        </Routes>
+        <Footer />
         <VideoModal
           isOpen={isVideoModalOpen}
           onClose={handleCloseVideo}

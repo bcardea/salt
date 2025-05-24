@@ -2,33 +2,37 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      'sans': ['Lato', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      'heading': ['Nunito', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+    },
     extend: {
       colors: {
-        background: '#f1f1ee',
-        text: '#231f20',
+        background: '#F5F5F7', // Light blue-tinted white instead of beige
+        text: '#7F8C8D', // Neutral Grey
         primary: {
-          50: '#fdf8f6',
-          100: '#f2e8e5',
-          200: '#eaddd7',
-          300: '#e0cec7',
-          400: '#d2bab0',
-          500: '#bfa094',
-          600: '#a18072',
-          700: '#977669',
-          800: '#846358',
-          900: '#43302b',
+          50: '#EAF0F5',
+          100: '#D5E1EB',
+          200: '#BFD3E1',
+          300: '#A1C1D7', // Accent Light Blue
+          400: '#83AEC8',
+          500: '#6699BA',
+          600: '#4983AB',
+          700: '#3D7095',
+          800: '#345A7C', // Primary Dark Blue
+          900: '#294764',
         },
         secondary: {
-          50: '#f8f8f7',
-          100: '#f1f1ee',
-          200: '#e8e8e4',
-          300: '#d4d4cc',
-          400: '#a3a39b',
-          500: '#82827a',
-          600: '#656560',
-          700: '#4d4d49',
-          800: '#363633',
-          900: '#231f20',
+          50: '#F0F7FC',
+          100: '#E1EFF9',
+          200: '#C3DFF3',
+          300: '#A5CFED',
+          400: '#87BFE7',
+          500: '#69AFE1', // Accent Blue
+          600: '#4B9FDB',
+          700: '#2D8FD5',
+          800: '#1F7FBF',
+          900: '#166FA9',
           950: '#1a1718',
         },
         accent: {

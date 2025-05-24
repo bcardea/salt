@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import QuoteRequestForm from '../components/QuoteRequestForm';
 import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
+
 import { supabase } from '../lib/supabase';
 import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
 import { analyzeSermonInput } from '../lib/openaiClient';
@@ -24,8 +26,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const [fullPrompt, setFullPrompt] = useState('');
   const [promptSummary, setPromptSummary] = useState('');
   const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [status, setStatus] = useState<'idle' | 'analyzing' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
+  const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
   const [error, setError] = useState('');
+  const [isQuoteFormOpen, setIsQuoteFormOpen] = useState(false);
   const { credits, loading: creditsLoading } = useCredits();
 
   const saveToLibrary = async (imageUrl: string) => {
@@ -141,7 +144,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
   const handleInputChange = async (value: string) => {
     setRawInput(value);
-    setStatus('analyzing');
+    setStatus('generating-prompt');
     
     try {
       const analysis = await analyzeSermonInput(value);
@@ -158,18 +161,44 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
   if (!session) {
     return (
-      <div className="min-h-screen pt-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-secondary-900 mb-4">
-              Sign In to Create Artwork
-            </h1>
-            <p className="text-lg text-secondary-600">
-              Create an account or sign in to start generating sermon artwork
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center pt-36 md:pt-40 pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-8">Flexible Annual Pricing Built for Every Church</h2>
+          
+          <p className="text-base md:text-xl text-gray-600 mb-8 md:mb-12 max-w-3xl mx-auto">
+            At SALT Creative, we believe every pastor deserves beautiful, impactful sermon art—regardless of church size or budget. 
+            Our annual licensing is tailored specifically to your church's congregation size, allowing us to offer significantly 
+            reduced pricing for smaller, newer churches.
+          </p>
+
+          <div className="bg-white p-6 md:p-12 rounded-xl shadow-lg mb-12 md:mb-16">
+            <h3 className="text-xl md:text-2xl font-semibold text-gray-900 mb-4 md:mb-6">Ready to Get Started?</h3>
+            <p className="text-sm md:text-base text-gray-600 mb-8 md:mb-10 max-w-2xl mx-auto">
+              Click below to get your personalized quote for an annual license.
+              <br className="hidden md:block" />
+              <span className="block mt-2 md:mt-3">
+                Are you a startup or brand-new church? Apply today for discounted—or even sponsored—membership through our SALT Sponsorship Initiative.
+              </span>
             </p>
+
+            <button
+              onClick={() => setIsQuoteFormOpen(true)}
+              className="inline-flex items-center justify-center px-6 md:px-10 py-3 md:py-5 text-base md:text-lg font-semibold rounded-full text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5"
+            >
+              Get Your Quote
+            </button>
           </div>
-          <Auth onSuccess={() => setStatus('idle')} />
+
+          <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-200">
+            <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">Already have an account?</h3>
+            <Auth />
+          </div>
         </div>
+
+        <QuoteRequestForm
+          isOpen={isQuoteFormOpen}
+          onClose={() => setIsQuoteFormOpen(false)}
+        />
       </div>
     );
   }

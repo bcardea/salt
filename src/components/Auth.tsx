@@ -15,10 +15,6 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   const [showForm, setShowForm] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
 
-  const handleShowForm = () => {
-    setShowForm(true);
-  };
-
   const handleCloseForm = () => {
     setShowForm(false);
   };
@@ -179,21 +175,10 @@ const Auth: React.FC<AuthProps> = ({ onSuccess }) => {
   return (
     <div className="w-full max-w-md mx-auto p-6">
       <div className="text-center mb-8">
-        <p className="text-secondary-600 mb-6">
-          SALT Creative is currently in beta and only accepting new accounts by private invite. 
-          If you're interested in using Salt,{' '}
-          <button 
-            onClick={handleShowForm}
-            className="text-primary-600 hover:text-primary-700 font-medium"
-          >
-            Click Here
-          </button>
-          {' '}to schedule a time for us to speak with you and to learn more about using Salt.
-        </p>
-        <h2 className="text-2xl font-bold text-secondary-900">
+        <h2 className="text-2xl font-bold text-secondary-900 mb-2">
           {mode === 'signin' ? 'Welcome Back' : 'Create Your Account'}
         </h2>
-        <p className="mt-2 text-secondary-600">
+        <p className="text-secondary-600">
           {mode === 'signin' 
             ? 'Sign in to create your sermon artwork' 
             : 'Sign up to start creating sermon artwork'}

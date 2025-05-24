@@ -121,7 +121,7 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
                   to="/generator"
                   className="inline-flex items-center px-6 py-2 text-sm font-semibold rounded-full text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
                 >
-                  Get Started
+                  Start Creating Today!
                   <ChevronRight className="ml-1 w-4 h-4" />
                 </Link>
               )}

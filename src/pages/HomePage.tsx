@@ -189,7 +189,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
                     to="/generator" 
                     className="group inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-full text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5"
                   >
-                    Start Creating Free
+                    Start Creating Today!
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <button 

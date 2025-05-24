@@ -70,8 +70,8 @@ const staffGalleryImages = [
 
 const copyData = {
   pastor: {
-    heroTitle: "Beautiful Ministry Graphics in Seconds",
-    heroSubtitle: "Transform your message with authentic visuals that connect with your community.",
+    heroTitle: "Stunning Sermon Art in Seconds",
+    heroSubtitle: "Last-minute sermon change? No problem. Create beautiful graphics instantly—even on Saturday night.",
     problemTitle: "We Know Your Challenges",
     problemPoints: [
       { icon: Clock, title: "Time is Precious", description: "Hours lost trying to design visuals from scratch" },

@@ -130,7 +130,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
   return (
     <div className="min-h-screen pt-64 sm:pt-64 pt-80">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-[#F5F5DC] via-white to-[#A1C1D7]/20 min-h-screen -mt-64 sm:-mt-64 -mt-80">
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#F5F5DC] via-white to-[#A1C1D7]/20 -mt-64 sm:-mt-64 -mt-80 pb-20 sm:pb-24 lg:pb-28 xl:pb-32">
         {/* Animated background */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-[#345A7C] to-[#A1C1D7] rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
@@ -314,7 +314,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
       </section>
 
       {/* Problem Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-12 md:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white -mt-12 lg:-mt-8 xl:-mt-12">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h3 className="text-4xl font-heading font-bold text-gray-900">{copy.problemTitle}</h3>

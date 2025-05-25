@@ -32,12 +32,21 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
       isScrolled ? 'bg-white/70 backdrop-blur-sm border-b border-[#A1C1D7]/10' : ''
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center pt-4 pb-4 sm:pb-6">
-          {/* Logo */}
-          <Link to="/" className="mb-4 sm:mb-6">
+        <div className="flex flex-col items-center pt-4 pb-4 sm:pb-6 relative">
+          {/* Left Logo */}
+          <Link to="/" className="absolute left-0 top-1/2 -translate-y-1/2">
             <img 
-              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6830d6176126fb5dc2343645.png"
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68326088cc104c3c0fe8f8ce.png"
               alt="SALT Creative"
+              className="h-16 sm:h-24 w-auto"
+            />
+          </Link>
+          
+          {/* Center Icon Logo */}
+          <Link to="/" className="">
+            <img 
+              src="https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6832608843ed4d90d1f50f75.png"
+              alt="SALT Creative Icon"
               className="h-10 sm:h-12 w-auto"
             />
           </Link>

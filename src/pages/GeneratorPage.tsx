@@ -16,6 +16,7 @@ import { useCredits } from '../hooks/useCredits';
 // New component imports
 import EnhancedStyleSelector from '../components/EnhancedStyleSelector';
 import GenerationProgress from '../components/GenerationProgress';
+import ConceptProgress from '../components/ConceptProgress';
 import StepIndicator from '../components/StepIndicator';
 import AnimatedSection from '../components/AnimatedSection';
 
@@ -117,6 +118,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
     setError('');
     setStatus('generating-prompt');
+    setGenerationStartTime(Date.now());
     
     try {
       const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
@@ -126,10 +128,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       );
       setFullPrompt(generatedPrompt);
       setPromptSummary(summary);
+
+      // After concept is generated, scroll to the concept section
+      setTimeout(() => {
+        const conceptSection = document.querySelector('#concept-section');
+        if (conceptSection) {
+          conceptSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
     } catch (e) {
       setError((e as Error).message);
     } finally {
       setStatus('idle');
+      setGenerationStartTime(null);
     }
   };
 
@@ -185,7 +196,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const handleInputChange = async (value: string) => {
     setRawInput(value);
     setIsAnalyzing(true);
-    setStatus('generating-prompt');
     
     try {
       const analysis = await analyzeSermonInput(value);
@@ -196,7 +206,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       setSermonTitle(value);
       setSermonTopic(value);
     } finally {
-      setStatus('idle');
       // Add a small delay before showing styles to ensure smooth transition
       setTimeout(() => setIsAnalyzing(false), 300);
     }
@@ -248,17 +257,27 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     );
   }
 
-  // Show full-screen generation progress when generating image
-  if (status === 'generating-image') {
+  // Show full-screen loading states
+  if (status === 'generating-image' || status === 'generating-prompt') {
     return (
-      <GenerationProgress
-        startTime={generationStartTime!}
-        sermonTitle={sermon_title}
-        stylePreset={selectedStyle}
-      />
+      <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+        {status === 'generating-prompt' ? (
+          <ConceptProgress
+            startTime={generationStartTime || Date.now()}
+            sermonTitle={rawInput.split('\n')[0] || 'your sermon'}
+          />
+        ) : (
+          <GenerationProgress
+            startTime={generationStartTime!}
+            sermonTitle={sermon_title}
+            stylePreset={selectedStyle}
+          />
+        )}
+      </div>
     );
   }
 
+  // Main generator page content
   return (
     <div className="min-h-screen pt-32 pb-16 bg-gradient-to-b from-gray-50 to-white w-full">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -347,17 +366,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                       status !== 'idle' || !sermon_topic.trim() || !selectedStyle || !credits?.credits_remaining ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   >
-                    {status === 'generating-prompt' ? (
-                      <span className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Creating Your Concept...
-                      </span>
-                    ) : (
-                      'Generate Sermon Art Concept'
-                    )}
+                    {status !== 'idle' ? 'Creating Your Concept...' : 'Generate Sermon Art Concept'}
                   </button>
                 </div>
               </div>
@@ -367,7 +376,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
           {/* Step 4: Review and Customize */}
           {promptSummary && (
             <AnimatedSection delay={0.4}>
-              <div className={`mb-8 transition-all duration-500 ${currentStep >= 4 ? 'opacity-100' : 'opacity-50'}`}>
+              <div id="concept-section" className={`mb-8 transition-all duration-500 ${currentStep >= 4 ? 'opacity-100' : 'opacity-50'}`}>
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-300 hover:shadow-md">
                   <div className="flex items-center mb-6">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white flex items-center justify-center font-semibold mr-4">

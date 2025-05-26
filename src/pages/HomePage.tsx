@@ -377,7 +377,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#EFD9A0]/30 to-[#F5F5DC] border border-[#EFD9A0] rounded-full px-6 py-3 mb-8">
             <CheckCircle className="w-5 h-5 text-[#345A7C]" />
-            <span className="text-sm font-bold text-[#345A7C]">Free to start • No credit card required</span>
+            <span className="text-sm font-bold text-[#345A7C]">Free Onboarding & Training Included!</span>
           </div>
           
           <h3 className="text-5xl font-heading font-bold text-gray-900 mb-6 leading-tight">

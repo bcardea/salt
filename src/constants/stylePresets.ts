@@ -2,10 +2,1046 @@ import { StylePreset } from '../services/imageGeneration';
 
 export const STYLE_PRESETS: StylePreset[] = [
   {
+    "id": "JoyfulHearts_RetroPop",
+    "title": "Joyful Hearts Retro Pop",
+    "description": "Bold retro title card with spacey comic vibes, 3D block text on a star-studded black blob over a magenta backdrop.",
+    "categories": ["kids", "retro", "comic", "space", "bold", "typographic"],
+    "promptModifiers": `{
+      "scene": "Retro-pop title card set against a vibrant magenta backdrop. A big amorphous black blob floats centre-stage, ringed by white cartoon clouds and sparkly space glyphs. Sitting on the blob is bold 3-D block lettering that now reads “{sermon_title},” rendered in alternating cyan faces and orange sides with sunny-yellow top planes. Small starbursts and a striped planet icon add extra comic-book flair. A small tagline below reads: “{sermon_topic}.”",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2 landscape",
+      "style": [
+        "1970s Psychedelic Saturday AM graphic",
+        "flat cel-shaded 3-D extruded text",
+        "high-contrast complementary palette (purple / teal / orange)",
+        "smooth vector shapes with subtle grain overlay",
+        "tiny star, circle, and planet accents for playful depth"
+      ],
+      "color_palette": {
+        "backdrop_purple": "#9623A5",
+        "blob_black": "#0B0B0B",
+        "cloud_white": "#F2F2F2",
+        "face_cyan": "#05B5C6",
+        "side_orange": "#FF5A34",
+        "top_yellow": "#FCD03A",
+        "shadow_magenta": "#8D1F92",
+        "spark_white": "#FFFFFF",
+        "planet_teal": "#00888A",
+        "planet_magenta": "#DE327F"
+      },
+      "background": {
+        "fill": "backdrop_purple",
+        "texture_overlay": {
+          "kind": "fine speckle grain",
+          "opacity_pct": 6
+        }
+      },
+      "elements": [
+        {
+          "type": "shape",
+          "shape": "ink-blot cloud",
+          "fill_color": "blob_black",
+          "position_pct": { "x": 50, "y": 50 },
+          "size_pct": { "width": 78, "height": 60 },
+          "layering": "behind text, in front of backdrop"
+        },
+        {
+          "type": "group",
+          "description": "smooth white cloud bands sliced through blob",
+          "instances": 3,
+          "fill_color": "cloud_white",
+          "size_pct": [
+            { "width": 45, "height": 12 },
+            { "width": 62, "height": 14 },
+            { "width": 53, "height": 13 }
+          ],
+          "positions_pct": [
+            { "x": 32, "y": 35 },
+            { "x": 66, "y": 47 },
+            { "x": 29, "y": 71 }
+          ],
+          "rotation_deg": [-5, 3, -4],
+          "layering": "in front of blob, behind text"
+        },
+        {
+          "type": "multiline_text",
+          "lines": [
+            { "text": "{sermon_title}", "baseline_pct": 58 }
+          ],
+          "font": "bold geometric sans (e.g., 'Fredoka One')",
+          "size_px": 340,
+          "weight": "900",
+          "case": "uppercase",
+          "style": "normal",
+          "tracking_px": -8,
+          "extrusion": {
+            "depth_px": 18,
+            "direction_deg": 225,
+            "front_face_color": "face_cyan",
+            "side_color": "side_orange",
+            "top_color": "top_yellow",
+            "shadow_color": "shadow_magenta"
+          },
+          "inner_stroke": {
+            "color": "blob_black",
+            "width_px": 4
+          },
+          "position_pct": { "x": 50, "y": 58 },
+          "alignment": "center",
+          "layering": "frontmost"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_topic}",
+          "font": "rounded geometric sans",
+          "size_px": 80,
+          "weight": "700",
+          "case": "uppercase",
+          "color": "cloud_white",
+          "alignment": "center",
+          "position_pct": { "x": 50, "y": 84 },
+          "layering": "front"
+        },
+        {
+          "type": "scatter_icons",
+          "icons": [
+            { "kind": "spark", "size_px": 34, "color": "spark_white", "x_pct": 57, "y_pct": 30 },
+            { "kind": "spark", "size_px": 40, "color": "spark_white", "x_pct": 64, "y_pct": 54 },
+            { "kind": "spark", "size_px": 26, "color": "spark_white", "x_pct": 41, "y_pct": 62 },
+            { "kind": "circle", "size_px": 10, "color": "spark_white", "x_pct": 59, "y_pct": 40 },
+            { "kind": "circle", "size_px": 12, "color": "spark_white", "x_pct": 33, "y_pct": 55 }
+          ],
+          "layering": "front of blob, behind clouds if overlapping"
+        },
+        {
+          "type": "shape",
+          "shape": "circle",
+          "fill_color": "planet_teal",
+          "diameter_px": 64,
+          "stroke": {
+            "color": "planet_magenta",
+            "width_px": 6
+          },
+          "inner_lines": {
+            "horizontal_bar_color": "planet_magenta",
+            "vertical_bar_color": "planet_magenta"
+          },
+          "position_pct": { "x": 82, "y": 58 },
+          "layering": "above cloud, behind big text tail"
+        }
+      ],
+      "post_processing": [
+        "global 2 % RGB noise",
+        "apply −3 % vignette on extreme edges",
+        "subtle 1-px chroma shift (cyan +x, magenta −x) on text extrusion for print vibe"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68349ab6af0e81a56a28ec02.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68349ab6af0e81a56a28ec02.jpeg"
+  },
+  
+  {
+    "id": "GoodShepherd_KidsPasture",
+    "title": "Good Shepherd Kids Pasture",
+    "description": "Peaceful kids illustration of a shepherd and sheep in a stylized sunrise pasture, with playful headline and gouache textures.",
+    "categories": ["kids", "pastoral", "shepherd", "flat illustration", "mid-century", "gouache"],
+    "promptModifiers": `{
+      "scene": "Whimsical kids-series poster depicting a peaceful pasture at sunrise: fluffy sheep graze in the foreground while a robed shepherd with a red crook stands at the right. Rolling indigo hills recede toward a stylised mountain silhouette, and a turquoise sky is dotted with flat cloud puffs and a golden sun. The playful headline reads “{sermon_title},” with the word *GOOD* in a friendly script and *SHEPHERD* in large blocky caps. All artwork shares a hand-painted gouache texture and light halftone grain.",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2 landscape",
+      "style": [
+        "mid-century picture-book illustration",
+        "rough-edge acrylic brush fills with subtle paper grain",
+        "simple geometric shapes with halftone shading",
+        "cheerful pastel-meets-sunset palette",
+        "extra-large friendly headline typography"
+      ],
+      "color_palette": {
+        "sky_teal": "#34ADD1",
+        "sky_mid": "#2393B7",
+        "sky_deep": "#05647E",
+        "hill_dark": "#0B264A",
+        "hill_mid": "#3B4893",
+        "hill_light": "#6173C4",
+        "sheep_fleece": "#FFD7D2",
+        "sheep_pink": "#FFA1A5",
+        "sheep_shadow": "#F45F73",
+        "shepherd_robe": "#FFC628",
+        "shepherd_sash": "#F53F48",
+        "shepherd_head": "#18294F",
+        "crook_red": "#FF6150",
+        "sun_yellow": "#FFC32E",
+        "cloud_white": "#E5F6FA",
+        "title_white": "#FFFFFF",
+        "title_script": "#FFC32E"
+      },
+      "background": {
+        "fill": "sky_teal",
+        "texture": {
+          "kind": "subtle crumpled-paper grain",
+          "opacity_pct": 14
+        }
+      },
+      "elements": [
+        {
+          "type": "shape",
+          "shape": "circle",
+          "fill_color": "sun_yellow",
+          "diameter_px": 90,
+          "position_pct": { "x": 15, "y": 14 },
+          "layering": "behind clouds"
+        },
+        {
+          "type": "group",
+          "description": "flat rounded cloud puffs",
+          "instances": 7,
+          "size_px": [140, 80, 105, 95, 110, 75, 60],
+          "fill_color": "cloud_white",
+          "positions_pct": [
+            { "x": 25, "y": 23 }, { "x": 50, "y": 15 }, { "x": 71, "y": 21 },
+            { "x": 87, "y": 30 }, { "x": 12, "y": 46 },
+            { "x": 42, "y": 44 }, { "x": 83, "y": 43 }
+          ],
+          "layering": "behind headline"
+        },
+        {
+          "type": "vector_layer",
+          "description": "overlapping indigo-purple hills with soft gouache edges",
+          "colors": ["hill_light", "hill_mid", "hill_dark"],
+          "position_pct": { "x": 50, "y": 53 },
+          "size_pct": { "width": 90, "height": 42 },
+          "layering": "behind sheep and shepherd"
+        },
+        {
+          "type": "text",
+          "content": "A GOOD",
+          "font": "friendly brush script (e.g., 'Pacifico')",
+          "size_px": 140,
+          "weight": "700",
+          "case": "title",
+          "color": "title_script",
+          "position_pct": { "x": 52, "y": 27 },
+          "alignment": "center",
+          "layering": "front of clouds, behind block word"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_title}",
+          "font": "chunky kids display (e.g., 'Luckiest Guy')",
+          "size_px": 280,
+          "weight": "900",
+          "case": "uppercase",
+          "color": "title_white",
+          "tracking_px": 2,
+          "position_pct": { "x": 50, "y": 53 },
+          "alignment": "center",
+          "layering": "frontmost",
+          "texture_overlay": {
+            "kind": "subtle speckled dry-brush gaps",
+            "opacity_pct": 10
+          }
+        },
+        {
+          "type": "illustration",
+          "subject": "stylised shepherd standing front-right holding red crook",
+          "color_map": {
+            "robe": "shepherd_robe",
+            "head_scarf": "shepherd_head",
+            "sash": "shepherd_sash",
+            "crook": "crook_red"
+          },
+          "position_pct": { "x": 89, "y": 69 },
+          "scale_pct": 26,
+          "layering": "in front of hills, behind title"
+        },
+        {
+          "type": "group",
+          "description": "cartoon sheep with pink fleece and darker shading",
+          "instances": 7,
+          "colors": {
+            "body": "sheep_fleece",
+            "shadow": "sheep_shadow",
+            "accent": "sheep_pink"
+          },
+          "size_px": [170, 140, 120, 110, 100, 130, 150],
+          "positions_pct": [
+            { "x": 12, "y": 68 }, { "x": 29, "y": 76 }, { "x": 44, "y": 70 },
+            { "x": 59, "y": 83 }, { "x": 75, "y": 69 }, { "x": 18, "y": 87 },
+            { "x": 82, "y": 87 }
+          ],
+          "layering": "front of hills, behind title"
+        },
+        {
+          "type": "group",
+          "description": "simple pointed conifer silhouettes",
+          "instances": 4,
+          "fill_color": "hill_mid",
+          "size_px": [130, 115, 100, 90],
+          "positions_pct": [
+            { "x": 70, "y": 65 }, { "x": 73, "y": 68 },
+            { "x": 27, "y": 64 }, { "x": 30, "y": 67 }
+          ],
+          "layering": "behind sheep, in front of hills"
+        }
+      ],
+      "post_processing": [
+        "apply 3 % film-grain noise over entire canvas",
+        "slight vignette −4 % at outer 6 % frame to draw eye inward",
+        "tiny chromatic offset [+0.5 px red, −0.5 px blue] on block title for print charm"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/683498aee238fd32aa180748.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/683498aee238fd32aa180748.jpeg"
+  },
+  
+  {
+    "id": "WalkInFaith_KidsHike",
+    "title": "Walk In Faith Kids Hike",
+    "description": "Retro book-style kids poster showing a young hiker following a glowing path toward distant peaks, with bold brush text and trust-themed messaging.",
+    "categories": ["kids", "pastoral", "shepherd", "flat illustration", "mid-century", "gouache"],
+    "promptModifiers": `{
+      "scene": "Playful flat-illustration poster that shows a lone hiker gazing toward distant teal mountains while a glowing golden path curls forward. Big brush-lettered words now read “{sermon_title}”, with a smaller “IN” tucked between. A crisp sans-serif footer taglines the series as “{sermon_topic}”. All art keeps the original gouache-paper texture and halftone shading.",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2 landscape",
+      "style": [
+        "mid-century children’s book illustration",
+        "rough-edge acrylic brush typography in hot orange-red",
+        "halftone grain shading on landscape shapes",
+        "soft crumpled-paper background texture",
+        "cheerful adventure palette with sunny highlight path"
+      ],
+      "color_palette": {
+        "sky_blue": "#7BC3CF",
+        "mountain_teal": "#0C5461",
+        "mountain_mid": "#155F70",
+        "mountain_light": "#1C7287",
+        "snow_white": "#FFFFFF",
+        "sun_yellow": "#FCC32D",
+        "path_glow": "#EAD25E",
+        "water_blue": "#008BBE",
+        "grass_cyan": "#1098B2",
+        "tree_dark": "#083845",
+        "tree_mid": "#0D4F5F",
+        "tree_light": "#197183",
+        "hiker_pants": "#FFEFEB",
+        "hiker_hair": "#C06D34",
+        "hiker_shirt": "#62B1A6",
+        "hiker_pack": "#0C5E46",
+        "title_red": "#F74623",
+        "title_orange": "#FF8B1F",
+        "title_edge": "#FFDB4C",
+        "highlight_white": "#FFFFFF"
+      },
+      "background": {
+        "fill": "sky_blue",
+        "paper_texture": {
+          "kind": "subtle crumple / fibrous grain",
+          "opacity_pct": 12
+        }
+      },
+      "elements": [
+        {
+          "type": "shape",
+          "shape": "circle",
+          "fill_color": "sun_yellow",
+          "diameter_px": 84,
+          "position_pct": { "x": 12, "y": 11 },
+          "layering": "behind clouds"
+        },
+        {
+          "type": "group",
+          "description": "flat white cloud puffs",
+          "instances": 6,
+          "shape": "rounded polygons",
+          "fill_color": "snow_white",
+          "size_px": [140, 100, 110, 120, 90, 70],
+          "positions_pct": [
+            { "x": 28, "y": 16 }, { "x": 49, "y": 12 },
+            { "x": 62, "y": 21 }, { "x": 81, "y": 20 },
+            { "x": 71, "y": 7 },  { "x": 41, "y": 7 }
+          ],
+          "layering": "in front of sun, behind mountains"
+        },
+        {
+          "type": "vector_layer",
+          "description": "three overlapping mountain shapes with halftone shading and snow caps",
+          "colors": ["mountain_light", "mountain_mid", "mountain_teal"],
+          "snow_color": "snow_white",
+          "position_pct": { "x": 50, "y": 35 },
+          "size_pct": { "width": 90, "height": 50 },
+          "layering": "behind hiker"
+        },
+        {
+          "type": "shape",
+          "shape": "curved basin",
+          "fill_color": "water_blue",
+          "position_pct": { "x": 50, "y": 56 },
+          "size_pct": { "width": 74, "height": 22 },
+          "texture": "halftone dot 20 %",
+          "layering": "behind path glow, behind hiker"
+        },
+        {
+          "type": "group",
+          "description": "solid silhouette trees with halftone overlay",
+          "instances": 3,
+          "fill_colors": ["tree_dark", "tree_mid", "tree_light"],
+          "positions_pct": [ { "x": 83, "y": 55 }, { "x": 80, "y": 60 }, { "x": 78, "y": 63 } ],
+          "size_px": [160, 130, 110],
+          "layering": "behind hiker"
+        },
+        {
+          "type": "illustration",
+          "subject": "back-view hiker, arms akimbo, backpack on",
+          "color_map": {
+            "hair": "hiker_hair",
+            "shirt": "hiker_shirt",
+            "backpack": "hiker_pack",
+            "pants": "hiker_pants",
+            "shoes": "tree_mid"
+          },
+          "position_pct": { "x": 63, "y": 49 },
+          "scale_pct": 32,
+          "layering": "front of landscape, behind title"
+        },
+        {
+          "type": "path",
+          "description": "sinuous golden ribbon starting foreground, looping around hiker’s waist, tapering into mountains",
+          "stroke_color": "path_glow",
+          "stroke_width_px": 120,
+          "opacity_gradient": "90 % → 0 %",
+          "blur_px": 8,
+          "position_anchor": "starts at 29%/67%, loops at 63%/49%, ends ~45%/29%",
+          "layering": "between hiker and title",
+          "blend_mode": "screen"
+        },
+        {
+          "type": "multiline_text",
+          "lines": [
+            { "text": "{sermon_title}", "baseline_pct": 80 }
+          ],
+          "inter_word_gap_pct": 18,
+          "font": "rough hand-painted brush (e.g., 'Nashville Sketch')",
+          "size_px": 300,
+          "weight": "900",
+          "case": "uppercase",
+          "style": "slight back-slant",
+          "fill": {
+            "gradient": {
+              "colors": ["title_red", "title_orange"],
+              "angle_deg": 90
+            }
+          },
+          "stroke": {
+            "color": "title_edge",
+            "width_px": 8,
+            "opacity_pct": 75
+          },
+          "texture_overlay": {
+            "kind": "speckled dry-brush gaps",
+            "opacity_pct": 12
+          },
+          "position_pct": { "x": 50, "y": 78 },
+          "alignment": "center",
+          "layering": "frontmost"
+        },
+        {
+          "type": "text",
+          "content": "IN",
+          "font": "condensed sans bold",
+          "size_px": 88,
+          "weight": "800",
+          "case": "uppercase",
+          "color": "path_glow",
+          "position_pct": { "x": 50, "y": 78 },
+          "alignment": "center",
+          "layering": "front, between WALK and FAITH"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_topic}",
+          "font": "rounded geometric sans",
+          "size_px": 66,
+          "weight": "900",
+          "case": "uppercase",
+          "color": "highlight_white",
+          "letter_spacing_px": 2,
+          "position_pct": { "x": 50, "y": 93 },
+          "alignment": "center",
+          "layering": "front"
+        }
+      ],
+      "post_processing": [
+        "add 3 % film grain on top",
+        "tiny chromatic shift (+0.5 px red right / –0.5 px blue left) on title for print feel",
+        "soft vignette −4 % at edges"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68349026016c69c3b4f69e1e.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68349026016c69c3b4f69e1e.jpeg"
+  },
+  
+  {
+    "id": "TreasureMap_KidsAdventure",
+    "title": "Treasure Map Kids Adventure",
+    "description": "Parchment map adventure theme with golden title and stone-carved text, styled for a Holy Spirit treasure series in kids church.",
+    "categories": ["kids", "adventure", "treasure", "vintage", "comic"],
+    "promptModifiers": `{
+      "scene": "Adventure-style kids sermon graphic resembling an old treasure-map poster: a distressed parchment sheet sits over a warm brown table, with a coiled rope, faint compass rose, and a bold black cartouche that carries the comic-book title “{sermon_title}”. ‘{sermon_title}’ glows gold-to-scarlet and looks carved from stone, while a red ribbon taglines the series theme: '{sermon_topic}'.",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2 landscape",
+      "style": [
+        "Indiana-Jones pulp poster",
+        "sun-bleached parchment textures with torn edges",
+        "thick 3-D extruded lettering (warm gradient & chiseled stone)",
+        "subtle halftone/grain overlay for print vibe",
+        "hand-lettered adventure ribbon"
+      ],
+      "color_palette": {
+        "table_brown": "#87520D",
+        "parchment_light": "#F6D8A0",
+        "parchment_shadow": "#E4B979",
+        "cartouche_black": "#1A110C",
+        "rope_tan": "#D7B46B",
+        "gradient_yellow": "#FFE04A",
+        "gradient_orange": "#FFA531",
+        "gradient_red": "#FF4242",
+        "stone_light": "#B8B8B8",
+        "stone_dark": "#545454",
+        "banner_red": "#E6392F",
+        "text_white": "#FFFFFF"
+      },
+      "background": {
+        "base_fill": "table_brown",
+        "paper_sheet": {
+          "fill": "parchment_light",
+          "edge_torn": true,
+          "shadow_inner": {
+            "color": "parchment_shadow",
+            "blur_px": 12,
+            "spread_px": 0,
+            "opacity_pct": 50
+          },
+          "position_pct": { "x": 50, "y": 52 },
+          "size_pct": { "width": 98, "height": 90 },
+          "rotation_deg": 2
+        },
+        "compass_rose": {
+          "stroke_color": "parchment_shadow",
+          "stroke_width_px": 6,
+          "opacity_pct": 45,
+          "radius_pct": 38,
+          "arrow_points": 8,
+          "position_pct": { "x": 50, "y": 38 }
+        },
+        "texture_overlay": {
+          "kind": "fine coffee-stain speckles + soft film grain",
+          "opacity_pct": 8
+        }
+      },
+      "elements": [
+        {
+          "type": "vector_path",
+          "description": "golden rope looping behind cartouche, peeking left-top and lower-right",
+          "stroke_color": "rope_tan",
+          "stroke_width_px": 12,
+          "shadow": {
+            "color": "parchment_shadow",
+            "blur_px": 8,
+            "opacity_pct": 35
+          },
+          "layering": "above parchment sheet, below cartouche"
+        },
+        {
+          "type": "shape",
+          "shape": "irregular cloud/ink-blot rectangle",
+          "fill_color": "cartouche_black",
+          "size_pct": { "width": 85, "height": 52 },
+          "position_pct": { "x": 52, "y": 50 },
+          "layering": "above rope, behind title text"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_title}",
+          "font": "pulp adventure display (e.g., 'Adventure', heavy italic)",
+          "case": "title",
+          "weight": "900",
+          "style": "italic 11°",
+          "size_px": 300,
+          "tracking_px": -8,
+          "fill": {
+            "gradient": {
+              "colors": ["gradient_yellow", "gradient_orange", "gradient_red"],
+              "angle_deg": 90
+            }
+          },
+          "stroke": {
+            "color": "text_white",
+            "width_px": 6,
+            "opacity_pct": 80
+          },
+          "extrusion": {
+            "depth_px": 18,
+            "direction_deg": 225,
+            "fill_color": "gradient_red"
+          },
+          "inner_shadow": {
+            "color": "cartouche_black",
+            "blur_px": 6,
+            "opacity_pct": 25,
+            "offset_px": { "x": -3, "y": 4 }
+          },
+          "gloss_highlights": {
+            "color": "text_white",
+            "opacity_pct": 35
+          },
+          "position_pct": { "x": 50, "y": 34 },
+          "alignment": "center",
+          "layering": "front"
+        },
+        {
+          "type": "text",
+          "content": "MAP",
+          "font": "blocky slab (e.g., 'Karmatic Arcade')",
+          "case": "uppercase",
+          "weight": "900",
+          "style": "normal",
+          "size_px": 270,
+          "tracking_px": -6,
+          "fill_color": "stone_light",
+          "stroke": {
+            "color": "stone_dark",
+            "width_px": 4,
+            "opacity_pct": 90
+          },
+          "extrusion": {
+            "depth_px": 22,
+            "direction_deg": 235,
+            "fill_color": "stone_dark"
+          },
+          "texture_overlay": {
+            "kind": "subtle concrete cracks",
+            "opacity_pct": 20
+          },
+          "position_pct": { "x": 50, "y": 62 },
+          "alignment": "center",
+          "layering": "in front of cartouche, behind “TREASURE” word"
+        },
+        {
+          "type": "shape",
+          "shape": "curved ribbon",
+          "fill_color": "banner_red",
+          "size_pct": { "width": 45, "height": 15 },
+          "position_pct": { "x": 71, "y": 73 },
+          "rotation_deg": 7,
+          "layering": "above cartouche, behind stone letters tail"
+        },
+        {
+          "type": "multiline_text",
+          "lines": [
+            { "text": "{sermon_topic}", "baseline_pct": 83 }
+          ],
+          "font": "comic hand-sans (e.g., 'Luckiest Guy')",
+          "size_px": 68,
+          "weight": "700",
+          "case": "uppercase",
+          "style": "italic",
+          "color": "text_white",
+          "tracking_px": 0,
+          "alignment": "center",
+          "position_pct": { "x": 71, "y": 74 },
+          "layering": "above ribbon"
+        }
+      ],
+      "post_processing": [
+        "apply 4 % RGB noise to entire canvas",
+        "subtle vignette −5 % at outer 6 % frame",
+        "add soft drop-shadow (7 px, 60 % opacity) from cartouche onto parchment"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6834875166829d296c8d5c7e.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6834875166829d296c8d5c7e.jpeg"
+  },
+  
+  {
+    "id": "GoodNews_KidsComic",
+    "title": "Good News Kids Comic",
+    "description": "A vibrant, comic-style kids church graphic with bold 3D lettering, topographic background, and playful energy.",
+    "categories": ["kids", "comic", "bold", "3d", "gradient", "playful"],
+    "promptModifiers": `{
+      "scene": "Punchy comic-book series artwork with giant gradient block letters reading “{sermon_title}”, sitting on a matte black blob over a blue topographic-map background; hand-written sub-title describes the sermon series focus as '{sermon_topic}'.",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2 landscape",
+      "style": [
+        "retro Saturday-morning cartoon title card",
+        "thick 3-D extruded lettering with dark-blue outline & shadow layer",
+        "sunburst yellow-to-fiery-orange gradient fills with glossy highlights",
+        "halftone grain and subtle comic-dot texture overall",
+        "electric blue topographic contour pattern backdrop"
+      ],
+      "color_palette": {
+        "map_blue": "#3049D4",
+        "contour_indigo": "#212E9D",
+        "blob_black": "#0E0E0E",
+        "stroke_navy": "#0C0D54",
+        "shadow_purple": "#1F2A7B",
+        "fill_yellow": "#FFC827",
+        "fill_orange": "#F54D0E",
+        "gloss_white": "#FFFFFF",
+        "accent_white": "#FFFFFF"
+      },
+      "background": {
+        "base_fill": "map_blue",
+        "topographic_pattern": {
+          "stroke_color": "contour_indigo",
+          "stroke_width_px": 4,
+          "noise_jitter_pct": 2,
+          "density_pct": 55,
+          "scale_pct": 130,
+          "blend_mode": "multiply"
+        },
+        "texture_overlay": {
+          "kind": "fine halftone grain",
+          "color": "shadow_purple",
+          "opacity_pct": 6
+        }
+      },
+      "elements": [
+        {
+          "type": "shape",
+          "shape": "organic_blobby_oval",
+          "fill_color": "blob_black",
+          "position_pct": { "x": 52, "y": 50 },
+          "size_pct": { "width": 78, "height": 58 },
+          "rotation_deg": -4,
+          "layering": "above topographic pattern, behind all text"
+        },
+        {
+          "type": "text",
+          "content": "THE",
+          "font": "Bebas Neue Bold Italic",
+          "case": "uppercase",
+          "weight": "900",
+          "style": "italic",
+          "size_px": 120,
+          "tracking_px": 0,
+          "color": "accent_white",
+          "position_pct": { "x": 15, "y": 41 },
+          "alignment": "left",
+          "layering": "in front of blob, behind main title"
+        },
+        {
+          "type": "multiline_text",
+          "lines": [
+            { "text": "{sermon_title}", "baseline_pct": 58 }
+          ],
+          "font": "comic-block display (e.g., 'Gravitas One')",
+          "size_px": 340,
+          "weight": "900",
+          "case": "uppercase",
+          "style": "normal",
+          "tracking_px": -8,
+          "fill": {
+            "gradient": {
+              "colors": ["fill_yellow", "fill_orange"],
+              "angle_deg": 90
+            }
+          },
+          "stroke": {
+            "color": "stroke_navy",
+            "width_px": 18,
+            "join": "round"
+          },
+          "extrusion": {
+            "depth_px": 14,
+            "direction_deg": 225,
+            "fill_color": "shadow_purple"
+          },
+          "gloss_highlights": {
+            "color": "gloss_white",
+            "opacity_pct": 45,
+            "style": "comic curved swooshes on upper left of key glyphs"
+          },
+          "position_pct": { "x": 53, "y": 58 },
+          "alignment": "center",
+          "layering": "frontmost"
+        },
+        {
+          "type": "multiline_text",
+          "lines": [
+            { "text": "{sermon_topic}", "baseline_pct": 84 }
+          ],
+          "font": "casual hand-letter sans (e.g., 'Patrick Hand SC')",
+          "size_px": 72,
+          "weight": "700",
+          "case": "uppercase",
+          "style": "italic",
+          "tracking_px": 0,
+          "color": "accent_white",
+          "alignment": "center",
+          "position_pct": { "x": 53, "y": 91 },
+          "layering": "above blob, below main title extrusion overlap"
+        }
+      ],
+      "post_processing": [
+        "apply 4 % overall RGB noise",
+        "add subtle chromatic-aberration (blue shift +1 px left, red shift +1 px right) on outer 5 % frame",
+        "soft vignette −3 % brightness at extreme corners"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6834841157a3bf6c907521f1.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6834841157a3bf6c907521f1.jpeg"
+  },
+  
+  {
+    "id": "Welcome_Frame",
+    "title": "Welcome Frame",
+    "description": "Studio portrait with vibrant gradient placard framed in rounded cream, delivering an inviting church message.",
+    "categories": ["studio", "portrait", "gradient", "modern", "typographic"],
+    "promptModifiers": `{
+      "scene": "Portrait-oriented social graphic framed by a rounded-corner cream border. Centered within is a friendly young male volunteer in front of a neutral studio backdrop, holding a square gradient placard that reads—'{sermon_title}'. The sign’s vivid magenta-to-blue sweep and diagonal brushed-metal texture contrast the calm grey background, while small corner labels lend an editorial feel.",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2",
+      "style": [
+        "clean studio lifestyle photography",
+        "bold multilingual brand messaging",
+        "smooth magenta–violet–blue gradient with subtle diagonal brushed texture",
+        "rounded-corner frame for mobile-ready social posts",
+        "neo-grotesque uppercase headline in soft off-white"
+      ],
+      "color_palette": {
+        "frame_cream": "#EDE6D7",
+        "studio_grey": "#CFCFD2",
+        "gradient_magenta": "#B32BEA",
+        "gradient_blue": "#008AF3",
+        "gradient_pink": "#F07ACD",
+        "gradient_shadow": "#16141B",
+        "type_offwhite": "#F4ECE3",
+        "signature_white": "#FFFFFF",
+        "hand_skin": "#D9A78E",
+        "hair_black": "#1F1A19",
+        "tshirt_dark": "#182227"
+      },
+      "background": {
+        "frame": {
+          "fill": "frame_cream",
+          "corner_radius_px": 32
+        },
+        "inner": {
+          "fill": "studio_grey",
+          "corner_radius_px": 24
+        }
+      },
+      "elements": [
+        {
+          "type": "photo_subject",
+          "description": "Young adult male volunteer, mid-20s, medium olive complexion, short wavy black hair, wearing dark charcoal crew-neck tee, smiling directly at camera.",
+          "composition": {
+            "crop": "waist-up",
+            "pose": "arms forward holding square sign at chest height",
+            "lighting": "soft key light centred, minimal shadows"
+          },
+          "position_pct": { "x": 50, "y": 38 },
+          "scale_pct": 92,
+          "layering": "above inner background, below placard",
+          "treatment": "natural colour, mild clarity +8, no halftone"
+        },
+        {
+          "type": "shape",
+          "shape": "rounded_square",
+          "size_pct": { "width": 68, "height": 68 },
+          "corner_radius_px": 20,
+          "position_pct": { "x": 50, "y": 55 },
+          "fill_gradient": {
+            "mode": "conic",
+            "colors": [
+              { "hex": "gradient_magenta", "angle_deg": 0 },
+              { "hex": "gradient_shadow", "angle_deg": 60 },
+              { "hex": "gradient_blue", "angle_deg": 180 },
+              { "hex": "gradient_pink", "angle_deg": 300 }
+            ]
+          },
+          "texture_overlay": {
+            "kind": "diagonal brushed-metal lines",
+            "angle_deg": 135,
+            "line_width_px": 1,
+            "spacing_px": 6,
+            "opacity_pct": 10
+          },
+          "layering": "above model, below headline text"
+        },
+        {
+          "type": "multiline_text",
+          "lines": [
+            { "text": "{sermon_title}", "baseline_pct": 32 }
+          ],
+          "font": "condensed neo-grotesque (e.g., 'Helvetica Neue Condensed Black')",
+          "size_px": 64,
+          "weight": "900",
+          "case": "uppercase",
+          "style": "normal",
+          "tracking_px": -1,
+          "color": "type_offwhite",
+          "alignment": "center",
+          "position_pct": { "x": 50, "y": 55 },
+          "layering": "above placard"
+        },
+        {
+          "type": "text",
+          "content": "{sermon_topic}",
+          "font": "casual handwritten script",
+          "size_px": 22,
+          "weight": "normal",
+          "case": "lowercase",
+          "color": "signature_white",
+          "position_pct": { "x": 50, "y": 85 },
+          "alignment": "center",
+          "layering": "above placard"
+        }
+      ],
+      "post_processing": [
+        "global subtle film grain 3 % to unify photo and graphics",
+        "soft vignette −4 % at outer cream frame edges",
+        "tiny gaussian blur 0.4 px on brushed texture to remove aliasing"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68346e1b67b50b1109a99294.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68346e1b67b50b1109a99294.jpeg"
+  },
+  
+  {
+    "id": "Halftone_Hold",
+    "title": "Halftone Hold",
+    "description": "A bold modern sermon visual featuring halftone photo treatment set against a vibrant CMYK-inspired gradient.",
+    "categories": ["bold", "halftone", "modern", "gradient", "editorial", "poster"],
+    "promptModifiers": `{
+      "scene": "Bold editorial cover featuring a vivid four-corner gradient, oversized italic lettering, and a high-contrast halftone photo of two clasped hands intersecting the typography.",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2",
+      "style": [
+        "contemporary Swiss / neo-grotesque poster design",
+        "heavy oblique sans-serif wordmark as central focus",
+        "CMYK-style screen-print gradient (orange → pink → violet → deep blue)",
+        "black-and-white 45° halftone photo treatment",
+        "clean micro-text corner labels for editorial polish"
+      ],
+      "color_palette": {
+        "sunset_orange": "#F24A29",
+        "hot_pink": "#F04E9A",
+        "royal_violet": "#5A2BFF",
+        "deep_midnight": "#040404",
+        "brand_beige": "#F4ECE3",
+        "pure_white": "#FFFFFF"
+      },
+      "background": {
+        "base_gradient": {
+          "type": "multi-point radial blend",
+          "stops": [
+            { "color": "sunset_orange", "position_pct": 0, "anchor": "top_left" },
+            { "color": "hot_pink", "position_pct": 0, "anchor": "top_right" },
+            { "color": "royal_violet", "position_pct": 0, "anchor": "bottom_right" },
+            { "color": "deep_midnight", "position_pct": 0, "anchor": "bottom_left" }
+          ],
+          "blend_mode": "normal"
+        },
+        "texture_overlay": {
+          "kind": "ultra-subtle film grain",
+          "color": "deep_midnight",
+          "opacity_pct": 4
+        }
+      },
+      "elements": [
+        {
+          "type": "photo_cutout",
+          "subject": "two clasped hands (one darker, one lighter skin tone) forming an inverted V shape",
+          "treatment": [
+            "desaturate → 0",
+            "convert to monochrome 45° halftone dots (dot radius ≈ 2 px, screen freq ≈ 55 lpi)",
+            "increase contrast +25"
+          ],
+          "position_pct": { "x": 50, "y": 35 },
+          "scale_pct": 75,
+          "layering": "behind headline-text but above background",
+          "masking": "areas directly overlapped by letterforms are hidden, so hands peek through counters and extend below baseline"
+        },
+        {
+          "type": "headline-text",
+          "content": "{sermon_title}",
+          "font": "condensed grotesque sans-serif (e.g., 'Helvetica Neue Condensed Black Italic')",
+          "case": "uppercase",
+          "weight": "900",
+          "style": "italic (≈12° right slant)",
+          "size_px": 540,
+          "tracking_px": -8,
+          "color": "brand_beige",
+          "position_pct": { "x": 50, "y": 43 },
+          "alignment": "center",
+          "layering": "above halftone hands"
+        },
+        {
+          "type": "sub-headline-text",
+          "content": "{sermon_topic}",
+          "font": "neo-grotesque medium",
+          "case": "uppercase",
+          "weight": "500",
+          "style": "normal",
+          "size_px": 36,
+          "tracking_px": 0,
+          "color": "pure_white",
+          "position_pct": { "x": 6, "y": 93 },
+          "alignment": "left",
+          "layering": "above background"
+        }
+      ],
+      "post_processing": [
+        "apply 6 % vignette darkening on outer 10 % frame",
+        "add 1-px Gaussian blur fallback pass to gradient for banding reduction",
+        "ensure halftone layer has subtle -2 % noise to prevent moiré on HD screens"
+      ],
+      "export_settings": {
+        "format": "PNG",
+        "compression": "lossless",
+        "color_profile": "sRGB"
+      }
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68346c5767b50bee49a99010.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68346c5767b50bee49a99010.jpeg"
+  },
+  
+  {
   id: "Minimal_Stones",
   title: "Minimal Stones",
   description: "Editorial minimalism meets sacred illustration with stone cairn metaphor.",
-  categories: ["minimalist", "sacred", "photorealistic", "stone", "typographic", "modern", "sermon series"],
+  categories: ["minimal", "sacred", "photoreal", "typographic", "modern"],
   promptModifiers: `{
     "scene": "A minimalist, modern sermon series slide featuring a balanced stack of rough, photorealistic stones at the center, with bold, contrasting typography overlaying a large speech bubble, all set on a soft gray paper-textured background.",
     "image_dimensions": "1536x1024",
@@ -107,7 +1143,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   id: "fathers-day-3d",
   title: "Father's Day 3D",
   description: "Playful, balloon-style 3D Father's Day.",
-  categories: ["3d", "holiday", "father's day", "playful", "balloon", "modern", "celebratory"],
+  categories: ["3d", "holiday", "playful", "balloon", "modern"],
   promptModifiers: `{
     "scene": "A playful, three-dimensional Father's Day greeting composed of glossy blue balloon-style letters spelling '{sermon_title}', decorated with a classic bowler hat, a shiny black mustache, and a scattering of celebratory elements against a soft blue background.",
     "image_dimensions": "1536x1024",
@@ -225,7 +1261,7 @@ export const STYLE_PRESETS: StylePreset[] = [
   id: "luminous-dove",
   title: "Luminous Dove",
   description: "Ethereal worship art with monumental Didone typography",
-  categories: ["ethereal", "worship", "modern", "light", "editorial", "christian"],
+  categories: ["ethereal", "worship", "modern", "editorial"],
   promptModifiers: `{
     "scene": "ethereal worship graphic fusing luminous flowing-fiber motifs with a radiant dove silhouette and monumental Didone typography reading \\"{sermon_title}\\"",
     "image_dimensions": "1536×1024",
@@ -410,7 +1446,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "vintage-floral",
     title: "Vintage Floral",
     description: "Broken-vase floral illustration with sacred iconography",
-    categories: ["vintage", "floral", "sacred", "iconography", "illustrative"],
+    categories: ["vintage", "floral", "sacred", "illustrative"],
     promptModifiers: `{
       "scene": "centered symbolic illustration of a broken clay vase with flowers, placed within an arched gold frame on a deep navy background",
       "image_dimensions": "1536×1024",
@@ -591,7 +1627,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "neon-pastel",
     title: "Neon Pastel",
     description: "Pastel dawn gradient with prayer hands line art",
-    categories: ["minimal", "pastel", "spiritual", "modern", "gradient"],
+    categories: ["retro", "synthwave", "neon", "adventure", "bold"],
     promptModifiers: `{
       "scene": "calming, pastel-hued sky gradient fading from light lavender to peach and blue, suggesting dawn or spiritual awakening",
       "image_dimensions": "1536×1024",
@@ -918,7 +1954,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "ancient-maps",
     title: "Ancient Maps",
     description: "Antique parchment map with decision-point typography",
-    categories: ["vintage", "map", "ancient", "cartography", "editorial"],
+    categories: ["vintage", "map", "editorial", "typographic"],
     promptModifiers: `{
       "scene": "antique parchment map background centered on Corinth region, faintly labeled with aged, classical text and hand-drawn geographic lines",
       "image_dimensions": "1536×1024",
@@ -1020,7 +2056,7 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: "tropical-easter",
     title: "Tropical Easter",
     description: "Dense tropical foliage around modern type",
-    categories: ["nature", "tropical", "modern", "botanical", "joyful", "holiday"],
+    categories: ["nature", "tropical", "modern", "botanical", "holiday"],
     promptModifiers: `{
       "scene": "dense tropical foliage bursting with detailed leaves and vibrant blossoms over a deep forest green background",
       "image_dimensions": "1536×1024",

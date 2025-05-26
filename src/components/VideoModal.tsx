@@ -30,9 +30,12 @@ export const VideoModal: React.FC<VideoModalProps> = ({ isOpen, onClose, videoUr
           <video
             className="absolute inset-0 w-full h-full"
             controls
-            autoPlay
+            playsInline
+            preload="metadata"
+            controlsList="nodownload"
             src={videoUrl}
           >
+            <source src={videoUrl} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>

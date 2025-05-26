@@ -144,7 +144,13 @@ export async function convertSummaryToPrompt(
     messages: [
       {
         role: "system",
-        content: "You are an expert prompt engineer for GPT-1 image generation. Convert the given design concept into a detailed, technical prompt that will produce the desired image. Include specific details about composition, lighting, style, and mood. Ensure the sermon title and topic are prominently featured in the design."
+        content: `You are an expert prompt engineer for GPT-1 image generation. Your task is to convert the given design concept into a detailed, technical prompt. CRITICALLY IMPORTANT:
+1. The user's summary represents their FINAL, EDITED vision - you must STRICTLY preserve all specific details they've chosen.
+2. DO NOT add any subjects, elements, or details that weren't explicitly mentioned in their summary.
+3. DO NOT reintroduce elements from the style preset that were removed in the summary.
+4. The sermon title "${sermon_title}" and topic "${sermon_topic}" MUST be used exactly as provided.
+5. Typography settings from the style preset should be used ONLY for styling (font, color, etc), but the actual text content must use the provided sermon title and topic.
+6. Focus on enhancing technical details (lighting, mood, style) while keeping the core composition exactly as specified in the summary.`
       },
       {
         role: "user",

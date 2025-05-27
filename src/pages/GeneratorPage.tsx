@@ -37,6 +37,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const [isQuoteFormOpen, setIsQuoteFormOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [generationStartTime, setGenerationStartTime] = useState<number | null>(null);
+  const [freeRegenerationUsed, setFreeRegenerationUsed] = useState(false); // Added state for free regeneration
   const { credits, loading: creditsLoading } = useCredits();
 
   // Add refs for scroll targets
@@ -128,6 +129,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       );
       setFullPrompt(generatedPrompt);
       setPromptSummary(summary);
+      setFreeRegenerationUsed(false); // Reset free regeneration for new concept
 
       // After concept is generated, scroll to the concept section
       setTimeout(() => {
@@ -170,11 +172,17 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       );
       setFullPrompt(updatedFullPrompt);
 
-      const { data: decrementResult, error: decrementError } = await supabase
-        .rpc('decrement_credits', { user_id: session.user.id });
+      if (freeRegenerationUsed) {
+        // If free regeneration has been used, decrement credits
+        const { data: decrementResult, error: decrementError } = await supabase
+          .rpc('decrement_credits', { user_id: session.user.id });
 
-      if (decrementError || !decrementResult) {
-        throw new Error('Failed to use credit. Please try again.');
+        if (decrementError || !decrementResult) {
+          throw new Error('Failed to use credit. Please try again.');
+        }
+      } else {
+        // This is the first (free) generation/regeneration for this concept
+        setFreeRegenerationUsed(true);
       }
 
       const src = await generateSermonArt(updatedFullPrompt, selectedStyle);

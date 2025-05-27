@@ -8,14 +8,14 @@ interface GenerationProgressProps {
 }
 
 const tips = [
-  "AI is analyzing your sermon theme and creating unique visual metaphors...",
-  "Incorporating theological symbolism into your artwork...",
-  "Balancing composition and color theory for maximum impact...",
-  "Adding final touches to ensure your message shines through...",
-  "Creating artwork that will resonate with your congregation...",
-  "Applying artistic principles to enhance spiritual messaging...",
-  "Generating high-resolution artwork for all your needs...",
-  "Finalizing details to create a truly meaningful image..."
+  "SALT's proprietary AI is now crafting your artwork by infusing your details into our design...",
+  "Although our AI is impressive, it's not perfect. Occasionally, it can make a mistake, especially when it comes to the typography...",
+  "When your image is delivered, if it doesn't meet your expectations, we provide one free regeneration of your image that will not take from your credits...",
+  "In order to renegerate your image, you'll simply click the regenerate button right next to the download button when viewing your image...",
+  "Currently, your artwork is being generated using V1 of SALT AI...",
+  "We're actively working on V2 of SALT which will include video generation, enhanced customization and more...",
+  "If you have any questions or need support, send us an email at support@usesaltcreative.com...",
+  "Find us on Social Media! Share a generation from SALT with our account tagged and we'll send you a pack of bonus credits..."
 ];
 
 const GenerationProgress: React.FC<GenerationProgressProps> = ({

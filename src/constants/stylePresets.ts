@@ -2297,7 +2297,7 @@ export const STYLE_PRESETS: StylePreset[] = [
       }
     ],
     "subtitle": {
-      "text": "{SERMON_TOPIC}}",
+      "text": "{SERMON_TOPIC}",
       "font": "modern sans-serif",
       "weight": "medium",
       "size": "medium",

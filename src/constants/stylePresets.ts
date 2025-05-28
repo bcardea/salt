@@ -2,6 +2,138 @@ import { StylePreset } from '../services/imageGeneration';
 
 export const STYLE_PRESETS: StylePreset[] = [
   {
+    "id": "Backalley_Prayer",
+    "title": "Backalley Prayer",
+    "description": "Urban monochrome aesthetic with bold street-style type in a moody Tokyo alley—ideal for dramatic announcements or event visuals.",
+    "categories": ["monochrome", "urban", "gritty", "cinematic", "typographic", "event", "sermon series"],
+    "promptModifiers": `{
+      "scene": "Moody Tokyo backalley at night rendered in rich black and white with subtle filmic treatments. Typography clearly says "{sermon_title} and {sermon_topic}".",
+      "image_dimensions": "1536x1024",
+      "aspect_ratio": "3:2",
+      "composition": "Full-frame vertical alignment; title block centered with stacked lines, lower-third subtitle grounding the layout; left-side gradient burn enhances depth and focus.",
+      "color_palette": {
+        "background_dark": "#0a0a0a",
+        "midtone_gray": "#3b3b3b",
+        "highlight_gray": "#8e8e8e",
+        "text_white": "#ffffff"
+      },
+      "lighting": "Dim ambient lighting with soft gradients from alley signage; shadows are smooth and pervasive; no direct highlights.",
+      "mood": "Serious, intense, introspective—urban nighttime atmosphere invokes intimacy and depth.",
+      "texture": [
+        "Fine 35 mm grain overlay across the entire image (35% opacity)",
+        "Subtle lens blur at edges to simulate soft focus",
+        "Filmic vignette darkening corners (22% strength)"
+      ],
+      "background": {
+        "elements": [
+          "Narrow Tokyo alley with visible piping, signage, and reflective surfaces",
+          "Horizontal gradient darkening from left edge",
+          "Custom gradient map desaturation with soft black-to-silver tone ramp"
+        ],
+        "depth_of_field": "Background gently softened; all text remains sharply rendered"
+      },
+      "typography": {
+        "hierarchy": [
+          {
+            "text": "{sermon_title}",
+            "font": "Helvetica Black",
+            "weight": "black",
+            "size": "240px",
+            "color": "#ffffff",
+            "letter_spacing": 0,
+            "position": "center (500px from top)",
+            "alignment": "center",
+            "shadow": "rgba(0,0,0,0.6), blur 14"
+          },
+          {
+            "text": "{sermon_topic}",
+            "font": "Helvetica Light Italic",
+            "weight": "light",
+            "size": "80px",
+            "color": "#ffffff",
+            "letter_spacing": 2,
+            "position": "lower center (~710px from top) centered underneath {sermon_title}",
+            "alignment": "center",
+            "shadow": "rgba(0,0,0,0.5), blur 8"
+          }
+        ]
+      },
+      "style": "Streetwise monochrome flyer meets high-impact typographic sermon graphic. Cinematic alley shot forms the gritty base; ultra-bold Helvetica adds immediacy.",
+      "post_processing": [
+        "Black-and-white gradient map with tonal curve",
+        "Punchy mid-tone contrast enhancement",
+        "Fine film grain overlay (35%)",
+        "Strong vignette on corners",
+        "Mild sharpen for final detail snap"
+      ]
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68378d29f362d688fbacc913.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68378d29f362d688fbacc913.jpeg"
+  },
+  {
+    "id": "Monochrome_Dunes",
+    "title": "Monochrome Dunes",
+    "description": "Minimalist black-and-white sermon series design featuring grainy desert dunes and stark centered typography.",
+    "categories": ["minimalist", "monochrome", "cinematic", "desert", "typographic", "sermon series"],
+    "promptModifiers": `{
+      "scene": "Windswept dune field under a hazy overcast sky, rendered entirely in rich monochrome.",
+      "image_dimensions": "1536×1024",
+      "aspect_ratio": "3:2 landscape",
+      "composition": "Rule-of-thirds: dune-crest horizon rides the lower third; all text is perfectly centred on the vertical mid-line, occupying the middle third of the frame; ample negative space in upper sky.",
+      "color_palette": {
+        "sky": "#707070",
+        "dune_highlights": "#4e4e4e",
+        "dune_shadows": "#1e1e1e",
+        "title_text": "#000000",
+        "subtitle_text": "#ffffff"
+      },
+      "lighting": "Soft diffused daylight with no direct sun—flat, shadow-less highlights and gentle tonal transitions.",
+      "mood": "Quietly contemplative, sober yet confident.",
+      "texture": [
+        "Fine 35 mm film grain across entire frame (≈60% opacity)",
+        "Very subtle Gaussian blur gradient rising from foreground sand to sharpen mid-ground dunes"
+      ],
+      "background": {
+        "elements": [
+          "Smooth rolling dunes sweeping laterally, faint ripples visible",
+          "Soft atmospheric haze reducing contrast toward distant horizon"
+        ],
+        "depth_of_field": "Mid-ground dunes tack-sharp; foreground and extreme background fall softly out of focus"
+      },
+      "typography": {
+        "hierarchy": [
+          {
+            "text": "{sermon_title}",
+            "font": "Helvetica Neue, Bold, All Caps",
+            "size": "138 px",
+            "color": "#000000",
+            "letter_spacing": "1.8",
+            "position": "centre-top of text block (≈560 px from canvas top)",
+            "alignment": "centre"
+          },
+        ],
+        "subtitle": {
+          "text": "{sermon_topic}",
+          "font": "Helvetica Neue, Regular, All Caps",
+          "size": "78 px",
+          "color": "#ffffff",
+          "letter_spacing": "1.2",
+          "position": "≈700 px from canvas top",
+          "alignment": "centre"
+        }
+      },
+      "style": "Minimalist black-and-white cinematic poster; large bold sans-serif title over grainy desert photograph.",
+      "post_processing": [
+        "Black-and-white conversion with gentle S-curve for contrast",
+        "10% vignette darkening at corners",
+        "Randomised dust specks matching grain pattern",
+        "Soft Gaussian bloom around bright subtitle to fuse with background"
+      ]
+    }`,
+    "previewUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68378bc34eb4a11d38127fe4.jpeg",
+    "referenceUrl": "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/68378bc34eb4a11d38127fe4.jpeg"
+  },
+  {
     "id": "JoyfulHearts_RetroPop",
     "title": "Joyful Hearts Retro Pop",
     "description": "Bold retro title card with spacey comic vibes, 3D block text on a star-studded black blob over a magenta backdrop.",

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Play, CheckCircle, ChevronLeft, ChevronRight, Sparkles, Clock, Users, Palette, Zap, Star, ArrowUpRight } from 'lucide-react';
-import VideoModal from '../components/VideoModal';
+import { ArrowRight, Play, CheckCircle, ChevronLeft, ChevronRight, Sparkles, Clock, Users, Palette, Zap, Star, ArrowUpRight, X } from 'lucide-react';
 import './embla.css';
 
 type Role = 'pastor' | 'staff';
@@ -35,7 +34,6 @@ interface RoleCopy {
 
 interface HomePageProps {
   currentRole: Role;
-  onOpenVideo: () => void;
 }
 
 const pastorGalleryImages = [
@@ -106,8 +104,8 @@ const copyData = {
   }
 } as const;
 
-const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+const HomePage: React.FC<HomePageProps> = ({ currentRole }) => {
+  const [isSupademoModalOpen, setIsSupademoModalOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [currentImages, setCurrentImages] = useState<string[]>(pastorGalleryImages);
 
@@ -124,7 +122,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
     return () => clearInterval(interval);
   }, [currentImages.length]);
 
-  const handleCloseVideo = () => setIsVideoModalOpen(false);
+
 
   return (
     <div className="min-h-screen pt-64 sm:pt-64 pt-80">
@@ -192,11 +190,11 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <button 
-                    onClick={onOpenVideo}
+                    onClick={() => setIsSupademoModalOpen(true)}
                     className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-full text-[#345A7C] bg-white border-2 border-[#A1C1D7] hover:border-[#345A7C] hover:bg-[#F5F5DC]/50 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
                     <Play className="mr-2 h-5 w-5" />
-                    Watch 2-min Demo
+                    Experience a Quick Demo
                   </button>
                 </div>
 
@@ -396,7 +394,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
               <ArrowUpRight className="ml-2 h-5 w-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
             </Link>
             <button 
-              onClick={onOpenVideo}
+              onClick={() => setIsSupademoModalOpen(true)}
               className="inline-flex items-center justify-center px-10 py-5 text-lg font-bold rounded-full text-[#345A7C] bg-white border-2 border-[#A1C1D7] hover:border-[#345A7C] hover:bg-[#F5F5DC]/50 transition-all duration-300 shadow-lg"
             >
               <Play className="mr-2 h-5 w-5" />
@@ -407,10 +405,32 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole, onOpenVideo }) => {
       </section>
 
       {/* Video Modal */}
-      {isVideoModalOpen && (
-        <VideoModal onClose={handleCloseVideo} />
-      )}
-    </div>
+
+      {isSupademoModalOpen && (
+      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black bg-opacity-75 p-4" onClick={() => setIsSupademoModalOpen(false)}>
+        <div className="relative bg-white rounded-lg shadow-xl w-full max-w-5xl mx-auto" onClick={(e) => e.stopPropagation()}>
+          <button
+            onClick={() => setIsSupademoModalOpen(false)}
+            className="absolute -top-2 -right-2 text-gray-700 bg-white hover:text-black rounded-full p-1.5 z-20 shadow-md border border-gray-200"
+            aria-label="Close demo"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <div style={{ position: 'relative', boxSizing: 'content-box', width: '100%', aspectRatio: '1.7929864253393666', maxHeight: 'calc(90vh - 32px)', overflow: 'hidden', borderRadius: '0.5rem' }}>
+            <iframe
+              src="https://app.supademo.com/embed/cmb8jb8340bk9sn1re9dk3t88?embed_v=2"
+              loading="lazy"
+              title="Usesaltcreative Demo"
+              allow="clipboard-write"
+              frameBorder="0"
+              allowFullScreen
+              style={{ display: 'block', width: '100%', height: '100%' }}
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
   );
 };
 

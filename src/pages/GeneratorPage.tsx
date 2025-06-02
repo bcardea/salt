@@ -72,8 +72,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         try {
           const suggestions = await getBackgroundSuggestions(headline, subHeadline);
           setBackgroundSuggestions(suggestions);
-        } catch (error) {
+          setError(''); // Clear any previous errors
+        } catch (error: any) {
           console.error('Failed to get background suggestions:', error);
+          setError('Unable to get background suggestions. You can still enter your own description.');
+          
+          // Provide fallback suggestions based on the headline
+          const fallbackSuggestions = [
+            'A peaceful church sanctuary with soft natural light streaming through stained glass windows',
+            'An abstract background with gentle waves of light and soft, muted colors',
+            'A modern minimalist design with clean lines and subtle gradients',
+            'A nature-inspired scene with soft bokeh effects and warm lighting',
+            'An elegant architectural detail with dramatic lighting and shadows'
+          ];
+          setBackgroundSuggestions(fallbackSuggestions);
         }
       };
       fetchSuggestions();

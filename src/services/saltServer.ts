@@ -81,7 +81,7 @@ export async function getBackgroundSuggestions(
   subHeadline: string
 ): Promise<string[]> {
   try {
-    const response = await fetch(`${SALT_SERVER_URL}/api/background-suggestions`, {
+    const response = await fetch(`${SALT_SERVER_URL}/api/suggest-backgrounds`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -93,11 +93,27 @@ export async function getBackgroundSuggestions(
     });
 
     if (!response.ok) {
-      const error = await response.json();
+      let error;
+      try {
+        error = await response.json();
+      } catch (e) {
+        throw new Error('Failed to get background suggestions from server');
+      }
       throw new Error(error.error || 'Background suggestions generation failed');
     }
 
-    const data: BackgroundSuggestionsResponse = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch (e) {
+      console.error('Failed to parse JSON response:', e);
+      throw new Error('Invalid response from background suggestions server');
+    }
+    
+    if (!data.suggestions || !Array.isArray(data.suggestions)) {
+      console.error('Unexpected response format:', data);
+      throw new Error('Invalid response format from server');
+    }
     return data.suggestions;
   } catch (error: any) {
     console.error('Background suggestions error:', error);

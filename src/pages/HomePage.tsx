@@ -418,7 +418,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole }) => {
           </button>
           <div style={{ position: 'relative', boxSizing: 'content-box', width: '100%', aspectRatio: '1.7929864253393666', maxHeight: 'calc(90vh - 32px)', overflow: 'hidden', borderRadius: '0.5rem' }}>
             <iframe
-              src="https://app.supademo.com/embed/cmb8jb8340bk9sn1re9dk3t88?embed_v=2"
+              src="https://app.supademo.com/embed/cmbfev6ye3x7psn1rzrp92jim?embed_v=2"
               loading="lazy"
               title="Usesaltcreative Demo"
               allow="clipboard-write"

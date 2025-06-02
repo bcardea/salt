@@ -236,16 +236,6 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       // Show the typography options immediately
       setTypographyOptions(options);
       setStatus('idle');
-
-      // Save the images to the library in the background
-      options.forEach(async (url) => {
-        try {
-          await saveToLibrary('typography', url);
-        } catch (err) {
-          console.error('Failed to save typography to library:', err);
-          // Don't show error to user since the images are still visible
-        }
-      });
     } catch (e) {
       console.error('Typography generation error:', e);
       setError((e as Error).message);
@@ -271,26 +261,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     setGenerationStartTime(Date.now());
 
     try {
-      const { data: decrementResult, error: decrementError } = await supabase
-        .rpc('decrement_credits', { user_id: session!.user.id });
-
-      if (decrementError || !decrementResult) {
-        throw new Error('Failed to use credit. Please try again.');
-      }
-
-      const posterUrl = await generateFinalPoster(selectedTypography, backgroundDescription);
-      setFinalPosterUrl(posterUrl);
-      setStatus('complete');
-      setGenerationStartTime(null);
+      const imageUrl = await generateFinalPoster(selectedTypography, backgroundDescription);
+      setFinalPosterUrl(imageUrl);
+      setStatus('idle');
 
       try {
-        await saveToLibrary('poster', posterUrl);
+        await saveToLibrary('poster', imageUrl);
       } catch (err) {
         console.error('Failed to save poster to library:', err);
       }
     } catch (e) {
       setError((e as Error).message);
       setStatus('error');
+    } finally {
       setGenerationStartTime(null);
     }
   };

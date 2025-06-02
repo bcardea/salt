@@ -125,15 +125,31 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         .from('sermon-images')
         .getPublicUrl(fileName);
 
-      const { error: insertError } = await supabase.from('images').insert({
-        user_id: session?.user.id,
+      // Ensure we have all required fields before attempting insert
+      if (!session?.user.id) {
+        throw new Error('User ID is required');
+      }
+
+      const imageData = {
+        user_id: session.user.id,  // Remove optional chaining since we checked above
         url: publicUrl,
         prompt: `${headline} - ${subHeadline}`,
-        topic: headline,
-        image_type: type
-      });
+        topic: headline
+        // Removed image_type as it's not in the schema
+        // created_at will be set automatically by Supabase
+      };
+      console.log('Attempting to save image with data:', imageData);
+      
+      const { error: insertError } = await supabase.from('images').insert(imageData);
 
-      if (insertError) throw insertError;
+      if (insertError) {
+        console.error('Supabase insert error details:', {
+          error: insertError,
+          message: insertError.message,
+          details: insertError.details
+        });
+        throw insertError;
+      }
     } catch (err) {
       console.error('Error saving to library:', err);
     }

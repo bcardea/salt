@@ -2,17 +2,22 @@ import React from 'react';
 
 interface StepIndicatorProps {
   currentStep: number;
+  totalSteps?: number;
 }
 
-const steps = [
-  { number: 1, label: 'Sermon Details' },
-  { number: 2, label: 'Choose Style' },
-  { number: 3, label: 'Generate Concept' },
-  { number: 4, label: 'Customize' },
-  { number: 5, label: 'Final Artwork' }
+const defaultSteps = [
+  'Enter Text',
+  'Choose Typography',
+  'Describe Background',
+  'Final Result'
 ];
 
-const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep }) => {
+const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep, totalSteps = 4 }) => {
+  const steps = defaultSteps.slice(0, totalSteps).map((label, index) => ({
+    number: index + 1,
+    label,
+  }));
+
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center space-x-2 md:space-x-4">

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { StylePreset } from '../services/imageGeneration';
+
+type GenerationStatus = 'idle' | 'generating-typography' | 'generating-poster' | 'animating' | 'complete' | 'error';
 
 interface GenerationProgressProps {
   startTime: number;
   sermonTitle: string;
-  stylePreset?: StylePreset;
+  stylePreset?: string;
+  status: GenerationStatus;
 }
 
 const tips = [
@@ -62,16 +64,21 @@ const GenerationProgress: React.FC<GenerationProgressProps> = ({
         {/* Main content */}
         <div className="mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-fade-in">
-            Creating Your Sermon Artwork
+            {status === 'idle' ? 'Waiting for generation to start...' : 'Creating Your Sermon Artwork'}
           </h2>
           <p className="text-lg text-gray-300 mb-2">
             "{sermonTitle}"
           </p>
           {stylePreset && (
             <p className="text-sm text-gray-400">
-              Style: {stylePreset.name}
+              Style: {stylePreset}
             </p>
           )}
+          <div className="text-lg text-secondary-600 mb-6">
+            {status === 'generating-typography' && 'Creating beautiful typography options for your text...'}
+            {status === 'generating-poster' && 'Crafting your final artwork with the perfect background...'}
+            {status === 'animating' && 'Adding cinematic animation to bring your artwork to life...'}
+          </div>
         </div>
 
         {/* Progress ring */}

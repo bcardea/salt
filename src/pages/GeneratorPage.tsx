@@ -4,19 +4,14 @@ import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
 
 import { supabase } from '../lib/supabase';
-import { generateSermonArtPrompt, generateSermonArt, convertSummaryToPrompt, StylePreset } from '../services/imageGeneration';
-import { analyzeSermonInput } from '../lib/openaiClient';
-import { STYLE_PRESETS } from '../constants/stylePresets';
+import { generateTypography, generateFinalPoster, animatePoster } from '../services/saltServer';
 import ImageDisplay from '../components/ImageDisplay';
-import SermonForm from '../components/SermonForm';
 import CreditDisplay from '../components/CreditDisplay';
-import PromptEditor from '../components/PromptEditor';
 import { useCredits } from '../hooks/useCredits';
+import TypographySelector from '../components/TypographySelector';
 
 // New component imports
-import EnhancedStyleSelector from '../components/EnhancedStyleSelector';
 import GenerationProgress from '../components/GenerationProgress';
-import ConceptProgress from '../components/ConceptProgress';
 import StepIndicator from '../components/StepIndicator';
 import AnimatedSection from '../components/AnimatedSection';
 
@@ -24,55 +19,67 @@ interface GeneratorPageProps {
   session: Session | null;
 }
 
+type GenerationStatus = 'idle' | 'generating-typography' | 'generating-poster' | 'animating' | 'complete' | 'error';
+
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
-  const [rawInput, setRawInput] = useState('');
-  const [sermon_title, setSermonTitle] = useState('');
-  const [sermon_topic, setSermonTopic] = useState('');
-  const [selectedStyle, setSelectedStyle] = useState<StylePreset | undefined>();
-  const [fullPrompt, setFullPrompt] = useState('');
-  const [promptSummary, setPromptSummary] = useState('');
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [status, setStatus] = useState<'idle' | 'generating-prompt' | 'generating-image' | 'complete' | 'error'>('idle');
+  // Form states
+  const [headline, setHeadline] = useState('');
+  const [subHeadline, setSubHeadline] = useState('');
+  const [typographyStyle, setTypographyStyle] = useState<'focused' | 'trendy' | 'kids' | 'handwritten'>('focused');
+  const [backgroundDescription, setBackgroundDescription] = useState('');
+
+  // Generation states
+  const [typographyOptions, setTypographyOptions] = useState<string[]>([]);
+  const [selectedTypography, setSelectedTypography] = useState<string | null>(null);
+  const [finalPosterUrl, setFinalPosterUrl] = useState<string | null>(null);
+  const [animatedVideoUrl, setAnimatedVideoUrl] = useState<string | null>(null);
+
+  // UI states
+  const [status, setStatus] = useState<GenerationStatus>('idle');
   const [error, setError] = useState('');
   const [isQuoteFormOpen, setIsQuoteFormOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
   const [generationStartTime, setGenerationStartTime] = useState<number | null>(null);
-  const [freeRegenerationUsed, setFreeRegenerationUsed] = useState(false); // Added state for free regeneration
+
   const { credits, loading: creditsLoading } = useCredits();
 
   // Add refs for scroll targets
-  const conceptSectionRef = useRef<HTMLDivElement>(null);
+  const typographySectionRef = useRef<HTMLDivElement>(null);
+  const backgroundSectionRef = useRef<HTMLDivElement>(null);
   const resultSectionRef = useRef<HTMLDivElement>(null);
 
   // Update current step based on progress
   useEffect(() => {
-    if (sermon_topic) setCurrentStep(2);
-    if (selectedStyle) setCurrentStep(3);
-    if (promptSummary) setCurrentStep(4);
-    if (status === 'generating-image') setCurrentStep(5);
-    if (imgSrc) setCurrentStep(5);
-  }, [sermon_topic, selectedStyle, promptSummary, status, imgSrc]);
+    if (typographyOptions.length > 0) setCurrentStep(2);
+    if (selectedTypography) setCurrentStep(3);
+    if (finalPosterUrl) setCurrentStep(4);
+  }, [typographyOptions, selectedTypography, finalPosterUrl]);
 
-  // Scroll to concept section when style is selected
+  // Scroll to sections
   useEffect(() => {
-    if (selectedStyle && conceptSectionRef.current) {
-      conceptSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (typographyOptions.length > 0 && typographySectionRef.current) {
+      typographySectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [selectedStyle]);
+  }, [typographyOptions]);
 
-  // Scroll to result section when image is generated
   useEffect(() => {
-    if (imgSrc && resultSectionRef.current) {
+    if (selectedTypography && backgroundSectionRef.current) {
+      backgroundSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [selectedTypography]);
+
+  useEffect(() => {
+    if (finalPosterUrl && resultSectionRef.current) {
       resultSectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [imgSrc]);
+  }, [finalPosterUrl]);
 
-  const saveToLibrary = async (imageUrl: string) => {
+  const saveToLibrary = async (type: 'typography' | 'poster' | 'video', url: string) => {
     try {
-      const response = await fetch(imageUrl);
+      const response = await fetch(url);
       const blob = await response.blob();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.png`;
-      
+      const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${type === 'video' ? 'mp4' : 'png'}`;
+
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('sermon-images')
         .upload(fileName, blob);
@@ -86,8 +93,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       const { error: insertError } = await supabase.from('images').insert({
         user_id: session?.user.id,
         url: publicUrl,
-        prompt: fullPrompt,
-        topic: sermon_topic
+        prompt: `${headline} - ${subHeadline}`,
+        topic: headline,
+        image_type: type
       });
 
       if (insertError) throw insertError;
@@ -96,19 +104,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     }
   };
 
-  const handleGeneratePrompt = async () => {
+  const handleGenerateTypography = async () => {
     if (!session) {
       setError('Please sign in to generate artwork');
-      return;
-    }
-
-    if (!selectedStyle) {
-      setError('Please select a style first');
-      return;
-    }
-
-    if (!sermon_topic.trim()) {
-      setError('Please enter your sermon details');
       return;
     }
 
@@ -117,40 +115,35 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       return;
     }
 
-    setError('');
-    setStatus('generating-prompt');
-    setGenerationStartTime(Date.now());
-    
-    try {
-      const { fullPrompt: generatedPrompt, summary } = await generateSermonArtPrompt(
-        sermon_title,
-        sermon_topic,
-        selectedStyle
-      );
-      setFullPrompt(generatedPrompt);
-      setPromptSummary(summary);
-      setFreeRegenerationUsed(false); // Reset free regeneration for new concept
+    if (!headline.trim() || !subHeadline.trim()) {
+      setError('Please enter both headline and sub-headline');
+      return;
+    }
 
-      // After concept is generated, scroll to the concept section
-      setTimeout(() => {
-        const conceptSection = document.querySelector('#concept-section');
-        if (conceptSection) {
-          conceptSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+    setError('');
+    setStatus('generating-typography');
+    setGenerationStartTime(Date.now());
+
+    try {
+      const options = await generateTypography(headline, subHeadline, typographyStyle);
+      setTypographyOptions(options);
+      setStatus('idle');
+      setGenerationStartTime(null);
+
+      // Save all typography options to library
+      for (const url of options) {
+        await saveToLibrary('typography', url);
+      }
     } catch (e) {
       setError((e as Error).message);
-    } finally {
-      setStatus('idle');
+      setStatus('error');
       setGenerationStartTime(null);
     }
   };
 
-  const handleGenerateArt = async () => {
-    if (!promptSummary.trim()) return;
-    
-    if (!session) {
-      setError('Please sign in to generate artwork');
+  const handleGenerateFinalPoster = async () => {
+    if (!selectedTypography || !backgroundDescription.trim()) {
+      setError('Please select typography and enter background description');
       return;
     }
 
@@ -158,64 +151,53 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       setError('You have no credits remaining. Please wait for your credits to reset.');
       return;
     }
-    
+
     setError('');
-    setStatus('generating-image');
+    setStatus('generating-poster');
     setGenerationStartTime(Date.now());
-    
+
     try {
-      const updatedFullPrompt = await convertSummaryToPrompt(
-        promptSummary,
-        sermon_title,
-        sermon_topic,
-        selectedStyle
-      );
-      setFullPrompt(updatedFullPrompt);
+      // Decrement credits
+      const { data: decrementResult, error: decrementError } = await supabase
+        .rpc('decrement_credits', { user_id: session!.user.id });
 
-      if (freeRegenerationUsed) {
-        // If free regeneration has been used, decrement credits
-        const { data: decrementResult, error: decrementError } = await supabase
-          .rpc('decrement_credits', { user_id: session.user.id });
-
-        if (decrementError || !decrementResult) {
-          throw new Error('Failed to use credit. Please try again.');
-        }
-      } else {
-        // This is the first (free) generation/regeneration for this concept
-        setFreeRegenerationUsed(true);
+      if (decrementError || !decrementResult) {
+        throw new Error('Failed to use credit. Please try again.');
       }
 
-      const src = await generateSermonArt(updatedFullPrompt, selectedStyle);
-      setImgSrc(src);
+      const posterUrl = await generateFinalPoster(selectedTypography, backgroundDescription);
+      setFinalPosterUrl(posterUrl);
       setStatus('complete');
       setGenerationStartTime(null);
-      if (src) {
-        await saveToLibrary(src);
-      }
+
+      // Save poster to library
+      await saveToLibrary('poster', posterUrl);
     } catch (e) {
       setError((e as Error).message);
-      setStatus('idle');
+      setStatus('error');
       setGenerationStartTime(null);
     }
   };
 
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const handleAnimatePoster = async () => {
+    if (!finalPosterUrl) return;
 
-  const handleInputChange = async (value: string) => {
-    setRawInput(value);
-    setIsAnalyzing(true);
-    
+    setError('');
+    setStatus('animating');
+    setGenerationStartTime(Date.now());
+
     try {
-      const analysis = await analyzeSermonInput(value);
-      setSermonTitle(analysis.title);
-      setSermonTopic(analysis.topic);
+      const videoUrl = await animatePoster(finalPosterUrl);
+      setAnimatedVideoUrl(videoUrl);
+      setStatus('complete');
+      setGenerationStartTime(null);
+
+      // Save video to library
+      await saveToLibrary('video', videoUrl);
     } catch (e) {
-      console.error('Error analyzing input:', e);
-      setSermonTitle(value);
-      setSermonTopic(value);
-    } finally {
-      // Add a small delay before showing styles to ensure smooth transition
-      setTimeout(() => setIsAnalyzing(false), 300);
+      setError((e as Error).message);
+      setStatus('error');
+      setGenerationStartTime(null);
     }
   };
 
@@ -225,7 +207,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         <AnimatedSection>
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-6 md:mb-8">Flexible Annual Pricing Built for Every Church</h2>
-            
+
             <p className="text-base md:text-xl text-gray-600 mb-8 md:mb-12 max-w-3xl mx-auto">
               At SALT Creative, we believe every pastor deserves beautiful, impactful sermon art—regardless of church size or budget. 
               Our annual licensing is tailored specifically to your church's congregation size, allowing us to offer significantly 
@@ -266,21 +248,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   }
 
   // Show full-screen loading states
-  if (status === 'generating-image' || status === 'generating-prompt') {
+  if (status === 'generating-typography' || status === 'generating-poster' || status === 'animating') {
     return (
       <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
-        {status === 'generating-prompt' ? (
-          <ConceptProgress
-            startTime={generationStartTime || Date.now()}
-            sermonTitle={rawInput.split('\n')[0] || 'your sermon'}
-          />
-        ) : (
-          <GenerationProgress
-            startTime={generationStartTime!}
-            sermonTitle={sermon_title}
-            stylePreset={selectedStyle}
-          />
-        )}
+        <GenerationProgress
+          startTime={generationStartTime!}
+          sermonTitle={headline}
+          stylePreset={typographyStyle}
+          status={status}
+        />
       </div>
     );
   }
@@ -309,11 +285,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
         {/* Step Indicator */}
         <div className="mb-12">
-          <StepIndicator currentStep={currentStep} />
+          <StepIndicator currentStep={currentStep} totalSteps={4} />
         </div>
 
         <div className="w-full max-w-4xl mx-auto">
-          {/* Step 1: Sermon Details */}
+          {/* Step 1: Typography Details */}
           <AnimatedSection delay={0.1}>
             <div className={`mb-8 transition-all duration-500 ${currentStep >= 1 ? 'opacity-100' : 'opacity-50'}`}>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-300 hover:shadow-md">
@@ -321,89 +297,128 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                   <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white flex items-center justify-center font-semibold mr-4">
                     1
                   </div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Enter Your Sermon Details</h3>
+                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Enter Your Text</h3>
                 </div>
-                <SermonForm
-                  onSubmit={handleInputChange}
-                  isLoading={status !== 'idle'}
-                  disabled={status !== 'idle'}
-                />
+
+                <div className="space-y-4">
+                  <div>
+                    <label htmlFor="headline" className="block text-sm font-medium text-gray-700 mb-2">
+                      Headline
+                    </label>
+                    <input
+                      id="headline"
+                      type="text"
+                      value={headline}
+                      onChange={(e) => setHeadline(e.target.value)}
+                      placeholder="e.g., Sunday Service"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      disabled={status !== 'idle'}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="subheadline" className="block text-sm font-medium text-gray-700 mb-2">
+                      Sub-headline
+                    </label>
+                    <input
+                      id="subheadline"
+                      type="text"
+                      value={subHeadline}
+                      onChange={(e) => setSubHeadline(e.target.value)}
+                      placeholder="e.g., Join us at 10am"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      disabled={status !== 'idle'}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="style" className="block text-sm font-medium text-gray-700 mb-2">
+                      Typography Style
+                    </label>
+                    <select
+                      id="style"
+                      value={typographyStyle}
+                      onChange={(e) => setTypographyStyle(e.target.value as any)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      disabled={status !== 'idle'}
+                    >
+                      <option value="focused">Focused</option>
+                      <option value="trendy">Trendy</option>
+                      <option value="kids">Kids</option>
+                      <option value="handwritten">Handwritten</option>
+                    </select>
+                  </div>
+
+                  <button
+                    onClick={handleGenerateTypography}
+                    disabled={status !== 'idle' || !headline.trim() || !subHeadline.trim() || !credits?.credits_remaining}
+                    className={`w-full py-4 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl ${
+                      status !== 'idle' || !headline.trim() || !subHeadline.trim() || !credits?.credits_remaining ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  >
+                    Generate Typography Options
+                  </button>
+                </div>
               </div>
             </div>
           </AnimatedSection>
 
-          {/* Step 2: Style Selection */}
-          {(sermon_topic || isAnalyzing) && (
-            // <AnimatedSection delay={0.2}>
-              <div className={`w-full mb-8`}>
-                <div className="w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-8">
+          {/* Step 2: Typography Selection */}
+          {typographyOptions.length > 0 && (
+            <AnimatedSection delay={0.2}>
+              <div ref={typographySectionRef} className={`mb-8 transition-all duration-500 ${currentStep >= 2 ? 'opacity-100' : 'opacity-50'}`}>
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-300 hover:shadow-md">
                   <div className="flex items-center mb-6">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white flex items-center justify-center font-semibold mr-4">
                       2
                     </div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Choose Your Visual Style</h3>
+                    <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Choose Your Typography</h3>
                   </div>
-                  <div className={`w-full opacity-100`}>
-                    <EnhancedStyleSelector
-                      presets={STYLE_PRESETS}
-                      selectedStyle={selectedStyle}
-                      onStyleSelect={setSelectedStyle}
-                      disabled={status !== 'idle' || isAnalyzing}
-                    />
-                  </div>
-                </div>
-              </div>
-            // </AnimatedSection>
-          )}
 
-          {/* Step 3: Generate Concept */}
-          {selectedStyle && sermon_topic && (
-            <AnimatedSection delay={0.3}>
-              <div ref={conceptSectionRef} className={`mb-8 transition-all duration-500 ${currentStep >= 3 ? 'opacity-100' : 'opacity-50'}`}>
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-300 hover:shadow-md">
-                  <div className="flex items-center mb-6">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white flex items-center justify-center font-semibold mr-4">
-                      3
-                    </div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Generate Your Concept</h3>
-                  </div>
-                  <button
-                    onClick={handleGeneratePrompt}
-                    disabled={status !== 'idle' || !sermon_topic.trim() || !selectedStyle || !credits?.credits_remaining}
-                    className={`w-full py-4 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl ${
-                      status !== 'idle' || !sermon_topic.trim() || !selectedStyle || !credits?.credits_remaining ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  >
-                    {status !== 'idle' ? 'Creating Your Concept...' : 'Generate Sermon Art Concept'}
-                  </button>
+                  <TypographySelector
+                    options={typographyOptions}
+                    selectedOption={selectedTypography}
+                    onSelect={setSelectedTypography}
+                    isLoading={status === 'generating-typography'}
+                  />
                 </div>
               </div>
             </AnimatedSection>
           )}
 
-          {/* Step 4: Review and Customize */}
-          {promptSummary && (
-            <AnimatedSection delay={0.4}>
-              <div id="concept-section" className={`mb-8 transition-all duration-500 ${currentStep >= 4 ? 'opacity-100' : 'opacity-50'}`}>
+          {/* Step 3: Background Description */}
+          {selectedTypography && (
+            <AnimatedSection delay={0.3}>
+              <div ref={backgroundSectionRef} className={`mb-8 transition-all duration-500 ${currentStep >= 3 ? 'opacity-100' : 'opacity-50'}`}>
                 <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-300 hover:shadow-md">
                   <div className="flex items-center mb-6">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white flex items-center justify-center font-semibold mr-4">
-                      4
+                      3
                     </div>
-                    <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Review and Customize</h3>
+                    <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Describe Your Background</h3>
                   </div>
-                  <div className="space-y-6">
-                    <PromptEditor
-                      value={promptSummary}
-                      onChange={setPromptSummary}
-                      disabled={status !== 'idle'}
-                    />
+
+                  <div className="space-y-4">
+                    <div>
+                      <label htmlFor="background" className="block text-sm font-medium text-gray-700 mb-2">
+                        Background Description
+                      </label>
+                      <textarea
+                        id="background"
+                        value={backgroundDescription}
+                        onChange={(e) => setBackgroundDescription(e.target.value)}
+                        placeholder="e.g., A peaceful sunrise over mountains with soft clouds"
+                        rows={4}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+                        disabled={status !== 'idle'}
+                      />
+                    </div>
 
                     <button
-                      onClick={handleGenerateArt}
-                      disabled={status !== 'idle' || !promptSummary.trim() || !credits?.credits_remaining}
+                      onClick={handleGenerateFinalPoster}
+                      disabled={status !== 'idle' || !backgroundDescription.trim() || !credits?.credits_remaining}
                       className={`w-full py-4 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl ${
-                        status !== 'idle' || !promptSummary.trim() || !credits?.credits_remaining ? 'opacity-50 cursor-not-allowed' : ''
+                        status !== 'idle' || !backgroundDescription.trim() || !credits?.credits_remaining ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     >
                       Generate Final Artwork
@@ -426,9 +441,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
             </AnimatedSection>
           )}
 
-          {/* Generated Image Display */}
-          {imgSrc && (
-            <AnimatedSection delay={0.5}>
+          {/* Step 4: Final Result */}
+          {finalPosterUrl && (
+            <AnimatedSection delay={0.4}>
               <div ref={resultSectionRef} className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 transition-all duration-300 hover:shadow-md">
                 <div className="flex items-center mb-6">
                   <div className="w-10 h-10 rounded-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] text-white flex items-center justify-center font-semibold mr-4">
@@ -436,11 +451,56 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                   </div>
                   <h3 className="text-xl md:text-2xl font-semibold text-gray-900">Your Sermon Artwork</h3>
                 </div>
-                <ImageDisplay
-                  imageUrl={imgSrc}
-                  status={status}
-                  onRegenerate={handleGenerateArt}
-                />
+
+                <div className="space-y-6">
+                  <ImageDisplay
+                    imageUrl={finalPosterUrl}
+                    status={status}
+                    onRegenerate={handleGenerateFinalPoster}
+                  />
+
+                  {!animatedVideoUrl && (
+                    <button
+                      onClick={handleAnimatePoster}
+                      disabled={status !== 'idle' && status !== 'complete'}
+                      className={`w-full py-4 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl ${
+                        status !== 'idle' && status !== 'complete' ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                    >
+                      <span className="flex items-center justify-center">
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        Animate Your Artwork
+                      </span>
+                    </button>
+                  )}
+
+                  {animatedVideoUrl && (
+                    <div className="mt-6">
+                      <h4 className="text-lg font-semibold text-gray-900 mb-4">Animated Version</h4>
+                      <video
+                        controls
+                        loop
+                        className="w-full rounded-lg shadow-lg"
+                        src={animatedVideoUrl}
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                      <a
+                        href={animatedVideoUrl}
+                        download
+                        className="mt-4 inline-flex items-center justify-center px-6 py-3 text-base font-semibold rounded-lg text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-300"
+                      >
+                        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        Download Video
+                      </a>
+                    </div>
+                  )}
+                </div>
               </div>
             </AnimatedSection>
           )}

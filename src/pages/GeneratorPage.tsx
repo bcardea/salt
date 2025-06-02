@@ -132,7 +132,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
       // Save all typography options to library
       for (const url of options) {
-        await saveToLibrary('typography', url);
+        try {
+          await saveToLibrary('typography', url);
+          console.log('Typography saved to library:', url);
+        } catch (err) {
+          console.error('Failed to save typography to library:', err);
+          // Don't throw error here to allow process to continue
+        }
       }
     } catch (e) {
       setError((e as Error).message);
@@ -171,7 +177,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       setGenerationStartTime(null);
 
       // Save poster to library
-      await saveToLibrary('poster', posterUrl);
+      try {
+        await saveToLibrary('poster', posterUrl);
+        console.log('Final poster saved to library:', posterUrl);
+      } catch (err) {
+        console.error('Failed to save poster to library:', err);
+        // Don't throw error here to allow process to continue
+      }
     } catch (e) {
       setError((e as Error).message);
       setStatus('error');
@@ -193,7 +205,13 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       setGenerationStartTime(null);
 
       // Save video to library
-      await saveToLibrary('video', videoUrl);
+      try {
+        await saveToLibrary('video', videoUrl);
+        console.log('Animated video saved to library:', videoUrl);
+      } catch (err) {
+        console.error('Failed to save video to library:', err);
+        // Don't throw error here to allow process to continue
+      }
     } catch (e) {
       setError((e as Error).message);
       setStatus('error');

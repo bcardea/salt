@@ -101,47 +101,78 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
   const saveToLibrary = async (type: 'typography' | 'poster' | 'video', url: string) => {
     try {
-      let finalUrl = url;
-      
-      // For ideogram.ai URLs, fetch directly (no proxy needed as they're already accessible)
+      console.log('Starting saveToLibrary for type:', type, 'URL:', url);
+
+      // For ideogram.ai URLs, we need to handle CORS and authentication
+      const headers = new Headers();
       if (url.includes('ideogram.ai')) {
-        console.log('Fetching ideogram image directly:', url);
+        headers.append('Origin', window.location.origin);
       }
 
-      const response = await fetch(finalUrl);
+      console.log('Fetching image with headers:', Object.fromEntries(headers.entries()));
+      const response = await fetch(url, { headers });
+      
       if (!response.ok) {
+        console.error('Fetch response not OK:', {
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries())
+        });
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
 
-      const blob = await response.blob();
-      // For ideogram images, they're always PNGs
-      const ext = type === 'video' ? 'mp4' : 'png';
-      
-      // Create a new blob with explicit type
-      const typedBlob = new Blob([blob], { 
-        type: type === 'video' ? 'video/mp4' : 'image/png'
+      // Log response details
+      console.log('Fetch response:', {
+        status: response.status,
+        contentType: response.headers.get('content-type'),
+        contentLength: response.headers.get('content-length'),
+        headers: Object.fromEntries(response.headers.entries())
       });
 
-      const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
-      console.log('Saving file:', fileName, 'Type:', typedBlob.type);
+      // Get the image data as an ArrayBuffer to ensure binary data integrity
+      const arrayBuffer = await response.arrayBuffer();
+      console.log('Received array buffer size:', arrayBuffer.byteLength);
+
+      // Create a properly typed blob
+      const contentType = type === 'video' ? 'video/mp4' : 'image/png';
+      const blob = new Blob([arrayBuffer], { type: contentType });
+      console.log('Created blob:', {
+        size: blob.size,
+        type: blob.type
+      });
+
+      // Verify the blob is valid
+      if (blob.size === 0) {
+        throw new Error('Created blob is empty');
+      }
+
+      const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${type === 'video' ? 'mp4' : 'png'}`;
+      console.log('Uploading to Supabase:', {
+        fileName,
+        contentType,
+        blobSize: blob.size
+      });
 
       const { error: uploadError, data: uploadData } = await supabase.storage
         .from('sermon-images')
-        .upload(fileName, typedBlob, {
-          contentType: typedBlob.type,
-          cacheControl: '3600'
+        .upload(fileName, blob, {
+          contentType,
+          cacheControl: '3600',
+          upsert: false
         });
 
       if (uploadError) {
-        console.error('Upload error:', uploadError);
+        console.error('Supabase upload error:', uploadError);
         throw uploadError;
       }
 
-      console.log('Upload successful:', uploadData);
+      console.log('Supabase upload successful:', uploadData);
 
       const { data: { publicUrl } } = supabase.storage
         .from('sermon-images')
         .getPublicUrl(fileName);
+
+      console.log('Generated public URL:', publicUrl);
 
       if (!session?.user.id) {
         throw new Error('User ID is required');
@@ -153,19 +184,21 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         prompt: `${headline} - ${subHeadline}`,
         topic: headline
       };
+
+      console.log('Inserting into images table:', imageData);
       
       const { error: insertError } = await supabase.from('images').insert(imageData);
 
       if (insertError) {
-        console.error('Supabase insert error details:', insertError);
+        console.error('Supabase insert error:', insertError);
         throw insertError;
       }
 
       console.log('Successfully saved to library:', publicUrl);
       return publicUrl;
     } catch (err) {
-      console.error('Error saving to library:', err);
-      throw err; // Re-throw to handle in the calling function
+      console.error('Error in saveToLibrary:', err);
+      throw err;
     }
   };
 

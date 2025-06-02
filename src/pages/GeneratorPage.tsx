@@ -29,6 +29,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const [typographyStyle, setTypographyStyle] = useState<'focused' | 'trendy' | 'kids' | 'handwritten'>('focused');
   const [backgroundDescription, setBackgroundDescription] = useState('');
   const [backgroundSuggestions, setBackgroundSuggestions] = useState<string[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
 
   // Generation states
   const [typographyOptions, setTypographyOptions] = useState<string[]>([]);
@@ -64,33 +65,34 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     }
   }, [typographyOptions]);
 
+  const fetchBackgroundSuggestions = async () => {
+    setIsLoadingSuggestions(true);
+    try {
+      const suggestions = await getBackgroundSuggestions(headline, subHeadline);
+      setBackgroundSuggestions(suggestions);
+    } catch (error: any) {
+      console.error('Failed to get background suggestions:', error);
+      
+      // Provide fallback suggestions based on the headline
+      const fallbackSuggestions = [
+        'A peaceful church sanctuary with soft natural light streaming through stained glass windows',
+        'An abstract background with gentle waves of light and soft, muted colors',
+        'A modern minimalist design with clean lines and subtle gradients',
+        'A nature-inspired scene with soft bokeh effects and warm lighting',
+        'An elegant architectural detail with dramatic lighting and shadows'
+      ];
+      setBackgroundSuggestions(fallbackSuggestions);
+    } finally {
+      setIsLoadingSuggestions(false);
+    }
+  };
+
+  // Scroll to background section when typography is selected
   useEffect(() => {
     if (selectedTypography && backgroundSectionRef.current) {
       backgroundSectionRef.current.scrollIntoView({ behavior: 'smooth' });
-      // Get background suggestions when typography is selected
-      const fetchSuggestions = async () => {
-        try {
-          const suggestions = await getBackgroundSuggestions(headline, subHeadline);
-          setBackgroundSuggestions(suggestions);
-          setError(''); // Clear any previous errors
-        } catch (error: any) {
-          console.error('Failed to get background suggestions:', error);
-          setError('Unable to get background suggestions. You can still enter your own description.');
-          
-          // Provide fallback suggestions based on the headline
-          const fallbackSuggestions = [
-            'A peaceful church sanctuary with soft natural light streaming through stained glass windows',
-            'An abstract background with gentle waves of light and soft, muted colors',
-            'A modern minimalist design with clean lines and subtle gradients',
-            'A nature-inspired scene with soft bokeh effects and warm lighting',
-            'An elegant architectural detail with dramatic lighting and shadows'
-          ];
-          setBackgroundSuggestions(fallbackSuggestions);
-        }
-      };
-      fetchSuggestions();
     }
-  }, [selectedTypography, headline, subHeadline]);
+  }, [selectedTypography]);
 
   useEffect(() => {
     if (finalPosterUrl && resultSectionRef.current) {
@@ -100,11 +102,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
   const saveToLibrary = async (type: 'typography' | 'poster' | 'video', url: string) => {
     try {
-      const response = await fetch(url);
+      // If it's an Ideogram URL, proxy it through our server
+      const proxyUrl = url.includes('ideogram.ai') 
+        ? `${import.meta.env.VITE_SALT_SERVER_URL}/api/proxy-image?url=${encodeURIComponent(url)}`
+        : url;
+
+      const response = await fetch(proxyUrl);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.statusText}`);
+      }
+
       const blob = await response.blob();
       const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${type === 'video' ? 'mp4' : 'png'}`;
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from('sermon-images')
         .upload(fileName, blob);
 
@@ -149,7 +160,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     setGenerationStartTime(Date.now());
 
     try {
-      const options = await generateTypography(headline, subHeadline, typographyStyle);
+      // Start both typography generation and background suggestions in parallel
+      const [options] = await Promise.all([
+        generateTypography(headline, subHeadline, typographyStyle),
+        fetchBackgroundSuggestions() // This runs in parallel
+      ]);
+
       setTypographyOptions(options);
       setStatus('idle');
       setGenerationStartTime(null);
@@ -445,7 +461,15 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                       <label htmlFor="background" className="block text-sm font-medium text-gray-700 mb-2">
                         Background Description
                       </label>
-                      {backgroundSuggestions.length > 0 && (
+                      {isLoadingSuggestions ? (
+                        <div className="mb-3 flex gap-2">
+                          <div className="animate-pulse flex space-x-2">
+                            {[1, 2, 3].map((i) => (
+                              <div key={i} className="h-8 w-32 bg-gray-200 rounded-lg"></div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : backgroundSuggestions.length > 0 && (
                         <div className="mb-3 flex flex-wrap gap-2">
                           {backgroundSuggestions.map((suggestion, index) => (
                             <button

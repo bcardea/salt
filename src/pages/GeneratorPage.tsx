@@ -146,17 +146,25 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         throw new Error('Created blob is empty');
       }
 
+      // Add size validation for videos
+      if (type === 'video' && blob.size > 100 * 1024 * 1024) { // 100MB limit
+        throw new Error('Video file too large. Maximum size is 100MB.');
+      }
+
       const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${type === 'video' ? 'mp4' : 'png'}`;
+      const bucketName = type === 'video' ? 'sermon-videos' : 'sermon-images';
+
       console.log('Uploading to Supabase:', {
         fileName,
-        contentType,
-        blobSize: blob.size
+        bucketName,
+        contentType: type === 'video' ? 'video/mp4' : 'image/png',
+        size: blob.size
       });
 
-      const { error: uploadError, data: uploadData } = await supabase.storage
-        .from('sermon-images')
+      const { error: uploadError } = await supabase.storage
+        .from(type === 'video' ? 'sermon-videos' : 'sermon-images')
         .upload(fileName, blob, {
-          contentType,
+          contentType: type === 'video' ? 'video/mp4' : 'image/png',
           cacheControl: '3600',
           upsert: false
         });
@@ -166,10 +174,10 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         throw uploadError;
       }
 
-      console.log('Supabase upload successful:', uploadData);
+      console.log('Supabase upload successful');
 
       const { data: { publicUrl } } = supabase.storage
-        .from('sermon-images')
+        .from(bucketName)
         .getPublicUrl(fileName);
 
       console.log('Generated public URL:', publicUrl);

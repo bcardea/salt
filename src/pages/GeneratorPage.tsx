@@ -101,23 +101,54 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
   const saveToLibrary = async (type: 'typography' | 'poster' | 'video', url: string) => {
     try {
+      // For ideogram.ai URLs, use our proxy server
       const proxyUrl = url.includes('ideogram.ai') 
         ? `${import.meta.env.VITE_SALT_SERVER_URL}/api/proxy-image?url=${encodeURIComponent(url)}`
         : url;
 
+      console.log('Fetching from URL:', proxyUrl);
       const response = await fetch(proxyUrl);
+      
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
 
+      // Verify content type
+      const contentType = response.headers.get('content-type');
+      console.log('Content type:', contentType);
+      
+      if (!contentType || (!contentType.includes('image/') && !contentType.includes('video/'))) {
+        throw new Error(`Invalid content type: ${contentType}`);
+      }
+
+      // Get the correct file extension based on content type
+      const ext = type === 'video' ? 'mp4' : 
+                 contentType.includes('image/png') ? 'png' :
+                 contentType.includes('image/jpeg') ? 'jpg' :
+                 contentType.includes('image/webp') ? 'webp' : 'png';
+
       const blob = await response.blob();
-      const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${type === 'video' ? 'mp4' : 'png'}`;
+      // Create a new blob with explicit type
+      const typedBlob = new Blob([blob], { 
+        type: type === 'video' ? 'video/mp4' : `image/${ext}`
+      });
 
-      const { error: uploadError } = await supabase.storage
+      const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
+      console.log('Saving file:', fileName, 'Type:', typedBlob.type);
+
+      const { error: uploadError, data: uploadData } = await supabase.storage
         .from('sermon-images')
-        .upload(fileName, blob);
+        .upload(fileName, typedBlob, {
+          contentType: typedBlob.type,
+          cacheControl: '3600'
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
+
+      console.log('Upload successful:', uploadData);
 
       const { data: { publicUrl } } = supabase.storage
         .from('sermon-images')
@@ -140,8 +171,12 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         console.error('Supabase insert error details:', insertError);
         throw insertError;
       }
+
+      console.log('Successfully saved to library:', publicUrl);
+      return publicUrl;
     } catch (err) {
       console.error('Error saving to library:', err);
+      throw err; // Re-throw to handle in the calling function
     }
   };
 
@@ -166,25 +201,42 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     setGenerationStartTime(Date.now());
 
     try {
+      // Generate typography and fetch background suggestions in parallel
       const [options] = await Promise.all([
         generateTypography(headline, subHeadline, typographyStyle),
         fetchBackgroundSuggestions()
       ]);
 
-      setTypographyOptions(options);
-      setStatus('idle');
-      setGenerationStartTime(null);
+      if (!options || options.length === 0) {
+        throw new Error('No typography options were generated');
+      }
 
+      // Save each typography option to the library
+      const savedUrls = [];
       for (const url of options) {
         try {
-          await saveToLibrary('typography', url);
+          const savedUrl = await saveToLibrary('typography', url);
+          if (savedUrl) {
+            savedUrls.push(savedUrl);
+          }
         } catch (err) {
           console.error('Failed to save typography to library:', err);
+          // Continue with other images even if one fails
         }
       }
+
+      // Update the typography options with the saved URLs
+      if (savedUrls.length > 0) {
+        setTypographyOptions(savedUrls);
+        setStatus('idle');
+      } else {
+        throw new Error('Failed to save any typography images');
+      }
     } catch (e) {
+      console.error('Typography generation error:', e);
       setError((e as Error).message);
       setStatus('error');
+    } finally {
       setGenerationStartTime(null);
     }
   };

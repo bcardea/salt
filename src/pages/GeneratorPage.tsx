@@ -101,36 +101,25 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
   const saveToLibrary = async (type: 'typography' | 'poster' | 'video', url: string) => {
     try {
-      // For ideogram.ai URLs, use our proxy server
-      const proxyUrl = url.includes('ideogram.ai') 
-        ? `${import.meta.env.VITE_SALT_SERVER_URL}/api/proxy-image?url=${encodeURIComponent(url)}`
-        : url;
-
-      console.log('Fetching from URL:', proxyUrl);
-      const response = await fetch(proxyUrl);
+      let finalUrl = url;
       
+      // For ideogram.ai URLs, fetch directly (no proxy needed as they're already accessible)
+      if (url.includes('ideogram.ai')) {
+        console.log('Fetching ideogram image directly:', url);
+      }
+
+      const response = await fetch(finalUrl);
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
 
-      // Verify content type
-      const contentType = response.headers.get('content-type');
-      console.log('Content type:', contentType);
-      
-      if (!contentType || (!contentType.includes('image/') && !contentType.includes('video/'))) {
-        throw new Error(`Invalid content type: ${contentType}`);
-      }
-
-      // Get the correct file extension based on content type
-      const ext = type === 'video' ? 'mp4' : 
-                 contentType.includes('image/png') ? 'png' :
-                 contentType.includes('image/jpeg') ? 'jpg' :
-                 contentType.includes('image/webp') ? 'webp' : 'png';
-
       const blob = await response.blob();
+      // For ideogram images, they're always PNGs
+      const ext = type === 'video' ? 'mp4' : 'png';
+      
       // Create a new blob with explicit type
       const typedBlob = new Blob([blob], { 
-        type: type === 'video' ? 'video/mp4' : `image/${ext}`
+        type: type === 'video' ? 'video/mp4' : 'image/png'
       });
 
       const fileName = `${type}-${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
@@ -211,27 +200,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         throw new Error('No typography options were generated');
       }
 
-      // Save each typography option to the library
-      const savedUrls = [];
-      for (const url of options) {
+      // Show the typography options immediately
+      setTypographyOptions(options);
+      setStatus('idle');
+
+      // Save the images to the library in the background
+      options.forEach(async (url) => {
         try {
-          const savedUrl = await saveToLibrary('typography', url);
-          if (savedUrl) {
-            savedUrls.push(savedUrl);
-          }
+          await saveToLibrary('typography', url);
         } catch (err) {
           console.error('Failed to save typography to library:', err);
-          // Continue with other images even if one fails
+          // Don't show error to user since the images are still visible
         }
-      }
-
-      // Update the typography options with the saved URLs
-      if (savedUrls.length > 0) {
-        setTypographyOptions(savedUrls);
-        setStatus('idle');
-      } else {
-        throw new Error('Failed to save any typography images');
-      }
+      });
     } catch (e) {
       console.error('Typography generation error:', e);
       setError((e as Error).message);

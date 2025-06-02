@@ -10,6 +10,10 @@ interface AnimationResponse {
   videoUrl: string;
 }
 
+interface BackgroundSuggestionsResponse {
+  suggestions: string[];
+}
+
 const SALT_SERVER_URL = 'https://salt-server.onrender.com';
 
 export async function generateTypography(
@@ -68,6 +72,35 @@ export async function generateFinalPoster(
     return data.imageUrl;
   } catch (error: any) {
     console.error('Final poster generation error:', error);
+    throw error;
+  }
+}
+
+export async function getBackgroundSuggestions(
+  headline: string,
+  subHeadline: string
+): Promise<string[]> {
+  try {
+    const response = await fetch(`${SALT_SERVER_URL}/api/background-suggestions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        headline,
+        subHeadline
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Background suggestions generation failed');
+    }
+
+    const data: BackgroundSuggestionsResponse = await response.json();
+    return data.suggestions;
+  } catch (error: any) {
+    console.error('Background suggestions error:', error);
     throw error;
   }
 }

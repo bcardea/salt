@@ -4,7 +4,7 @@ import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
 
 import { supabase } from '../lib/supabase';
-import { generateTypography, generateFinalPoster, animatePoster } from '../services/saltServer';
+import { generateTypography, generateFinalPoster, animatePoster, getBackgroundSuggestions } from '../services/saltServer';
 import ImageDisplay from '../components/ImageDisplay';
 import CreditDisplay from '../components/CreditDisplay';
 import { useCredits } from '../hooks/useCredits';
@@ -20,6 +20,7 @@ interface GeneratorPageProps {
 }
 
 type GenerationStatus = 'idle' | 'generating-typography' | 'generating-poster' | 'animating' | 'complete' | 'error';
+const isGeneratingTypography = (status: GenerationStatus): boolean => status === 'generating-typography';
 
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   // Form states
@@ -27,6 +28,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const [subHeadline, setSubHeadline] = useState('');
   const [typographyStyle, setTypographyStyle] = useState<'focused' | 'trendy' | 'kids' | 'handwritten'>('focused');
   const [backgroundDescription, setBackgroundDescription] = useState('');
+  const [backgroundSuggestions, setBackgroundSuggestions] = useState<string[]>([]);
 
   // Generation states
   const [typographyOptions, setTypographyOptions] = useState<string[]>([]);
@@ -65,8 +67,18 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   useEffect(() => {
     if (selectedTypography && backgroundSectionRef.current) {
       backgroundSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+      // Get background suggestions when typography is selected
+      const fetchSuggestions = async () => {
+        try {
+          const suggestions = await getBackgroundSuggestions(headline, subHeadline);
+          setBackgroundSuggestions(suggestions);
+        } catch (error) {
+          console.error('Failed to get background suggestions:', error);
+        }
+      };
+      fetchSuggestions();
     }
-  }, [selectedTypography]);
+  }, [selectedTypography, headline, subHeadline]);
 
   useEffect(() => {
     if (finalPosterUrl && resultSectionRef.current) {
@@ -397,7 +409,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                     options={typographyOptions}
                     selectedOption={selectedTypography}
                     onSelect={setSelectedTypography}
-                    isLoading={status === 'generating-typography'}
+                    isLoading={isGeneratingTypography(status)}
                   />
                 </div>
               </div>
@@ -421,6 +433,20 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                       <label htmlFor="background" className="block text-sm font-medium text-gray-700 mb-2">
                         Background Description
                       </label>
+                      {backgroundSuggestions.length > 0 && (
+                        <div className="mb-3 flex flex-wrap gap-2">
+                          {backgroundSuggestions.map((suggestion, index) => (
+                            <button
+                              key={index}
+                              onClick={() => setBackgroundDescription(suggestion)}
+                              className="px-3 py-1.5 text-sm bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
+                              type="button"
+                            >
+                              {suggestion}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                       <textarea
                         id="background"
                         value={backgroundDescription}

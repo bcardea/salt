@@ -263,7 +263,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     try {
       const imageUrl = await generateFinalPoster(selectedTypography, backgroundDescription);
       setFinalPosterUrl(imageUrl);
-      setStatus('idle');
+      setStatus('complete'); // Change from 'idle' to 'complete' to show the preview
 
       try {
         await saveToLibrary('poster', imageUrl);

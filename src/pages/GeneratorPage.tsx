@@ -22,6 +22,50 @@ interface GeneratorPageProps {
 type GenerationStatus = 'idle' | 'generating-typography' | 'generating-poster' | 'animating' | 'complete' | 'error';
 const isGeneratingTypography = (status: GenerationStatus): boolean => status === 'generating-typography';
 
+interface PricingTier {
+  name: string;
+  price: number;
+  credits: string;
+  support: string;
+  perks: string[];
+  impact: string[];
+}
+
+const pricingTiers: PricingTier[] = [
+  {
+    name: 'Pinch',
+    price: 50,
+    credits: '20 credits',
+    support: 'Basic – email response within 48 hrs',
+    perks: [],
+    impact: []
+  },
+  {
+    name: 'Shaker',
+    price: 150,
+    credits: '75 credits',
+    support: 'Priority – 24-hr email + chat',
+    perks: ['Early-access to new features', 'Access to our weekly newsletter'],
+    impact: ['10% of gross from this tier donated back to a church in the SALT community']
+  },
+  {
+    name: 'Rock',
+    price: 300,
+    credits: '150 credits',
+    support: 'Same-day support (M-F)',
+    perks: ['Everything in Shaker', 'Monthly "Marketing & AI for Churches" group coaching call'],
+    impact: ['10% offering donation', 'PLUS: One free Starter scholarship granted to a small church']
+  },
+  {
+    name: 'Ocean',
+    price: 500,
+    credits: 'Unlimited credits*',
+    support: 'White-glove – same-day (M-F) + weekend on-call',
+    perks: ['Everything in Rock', 'Dedicated account manager', 'Quarterly 1-on-1 strategy session'],
+    impact: ['10% offering donation', 'One free Starter scholarship per subscription']
+  }
+];
+
 const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   // Form states
   const [headline, setHeadline] = useState('');
@@ -45,6 +89,11 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   const [generationStartTime, setGenerationStartTime] = useState<number | null>(null);
   const [hoveredSuggestion, setHoveredSuggestion] = useState<number | null>(null);
 
+  // Pricing slider states
+  const [sliderValue, setSliderValue] = useState(150);
+  const [selectedPlan, setSelectedPlan] = useState<string>('Shaker');
+  const [isDragging, setIsDragging] = useState(false);
+
   const { credits, loading: creditsLoading } = useCredits();
 
   // Add refs for scroll targets
@@ -65,6 +114,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
       typographySectionRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [typographyOptions]);
+
+  // Update selected plan based on slider value
+  useEffect(() => {
+    const tier = pricingTiers.find(t => t.price === sliderValue);
+    if (tier) {
+      setSelectedPlan(tier.name);
+    }
+  }, [sliderValue]);
 
   const fetchBackgroundSuggestions = async () => {
     setIsLoadingSuggestions(true);
@@ -311,6 +368,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
     }
   };
 
+  const handleSliderChange = (value: number) => {
+    // Snap to nearest tier
+    const prices = [50, 150, 300, 500];
+    const nearest = prices.reduce((prev, curr) => 
+      Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+    );
+    setSliderValue(nearest);
+  };
+
+  const handleGetStarted = () => {
+    setIsQuoteFormOpen(true);
+  };
+
   if (!session) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50 flex flex-col justify-center pt-36 md:pt-40 pb-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -322,54 +392,209 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         </div>
 
         <AnimatedSection>
-          <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="max-w-6xl mx-auto text-center relative z-10">
             <div className="mb-12">
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 md:mb-8 bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] bg-clip-text text-transparent animate-fade-in">
-                Flexible Annual Pricing Built for Every Church
+                Pay-What-You-Want Pricing for Every Church
               </h2>
 
-              <p className="text-base md:text-xl text-gray-600 mb-8 md:mb-12 max-w-3xl mx-auto leading-relaxed animate-fade-in animation-delay-200">
-                At SALT Creative, we believe every pastor deserves beautiful, impactful sermon art—regardless of church size or budget. 
-                Our annual licensing is tailored specifically to your church's congregation size, allowing us to offer significantly 
-                reduced pricing for smaller, newer churches.
+              <p className="text-base md:text-xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed animate-fade-in animation-delay-200">
+                Beautiful sermon art shouldn't be a luxury. Choose your level and help smaller churches thrive.
+              </p>
+              
+              <p className="text-sm md:text-base text-[#345A7C] font-medium max-w-2xl mx-auto animate-fade-in animation-delay-300">
+                Every upgrade funds ministry for others. 10% of each tier goes back to churches in need.
               </p>
             </div>
 
-            <div className="bg-white/80 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-2xl mb-12 md:mb-16 transition-all duration-500 hover:shadow-3xl hover:scale-[1.02] border border-gray-100 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              
-              <div className="relative z-10">
-                <div className="mb-6">
-                  <svg className="w-16 h-16 mx-auto text-[#345A7C] animate-bounce" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">Ready to Get Started?</h3>
-                <p className="text-sm md:text-base text-gray-600 mb-8 md:mb-10 max-w-2xl mx-auto leading-relaxed">
-                  Click below to get your personalized quote for an annual license.
-                  <br className="hidden md:block" />
-                  <span className="block mt-2 md:mt-3 font-medium text-[#345A7C]">
-                    Are you a startup or brand-new church? Apply today for discounted—or even sponsored—membership through our SALT Sponsorship Initiative.
-                  </span>
-                </p>
+            {/* Pricing Slider Section */}
+            <div className="bg-white/90 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-2xl mb-8 transition-all duration-500 border border-gray-100 relative overflow-hidden">
+              <div className="mb-8">
+                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Choose Your Impact Level</h3>
+                <p className="text-gray-600">Drag the slider to choose your level—every step up unlocks more creative power.</p>
+              </div>
 
-                <button
-                  onClick={() => setIsQuoteFormOpen(true)}
-                  className="group inline-flex items-center justify-center px-8 md:px-12 py-4 md:py-5 text-base md:text-lg font-bold rounded-full text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
-                >
-                  <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
-                  <span className="relative flex items-center">
-                    Get Your Quote
-                    <svg className="ml-3 w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                    </svg>
-                  </span>
-                </button>
+              {/* Slider Container */}
+              <div className="mb-12 px-4 md:px-8">
+                <div className="relative">
+                  {/* Slider Track */}
+                  <div className="h-3 bg-gray-200 rounded-full relative overflow-hidden">
+                    <div 
+                      className="absolute h-full bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] rounded-full transition-all duration-300"
+                      style={{ width: `${((sliderValue - 50) / 450) * 100}%` }}
+                    ></div>
+                  </div>
+                  
+                  {/* Slider Marks */}
+                  <div className="absolute w-full -top-1">
+                    {[50, 150, 300, 500].map((price, index) => (
+                      <div
+                        key={price}
+                        className="absolute transform -translate-x-1/2"
+                        style={{ left: `${(index / 3) * 100}%` }}
+                      >
+                        <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 ${
+                          sliderValue >= price 
+                            ? 'bg-[#345A7C] border-[#345A7C] scale-125' 
+                            : 'bg-white border-gray-300'
+                        }`}></div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Slider Input */}
+                  <input
+                    type="range"
+                    min="50"
+                    max="500"
+                    value={sliderValue}
+                    onChange={(e) => handleSliderChange(Number(e.target.value))}
+                    onMouseDown={() => setIsDragging(true)}
+                    onMouseUp={() => setIsDragging(false)}
+                    onTouchStart={() => setIsDragging(true)}
+                    onTouchEnd={() => setIsDragging(false)}
+                    className="absolute w-full h-full opacity-0 cursor-pointer"
+                    style={{ top: '-50%' }}
+                  />
+                </div>
+
+                {/* Price Labels */}
+                <div className="flex justify-between mt-8 text-sm md:text-base">
+                  {pricingTiers.map((tier, index) => (
+                    <button
+                      key={tier.name}
+                      onClick={() => setSliderValue(tier.price)}
+                      className={`font-semibold transition-all duration-300 ${
+                        sliderValue === tier.price 
+                          ? 'text-[#345A7C] scale-110' 
+                          : 'text-gray-500 hover:text-gray-700'
+                      }`}
+                    >
+                      ${tier.price}
+                      <span className="block text-xs mt-1">{tier.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Selected Tier Details */}
+              <div className={`transition-all duration-500 ${isDragging ? 'opacity-50' : 'opacity-100'}`}>
+                {pricingTiers.map((tier) => (
+                  <div
+                    key={tier.name}
+                    className={`transition-all duration-500 ${
+                      sliderValue === tier.price 
+                        ? 'opacity-100 transform translate-y-0' 
+                        : 'hidden'
+                    }`}
+                  >
+                    <div className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl p-8 mb-8">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h4 className="text-3xl font-bold text-gray-900">{tier.name}</h4>
+                          <p className="text-5xl font-bold text-[#345A7C] mt-2">${tier.price}<span className="text-lg font-normal text-gray-600">/month</span></p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-gray-900">{tier.credits}</p>
+                          <p className="text-sm text-gray-600">{tier.credits === 'Unlimited credits*' ? 'Fair use policy applies' : '≈ ' + Math.floor(parseInt(tier.credits) / 4) + ' graphics/week'}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-6">
+                        {/* Support Level */}
+                        <div>
+                          <h5 className="font-semibold text-gray-900 mb-2 flex items-center">
+                            <svg className="w-5 h-5 mr-2 text-[#345A7C]" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M2 5a2 2 0 012-2h7a2 2 0 012 2v4a2 2 0 01-2 2H9l-3 3v-3H4a2 2 0 01-2-2V5z" />
+                              <path d="M15 7v2a4 4 0 01-4 4H9.828l-1.766 1.767c.28.149.599.233.938.233h2l3 3v-3h2a2 2 0 002-2V9a2 2 0 00-2-2h-1z" />
+                            </svg>
+                            Support Level
+                          </h5>
+                          <p className="text-gray-600 ml-7">{tier.support}</p>
+                        </div>
+
+                        {/* Perks */}
+                        {tier.perks.length > 0 && (
+                          <div>
+                            <h5 className="font-semibold text-gray-900 mb-2 flex items-center">
+                              <svg className="w-5 h-5 mr-2 text-[#345A7C]" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zM12 2a1 1 0 01.967.744L14.146 7.2 17.5 9.134a1 1 0 010 1.732l-3.354 1.935-1.18 4.455a1 1 0 01-1.933 0L9.854 12.8 6.5 10.866a1 1 0 010-1.732l3.354-1.935 1.18-4.455A1 1 0 0112 2z" clipRule="evenodd" />
+                              </svg>
+                              Perks & Extras
+                            </h5>
+                            <ul className="space-y-2 ml-7">
+                              {tier.perks.map((perk, index) => (
+                                <li key={index} className="text-gray-600 flex items-start">
+                                  <svg className="w-4 h-4 mr-2 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                  </svg>
+                                  {perk}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {/* Kingdom Impact */}
+                        {tier.impact.length > 0 && (
+                          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6">
+                            <h5 className="font-semibold text-gray-900 mb-2 flex items-center">
+                              <svg className="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                              </svg>
+                              Kingdom Impact
+                            </h5>
+                            <ul className="space-y-2 ml-7">
+                              {tier.impact.map((impact, index) => (
+                                <li key={index} className="text-gray-700 flex items-start">
+                                  <svg className="w-4 h-4 mr-2 text-purple-600 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                                  </svg>
+                                  {impact}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+
+                      {tier.credits === 'Unlimited credits*' && (
+                        <p className="text-xs text-gray-500 mt-4 italic">
+                          * Unlimited = "fair-use" policy (e.g., 500 generations/mo soft cap). Plenty of headroom for sermon series, social assets, and experimentation without nickel-and-diming pastors.
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      onClick={handleGetStarted}
+                      className="group w-full inline-flex items-center justify-center px-8 md:px-12 py-4 md:py-5 text-base md:text-lg font-bold rounded-full text-white bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] hover:from-[#2A4B6A] hover:to-[#8EAFC5] transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-1 active:translate-y-0 relative overflow-hidden"
+                    >
+                      <span className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+                      <span className="relative flex items-center">
+                        Get Started with {tier.name}
+                        <svg className="ml-3 w-5 h-5 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </span>
+                    </button>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-200 animate-fade-in animation-delay-400">
+            {/* Startup Church Notice */}
+            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 mb-8 text-center animate-fade-in animation-delay-400">
+              <svg className="w-12 h-12 mx-auto text-purple-600 mb-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+              </svg>
+              <h4 className="text-lg font-bold text-gray-900 mb-2">Are you a startup or brand-new church?</h4>
+              <p className="text-gray-700 max-w-2xl mx-auto">
+                Apply today for discounted—or even sponsored—membership through our SALT Sponsorship Initiative. 
+                We believe every church deserves beautiful sermon art, regardless of size or budget.
+              </p>
+            </div>
+
+            <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-200 animate-fade-in animation-delay-600">
               <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">Already have an account?</h3>
               <div className="transform hover:scale-[1.02] transition-transform duration-300">
                 <Auth />
@@ -381,6 +606,7 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
         <QuoteRequestForm
           isOpen={isQuoteFormOpen}
           onClose={() => setIsQuoteFormOpen(false)}
+          selectedPlan={selectedPlan}
         />
       </div>
     );
@@ -765,17 +991,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                           Animated Version
                         </h4>
                         <div className="relative rounded-xl overflow-hidden shadow-2xl group">
-                          <video
-                            controls
-                            loop
-                            autoPlay
-                            muted
-                            className="w-full rounded-xl"
-                            src={animatedVideoUrl}
-                          >
-                            Your browser does not support the video tag.
-                          </video>
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                          <div className="relative">
+                            <video
+                              controls
+                              loop
+                              autoPlay
+                              muted
+                              className="w-full rounded-xl"
+                              src={animatedVideoUrl}
+                            >
+                              Your browser does not support the video tag.
+                            </video>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+                          </div>
                         </div>
                         <div className="mt-6 flex flex-col sm:flex-row gap-4">
                           <a

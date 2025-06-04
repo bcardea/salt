@@ -369,10 +369,16 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
   };
 
   const handleSliderChange = (value: number) => {
-    // Snap to nearest tier
+    // Update slider value in real-time
+    setSliderValue(value);
+  };
+
+  // Snap to nearest tier when sliding ends
+  const handleSliderEnd = () => {
+    setIsDragging(false);
     const prices = [50, 150, 300, 500];
     const nearest = prices.reduce((prev, curr) => 
-      Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
+      Math.abs(curr - sliderValue) < Math.abs(prev - sliderValue) ? curr : prev
     );
     setSliderValue(nearest);
   };
@@ -433,11 +439,19 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                         className="absolute transform -translate-x-1/2"
                         style={{ left: `${(index / 3) * 100}%` }}
                       >
-                        <div className={`w-5 h-5 rounded-full border-2 transition-all duration-300 ${
-                          sliderValue >= price 
-                            ? 'bg-[#345A7C] border-[#345A7C] scale-125' 
-                            : 'bg-white border-gray-300'
-                        }`}></div>
+                        <div 
+                          className={`w-5 h-5 rounded-full border-2 transition-all duration-300 ${
+                            isDragging
+                              ? sliderValue >= price 
+                                ? 'bg-[#345A7C] border-[#345A7C] scale-110'
+                                : 'bg-white border-gray-300'
+                              : Math.abs(sliderValue - price) < 1
+                                ? 'bg-[#345A7C] border-[#345A7C] scale-125'
+                                : sliderValue > price
+                                  ? 'bg-[#345A7C] border-[#345A7C]'
+                                  : 'bg-white border-gray-300'
+                          }`}
+                        ></div>
                       </div>
                     ))}
                   </div>
@@ -447,14 +461,14 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
                     type="range"
                     min="50"
                     max="500"
+                    step="1"
                     value={sliderValue}
                     onChange={(e) => handleSliderChange(Number(e.target.value))}
                     onMouseDown={() => setIsDragging(true)}
-                    onMouseUp={() => setIsDragging(false)}
+                    onMouseUp={handleSliderEnd}
                     onTouchStart={() => setIsDragging(true)}
-                    onTouchEnd={() => setIsDragging(false)}
-                    className="absolute w-full h-full opacity-0 cursor-pointer"
-                    style={{ top: '-50%' }}
+                    onTouchEnd={handleSliderEnd}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                   />
                 </div>
 

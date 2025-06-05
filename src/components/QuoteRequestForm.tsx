@@ -72,7 +72,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ isOpen, onClose }) 
         <div className="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
           <div className="px-4 pt-5 pb-4 bg-white sm:p-6 sm:pb-4">
             <div className="flex justify-between items-center mb-5">
-              <h3 className="text-2xl font-bold text-gray-900">Request Your Quote</h3>
+              <h3 className="text-2xl font-bold text-gray-900">Setup Your On-boarding</h3>
               <button
                 onClick={onClose}
                 className="text-gray-400 hover:text-gray-500 transition-colors"
@@ -89,7 +89,7 @@ const QuoteRequestForm: React.FC<QuoteRequestFormProps> = ({ isOpen, onClose }) 
                   </svg>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">Thank You!</h3>
-                <p className="text-gray-600">We've received your request and will be in touch soon.</p>
+                <p className="text-gray-600">We've received your request and will be in touch as soon as possible to schedule your onboarding and get you on the SALT platform!</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">

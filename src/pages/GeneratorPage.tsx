@@ -399,6 +399,34 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
 
         <AnimatedSection>
           <div className="max-w-6xl mx-auto text-center relative z-10">
+            {/* Sign In Button */}
+            <button
+              onClick={() => {
+                const authElement = document.querySelector('#auth-section');
+                if (authElement) {
+                  authElement.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className="mb-8 inline-flex items-center px-6 py-3 text-sm font-medium text-[#345A7C] bg-white/90 hover:bg-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 border border-[#345A7C]/20 hover:border-[#345A7C]/30 backdrop-blur-xl group"
+            >
+              <svg
+                className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform duration-300"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+              </svg>
+              Already have an account? Click here to sign in
+              <svg
+                className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </button>
+
             <div className="mb-12">
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 md:mb-8 bg-gradient-to-r from-[#345A7C] to-[#A1C1D7] bg-clip-text text-transparent animate-fade-in">
                 Pay-What-You-Want Pricing for Every Church
@@ -611,7 +639,9 @@ const GeneratorPage: React.FC<GeneratorPageProps> = ({ session }) => {
             <div className="mt-12 md:mt-16 pt-8 md:pt-12 border-t border-gray-200 animate-fade-in animation-delay-600">
               <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-4 md:mb-6">Already have an account?</h3>
               <div className="transform hover:scale-[1.02] transition-transform duration-300">
-                <Auth />
+                <div id="auth-section">
+                  <Auth />
+                </div>
               </div>
             </div>
           </div>

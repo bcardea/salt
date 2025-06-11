@@ -131,7 +131,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 space-y-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">Sermon Generator</h1>
           <p className="text-lg text-gray-600">Transform your ideas into impactful sermons</p>
@@ -298,7 +298,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
 
           {/* Error Display */}
           {error && (
-            <div className="fixed bottom-4 right-4 p-4 bg-red-50 rounded-md shadow-lg border border-red-100 max-w-md animate-slide-in-bottom z-50">
+            <div className="fixed bottom-4 right-4 p-4 bg-red-50 rounded-md shadow-lg border border-red-100 max-w-md z-50">
               <p className="text-red-700">{error}</p>
             </div>
           )}

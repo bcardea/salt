@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Session } from '@supabase/supabase-js';
 import Auth from '../components/Auth';
 import StepIndicator from '../components/StepIndicator';
+import SermonOutlineDisplay from '../components/SermonOutlineDisplay';
 import { generateSermonAngles, generateSermonOutline } from '../services/saltServer';
 import { saveTextGeneration } from '../services/database';
 
@@ -285,10 +286,10 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
                   </button>
                 </div>
 
-                <div className="prose max-w-none mt-4">
-                  <div
-                    className="p-4 bg-gray-50 rounded-lg"
-                    dangerouslySetInnerHTML={{ __html: outline }}
+                <div className="mt-4">
+                  <SermonOutlineDisplay 
+                    content={outline}
+                    title={selectedAngle?.title || 'Sermon Outline'}
                   />
                 </div>
               </div>

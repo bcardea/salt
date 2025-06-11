@@ -11,6 +11,8 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import FlavorPage from './pages/FlavorPage';
+import DepthPage from './pages/DepthPage';
+import AromaPage from './pages/AromaPage';
 import { ApiKeyProvider } from './context/ApiKeyContext';
 import VideoModal from './components/VideoModal';
 
@@ -75,6 +77,8 @@ function App() {
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/flavor" element={<FlavorPage session={session} />} />
+          <Route path="/depth" element={<DepthPage session={session} />} />
+          <Route path="/aroma" element={<AromaPage session={session} />} />
         </Routes>
         <Footer />
         <VideoModal

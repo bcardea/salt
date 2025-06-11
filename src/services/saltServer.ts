@@ -24,6 +24,22 @@ interface SermonOutlineResponse {
   outline: string;
 }
 
+interface DepthResearchResponse {
+  text: string;
+}
+
+interface AromaContentResponse {
+  text: string;
+}
+
+export interface AromaContentParams {
+  type: string;
+  topic: string;
+  keyPoints: string;
+  tone: string;
+  audience: string;
+}
+
 const SALT_SERVER_URL = 'https://salt-server.onrender.com';
 
 export async function generateTypography(
@@ -231,6 +247,58 @@ export async function generateSermonOutline(
 
     const data: SermonOutlineResponse = await response.json();
     return data.outline;
+  } catch (error: any) {
+    console.error('Sermon outline generation error:', error);
+    throw error;
+  }
+}
+
+export async function generateDepthResearch(
+  research_topic: string
+): Promise<string> {
+  try {
+    const response = await fetch(`${SALT_SERVER_URL}/api/depth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({ research_topic })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Depth research generation failed');
+    }
+
+    const data: DepthResearchResponse = await response.json();
+    return data.text;
+  } catch (error: any) {
+    console.error('Depth research generation error:', error);
+    throw error;
+  }
+}
+
+export async function generateAromaContent(
+  params: AromaContentParams
+): Promise<string> {
+  try {
+    const response = await fetch(`${SALT_SERVER_URL}/api/aroma`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify(params)
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Aroma content generation failed');
+    }
+
+    const data: AromaContentResponse = await response.json();
+    return data.text;
   } catch (error: any) {
     console.error('Sermon outline generation error:', error);
     throw error;

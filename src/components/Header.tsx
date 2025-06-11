@@ -76,16 +76,34 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
                 Create Art
               </Link>
               {session && (
-                <Link 
-                  to="/flavor" 
-                  className={`text-sm font-semibold transition-all duration-300 hover:scale-105 ${
-                    location.pathname === '/flavor'
-                      ? 'text-[#345A7C] after:content-[""] after:block after:h-0.5 after:bg-[#345A7C] after:mt-0.5'
-                      : 'text-[#7F8C8D] hover:text-[#345A7C]'
-                  }`}
-                >
-                  Create Sermon
-                </Link>
+                <div className="relative group">
+                  <button
+                    className={`text-sm font-semibold transition-all duration-300 flex items-center cursor-default ${
+                      ['/flavor', '/depth', '/aroma'].includes(location.pathname)
+                        ? 'text-[#345A7C] after:content-[""] after:block after:h-0.5 after:bg-[#345A7C] after:mt-0.5'
+                        : 'text-[#7F8C8D] hover:text-[#345A7C]'
+                    }`}
+                  >
+                    Sermon Tools
+                    <svg className="w-4 h-4 ml-1 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </button>
+                  <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-72 bg-white rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 invisible group-hover:visible z-20 border border-gray-200/50 transform group-hover:translate-y-0 translate-y-2">
+                    <div className="p-2">
+                      <Link to="/flavor" className="block p-3 rounded-md hover:bg-gray-100 transition-colors">
+                        <p className="font-semibold text-gray-800">Flavor</p>
+                        <p className="text-sm text-gray-500">Create a sermon concept and outline</p>
+                      </Link>
+                      <Link to="/depth" className="block p-3 rounded-md hover:bg-gray-100 transition-colors">
+                        <p className="font-semibold text-gray-800">Depth</p>
+                        <p className="text-sm text-gray-500">Provides research on a given topic for a sermon</p>
+                      </Link>
+                      <Link to="/aroma" className="block p-3 rounded-md hover:bg-gray-100 transition-colors">
+                        <p className="font-semibold text-gray-800">Aroma</p>
+                        <p className="text-sm text-gray-500">Helps create outreach content for your desired messaging and platform</p>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
               )}
               {session && (
                 <Link 

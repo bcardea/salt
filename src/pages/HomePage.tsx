@@ -394,7 +394,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole }) => {
           <p className="text-xl lg:text-2xl leading-relaxed opacity-90 mb-12">{copy.solutionDescription}</p>
           
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+                    <div className="grid grid-cols-2 gap-8 max-w-2xl mx-auto">
             <div>
               <div className="text-4xl font-bold mb-2">10min</div>
               <div className="text-sm opacity-80">Complete Sunday Prep</div>

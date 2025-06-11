@@ -92,7 +92,7 @@ const features: Feature[] = [
     title: "Depth",
     subtitle: "Instant Research",
     description: "Get comprehensive biblical and theological research documents in minutes.",
-    time: "< 5 minutes",
+    time: "Ready in less than 90 seconds",
     gradient: "from-[#EFD9A0] to-[#F5F5DC]"
   },
   {
@@ -197,7 +197,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole }) => {
               {/* Left Column - Text */}
               <div className="space-y-8 lg:pr-8">
                 <div>
-                  <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                  <h1 className="text-5xl lg:text-6xl font-heading font-bold text-gray-900 leading-tight">
                     {copy.heroTitle}
                   </h1>
                   <p className="mt-6 text-xl lg:text-2xl text-gray-600 leading-relaxed">
@@ -232,34 +232,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole }) => {
                   </button>
                 </div>
 
-                {/* Trust badges */}
-                <div className="flex items-center gap-4 pt-4">
-                  <div className="flex -space-x-3">
-                    {[
-                      'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6832102f1dff7a784571fb64.png',
-                      'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6832102fb49f1949da860a41.png',
-                      'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6832102f1dff7a074371fb63.png',
-                      'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/683210300eaa6e2ee84dad16.png',
-                      'https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH7gl/media/6832102f0eaa6e01834dad15.png',
-                    ].map((src, i) => (
-                      <img 
-                        key={i} 
-                        src={src}
-                        alt={`Church leader ${i + 1}`}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md"
-                      />
-                    ))}
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1 mb-1">
-                      {[1,2,3,4,5].map((i) => (
-                        <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      ))}
-                    </div>
-                    <p className="text-sm font-semibold text-gray-900">Trusted by 500+ Churches</p>
-                    <p className="text-sm text-gray-600">Saving hours every week</p>
-                  </div>
-                </div>
+                
               </div>
 
               {/* Right Column - Gallery */}

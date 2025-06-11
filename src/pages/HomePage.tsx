@@ -403,10 +403,7 @@ const HomePage: React.FC<HomePageProps> = ({ currentRole }) => {
               <div className="text-4xl font-bold mb-2">4 Tools</div>
               <div className="text-sm opacity-80">In One Platform</div>
             </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-sm opacity-80">Churches Served</div>
-            </div>
+
           </div>
         </div>
       </section>

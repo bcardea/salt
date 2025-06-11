@@ -29,7 +29,7 @@ interface DepthResearchResponse {
 }
 
 interface AromaContentResponse {
-  text: string;
+  draft: string;
 }
 
 export interface AromaContentParams {
@@ -298,7 +298,7 @@ export async function generateAromaContent(
     }
 
     const data: AromaContentResponse = await response.json();
-    return data.text;
+    return data.draft;
   } catch (error: any) {
     console.error('Sermon outline generation error:', error);
     throw error;

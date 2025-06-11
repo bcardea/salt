@@ -127,10 +127,13 @@ export async function getBackgroundSuggestions(
       throw new Error('Invalid response from background suggestions server');
     }
     
+    console.log('Server response:', data);
+    
     if (!data.suggestions || !Array.isArray(data.suggestions)) {
       console.error('Unexpected response format:', data);
       throw new Error('Invalid response format from server');
     }
+    console.log('Parsed suggestions:', data.suggestions);
     return data.suggestions;
   } catch (error: any) {
     console.error('Background suggestions error:', error);
@@ -164,8 +167,23 @@ export async function generateSermonAngles(
       throw new Error(error.error || 'Sermon angles generation failed');
     }
 
-    const data: SermonAnglesResponse = await response.json();
-    return data.angles;
+    const data = await response.json();
+    console.log('Server response:', data);
+
+    // Check if response is an array directly
+    if (Array.isArray(data)) {
+      console.log('Response is direct array');
+      return data;
+    }
+
+    // Check if response has angles property
+    if (data && Array.isArray(data.angles)) {
+      console.log('Response has angles array');
+      return data.angles;
+    }
+
+    console.error('Unexpected response format:', data);
+    throw new Error('Invalid response format from server');
   } catch (error: any) {
     console.error('Sermon angles generation error:', error);
     throw error;

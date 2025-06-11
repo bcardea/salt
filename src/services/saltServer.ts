@@ -20,10 +20,6 @@ interface SermonAngle {
   journey: string;
 }
 
-interface SermonAnglesResponse {
-  angles: SermonAngle[];
-}
-
 interface SermonOutlineResponse {
   outline: string;
 }
@@ -168,7 +164,12 @@ export async function generateSermonAngles(
     }
 
     const data = await response.json();
-    console.log('Server response:', data);
+    console.log('Server response:', JSON.stringify(data, null, 2));
+    console.log('Response type:', typeof data);
+    if (data) {
+      console.log('Response keys:', Object.keys(data));
+      console.log('Response values:', Object.values(data));
+    }
 
     // Check if response is an array directly
     if (Array.isArray(data)) {
@@ -182,7 +183,17 @@ export async function generateSermonAngles(
       return data.angles;
     }
 
-    console.error('Unexpected response format:', data);
+    // Try to find any array in the response
+    if (data && typeof data === 'object') {
+      for (const key of Object.keys(data)) {
+        if (Array.isArray(data[key])) {
+          console.log('Found array in key:', key);
+          return data[key];
+        }
+      }
+    }
+
+    console.error('Unexpected response format:', typeof data, data);
     throw new Error('Invalid response format from server');
   } catch (error: any) {
     console.error('Sermon angles generation error:', error);

@@ -9,10 +9,29 @@ export interface TextGeneration {
 
 export async function saveTextGeneration(generation: TextGeneration) {
   try {
-    const { data, error } = await supabase
+    // Get the current user's ID
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      throw new Error('Not authenticated. Please sign in to save generations.');
+    }
+
+    // First insert the generation
+    const { error: insertError } = await supabase
       .from('text_generations')
-      .insert([generation])
-      .select()
+      .insert([{ ...generation, user_id: user.id }]);
+
+    if (insertError) {
+      console.error('Supabase insert error:', insertError);
+      throw new Error(insertError.message || 'Failed to save generation');
+    }
+
+    // Then fetch the latest generation for this user
+    const { data, error: selectError } = await supabase
+      .from('text_generations')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(1)
       .single();
 
     if (error) throw error;

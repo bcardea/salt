@@ -2,6 +2,17 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    extend: {
+      keyframes: {
+        'slide-in-bottom': {
+          '0%': { transform: 'translateY(100%)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' }
+        }
+      },
+      animation: {
+        'slide-in-bottom': 'slide-in-bottom 0.3s ease-out'
+      }
+    },
     fontFamily: {
       'sans': ['Lato', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       'heading': ['Nunito', 'ui-sans-serif', 'system-ui', 'sans-serif'],

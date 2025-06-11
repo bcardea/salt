@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -9,6 +10,7 @@ import LibraryPage from './pages/LibraryPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import FlavorPage from './pages/FlavorPage';
 import { ApiKeyProvider } from './context/ApiKeyContext';
 import VideoModal from './components/VideoModal';
 
@@ -17,7 +19,7 @@ const DEMO_VIDEO_URL = "https://storage.googleapis.com/msgsndr/jI35EgXT0cs2YnriH
 function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [currentRole, setCurrentRole] = useState<'pastor' | 'staff'>('pastor');
 
   useEffect(() => {
@@ -72,6 +74,7 @@ function App() {
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/privacy" element={<PrivacyPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/flavor" element={<FlavorPage session={session} />} />
         </Routes>
         <Footer />
         <VideoModal

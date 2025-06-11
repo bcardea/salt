@@ -73,8 +73,20 @@ const Header: React.FC<HeaderProps> = ({ session, currentRole = 'pastor', onRole
                     : 'text-[#7F8C8D] hover:text-[#345A7C]'
                 }`}
               >
-                Create
+                Create Art
               </Link>
+              {session && (
+                <Link 
+                  to="/flavor" 
+                  className={`text-sm font-semibold transition-all duration-300 hover:scale-105 ${
+                    location.pathname === '/flavor'
+                      ? 'text-[#345A7C] after:content-[""] after:block after:h-0.5 after:bg-[#345A7C] after:mt-0.5'
+                      : 'text-[#7F8C8D] hover:text-[#345A7C]'
+                  }`}
+                >
+                  Create Sermon
+                </Link>
+              )}
               {session && (
                 <Link 
                   to="/library" 

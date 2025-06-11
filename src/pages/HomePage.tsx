@@ -34,6 +34,7 @@ interface RoleCopy {
 
 interface HomePageProps {
   currentRole: Role;
+  onOpenVideo: () => void;
 }
 
 const pastorGalleryImages = [

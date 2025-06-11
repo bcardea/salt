@@ -3,6 +3,7 @@ import React from 'react';
 interface StepIndicatorProps {
   currentStep: number;
   totalSteps?: number;
+  steps?: string[];
 }
 
 const defaultSteps = [
@@ -12,8 +13,8 @@ const defaultSteps = [
   'Final Result'
 ];
 
-const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep, totalSteps = 4 }) => {
-  const steps = defaultSteps.slice(0, totalSteps).map((label, index) => ({
+const StepIndicator: React.FC<StepIndicatorProps> = ({ currentStep, totalSteps = 4, steps: customSteps }) => {
+  const steps = (customSteps || defaultSteps.slice(0, totalSteps)).map((label, index) => ({
     number: index + 1,
     label,
   }));

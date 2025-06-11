@@ -14,6 +14,20 @@ interface BackgroundSuggestionsResponse {
   suggestions: string[];
 }
 
+interface SermonAngle {
+  title: string;
+  coreSummary: string;
+  journey: string;
+}
+
+interface SermonAnglesResponse {
+  angles: SermonAngle[];
+}
+
+interface SermonOutlineResponse {
+  outline: string;
+}
+
 const SALT_SERVER_URL = 'https://salt-server.onrender.com';
 
 export async function generateTypography(
@@ -27,6 +41,7 @@ export async function generateTypography(
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
         headline,
         subHeadline,
@@ -57,6 +72,7 @@ export async function generateFinalPoster(
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
         typographyUrl,
         imageDescription
@@ -86,6 +102,7 @@ export async function getBackgroundSuggestions(
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
         headline,
         subHeadline
@@ -121,6 +138,76 @@ export async function getBackgroundSuggestions(
   }
 }
 
+export async function generateSermonAngles(
+  topic: string,
+  scripture: string,
+  length: string,
+  audience: string
+): Promise<SermonAngle[]> {
+  try {
+    const response = await fetch(`${SALT_SERVER_URL}/api/flavor`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        topic,
+        scripture,
+        length,
+        audience
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Sermon angles generation failed');
+    }
+
+    const data: SermonAnglesResponse = await response.json();
+    return data.angles;
+  } catch (error: any) {
+    console.error('Sermon angles generation error:', error);
+    throw error;
+  }
+}
+
+export async function generateSermonOutline(
+  topic: string,
+  scripture: string,
+  length: string,
+  audience: string,
+  chosenAngle: SermonAngle
+): Promise<string> {
+  try {
+    const response = await fetch(`${SALT_SERVER_URL}/api/flavor`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        topic,
+        scripture,
+        length,
+        audience,
+        chosenAngle
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Sermon outline generation failed');
+    }
+
+    const data: SermonOutlineResponse = await response.json();
+    return data.outline;
+  } catch (error: any) {
+    console.error('Sermon outline generation error:', error);
+    throw error;
+  }
+}
+
 export async function animatePoster(imageUrl: string): Promise<string> {
   try {
     // Convert image URL to base64
@@ -137,6 +224,7 @@ export async function animatePoster(imageUrl: string): Promise<string> {
       headers: {
         'Content-Type': 'application/json'
       },
+      credentials: 'include',
       body: JSON.stringify({
         imageBase64: base64Image
       })

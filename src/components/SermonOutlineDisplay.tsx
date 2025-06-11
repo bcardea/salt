@@ -12,7 +12,7 @@ const SermonOutlineDisplay: React.FC<SermonOutlineDisplayProps> = ({ content, ti
       {title && (
         <h2 className="text-2xl font-bold mb-4 text-gray-800">{title}</h2>
       )}
-      <div className="prose prose-lg max-w-none">
+      <div className="max-w-none">
         <ReactMarkdown
           components={{
             h1: ({children}) => <h1 className="text-3xl font-bold mt-6 mb-4 text-gray-900">{children}</h1>,

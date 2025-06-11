@@ -25,7 +25,7 @@ interface SermonOutlineResponse {
 }
 
 interface DepthResearchResponse {
-  text: string;
+  analysis: string;
 }
 
 interface AromaContentResponse {
@@ -272,7 +272,7 @@ export async function generateDepthResearch(
     }
 
     const data: DepthResearchResponse = await response.json();
-    return data.text;
+    return data.analysis;
   } catch (error: any) {
     console.error('Depth research generation error:', error);
     throw error;

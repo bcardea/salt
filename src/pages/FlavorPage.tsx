@@ -45,6 +45,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
   const [angles, setAngles] = useState<SermonAngle[]>([]);
   const [selectedAngle, setSelectedAngle] = useState<SermonAngle | null>(null);
   const [outline, setOutline] = useState<string>('');
+  const [outlineImage, setOutlineImage] = useState<string>('');
   
   // UI states
   const [status, setStatus] = useState<GenerationStatus>('idle');
@@ -93,14 +94,15 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
     setError('');
 
     try {
-      const generatedOutline = await generateSermonOutline(
+      const response = await generateSermonOutline(
         topic,
         scripture,
         length,
         audience,
         selectedAngle
       );
-      setOutline(generatedOutline);
+      setOutline(response.outline);
+      setOutlineImage(response.imageUrl);
       setCurrentStep(3);
 
       // Save the outline to the database
@@ -108,7 +110,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
         type: 'flavor',
         title: `Sermon Outline: ${selectedAngle.title}`,
         inputs: { topic, scripture, length, audience, selectedAngle },
-        content: generatedOutline
+        content: response.outline
       });
       setStatus('complete');
     } catch (err) {
@@ -158,6 +160,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
                     onChange={(e) => setTopic(e.target.value)}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder="e.g., The Prodigal Son"
+                    autoFocus
                   />
                 </div>
 
@@ -290,6 +293,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
                   <SermonOutlineDisplay 
                     content={outline}
                     title={selectedAngle?.title || 'Sermon Outline'}
+                    imageUrl={outlineImage}
                   />
                 </div>
               </div>

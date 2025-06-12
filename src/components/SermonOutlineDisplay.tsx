@@ -4,9 +4,10 @@ import ReactMarkdown from 'react-markdown';
 interface SermonOutlineDisplayProps {
   content: string;
   title?: string;
+  imageUrl?: string;
 }
 
-const SermonOutlineDisplay: React.FC<SermonOutlineDisplayProps> = ({ content, title }) => {
+const SermonOutlineDisplay: React.FC<SermonOutlineDisplayProps> = ({ content, title, imageUrl }) => {
   let processedContent = content;
 
   // 1. Remove the markdown code block fences if they exist
@@ -32,6 +33,15 @@ const SermonOutlineDisplay: React.FC<SermonOutlineDisplayProps> = ({ content, ti
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
+      {imageUrl && (
+        <div className="mb-6 -mx-6 -mt-6">
+          <img 
+            src={imageUrl} 
+            alt="Sermon Cover" 
+            className="w-full h-64 object-cover rounded-t-lg"
+          />
+        </div>
+      )}
       {title && (
         <h2 className="text-2xl font-bold mb-4 text-gray-800">{title}</h2>
       )}

@@ -22,6 +22,7 @@ interface SermonAngle {
 
 interface SermonOutlineResponse {
   outline: string;
+  imageUrl: string;
 }
 
 interface DepthResearchResponse {
@@ -223,7 +224,7 @@ export async function generateSermonOutline(
   length: string,
   audience: string,
   chosenAngle: SermonAngle
-): Promise<string> {
+): Promise<SermonOutlineResponse> {
   try {
     const response = await fetch(`${SALT_SERVER_URL}/api/flavor`, {
       method: 'POST',
@@ -246,7 +247,7 @@ export async function generateSermonOutline(
     }
 
     const data: SermonOutlineResponse = await response.json();
-    return data.outline;
+    return data;
   } catch (error: any) {
     console.error('Sermon outline generation error:', error);
     throw error;

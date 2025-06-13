@@ -56,13 +56,13 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
   const [loadingIntervalId, setLoadingIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
 
   const outlineLoadingMessages = [
-    "Connecting with the Divine Spark...",
-    "Weaving Wisdom from Your Angle...",
-    "Structuring the Sacred Narrative...",
-    "Infusing Scriptural Depth...",
-    "Crafting Compelling Points...",
-    "Polishing the Flow of Revelation...",
-    "Almost Ready to Inspire!"
+    "Syncing your notes with Scripture...",
+  "Framing a clear Sunday storyline...",
+  "Locking in exegetical anchors...",
+  "Layering cultural insight & application...",
+  "Shaping memorable points & hooks...",
+  "Smoothing transitions for seamless flow...",
+  "Outline almost ready—refill that coffee!"
   ];
 
   const handleGenerateAngles = async () => {

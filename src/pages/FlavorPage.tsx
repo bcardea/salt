@@ -52,6 +52,18 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
   const [error, setError] = useState('');
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState('');
+  const [loadingIntervalId, setLoadingIntervalId] = useState<ReturnType<typeof setInterval> | null>(null);
+
+  const outlineLoadingMessages = [
+    "Connecting with the Divine Spark...",
+    "Weaving Wisdom from Your Angle...",
+    "Structuring the Sacred Narrative...",
+    "Infusing Scriptural Depth...",
+    "Crafting Compelling Points...",
+    "Polishing the Flow of Revelation...",
+    "Almost Ready to Inspire!"
+  ];
 
   const handleGenerateAngles = async () => {
     if (!topic || !scripture || !length || !audience) {
@@ -93,6 +105,20 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
     setStatus('generating-outline');
     setError('');
 
+    // Clear any existing interval from previous attempts
+    if (loadingIntervalId) {
+      clearInterval(loadingIntervalId);
+    }
+
+    let messageIndex = 0;
+    setLoadingMessage(outlineLoadingMessages[messageIndex]);
+
+    const intervalId = setInterval(() => {
+      messageIndex = (messageIndex + 1) % outlineLoadingMessages.length;
+      setLoadingMessage(outlineLoadingMessages[messageIndex]);
+    }, 7000); // Change message every 7 seconds
+    setLoadingIntervalId(intervalId);
+
     try {
       const response = await generateSermonOutline(
         topic,
@@ -116,6 +142,12 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
     } catch (err) {
       setError('Failed to generate sermon outline. Please try again.');
       setStatus('error');
+    } finally {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      setLoadingIntervalId(null);
+      // Optionally reset loadingMessage here or let it persist until next generation
     }
   };
 
@@ -351,7 +383,7 @@ const FlavorPage: React.FC<FlavorPageProps> = ({ session }) => {
                           <div className="w-2 h-2 bg-white rounded-full animate-wave" style={{ animationDelay: '200ms', animationDuration: '1.4s' }}></div>
                           <div className="w-2 h-2 bg-white rounded-full animate-wave" style={{ animationDelay: '400ms', animationDuration: '1.4s' }}></div>
                         </div>
-                        <span>Creating Outline</span>
+                        <span>{loadingMessage || 'Creating Outline...'}</span>
                       </>
                     ) : (
                       <>

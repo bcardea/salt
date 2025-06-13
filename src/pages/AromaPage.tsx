@@ -77,7 +77,7 @@ const AromaPage: React.FC<AromaPageProps> = ({ session }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-secondary-50/30 to-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 space-y-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-12 space-y-8">
         {/* Enhanced Header Section */}
         <div className="text-center mb-12 relative">
           <div className="absolute inset-0 flex items-center justify-center opacity-10">
